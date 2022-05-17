@@ -1,0 +1,14 @@
+{
+  "entryPoints": ["src"],
+  "out": "docs",
+  "exclude": ["**/*.test.ts"],
+  "entryPointStrategy": "expand",
+  "name": "sa-lambda",
+  "includeVersion": true,
+  "githubPages": true,
+  "sort": ["source-order"],
+  "excludePrivate": true,
+  "excludeExternals": true,
+  "excludeInternal": true,
+  "categorizeByGroup": false
+}

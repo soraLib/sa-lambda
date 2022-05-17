@@ -1,0 +1,14 @@
+node_modules/
+es/
+esm/
+type/
+cjs/
+umd/
+dist/
+lib/
+tsout/
+/sa-lambda.js
+/sa-lambda.mjs
+coverage/
+/publish
+/pack

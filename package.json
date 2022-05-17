@@ -1,0 +1,99 @@
+{
+  "name": "sa-lambda",
+  "version": "1.0.0-pre.0",
+  "description": "Typescript library for functional programming.",
+  "main": "./cjs/index.js",
+  "module": "./esm/index.mjs",
+  "browser": "./dist/sa-lambda.min.js",
+  "umd::main": "./dist/sa-lambda.js",
+  "types": "./type/index.d.ts",
+  "typings": "./type/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.mjs",
+      "require": "./cjs/index.js"
+    },
+    "./*": {
+      "import": "./esm/*.mjs",
+      "require": "./cjs/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "/**/*.d.ts",
+    "src/**/*.ts",
+    "type/**/*.d.ts",
+    "cjs/**/*.js",
+    "cjs/**/*.ts",
+    "dist/**/*.js",
+    "es/**/*.js",
+    "es/**/*.ts",
+    "esm/**/*.mjs",
+    "esm/**/*.ts",
+    "umd/**/*.js",
+    "umd/**/*.ts",
+    "sa-lambda.js",
+    "sa-lambda.mjs"
+  ],
+  "scripts": {
+    "tsc": "tsc",
+    "doc": "typedoc",
+    "babel": "babel",
+    "rollup": "rollup",
+    "prebuild": "node ./dev/prebuild.mjs",
+    "postbuild": "node ./dev/postbuild.mjs",
+    "build": "darl build",
+    "test": "jest --coverage",
+    "prepare": "husky install",
+    "do:pack": "node ./dev/publish.mjs pack",
+    "do:publish": "node ./dev/publish.mjs"
+  },
+  "keywords": [
+    "typescript",
+    "js",
+    "library",
+    "functional-programming"
+  ],
+  "author": "hfutsora",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soraLib/sa-lambda.git"
+  },
+  "homepage": "https://github.com/soraLib/sa-lambda#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.16.5",
+    "@babel/plugin-transform-modules-umd": "^7.14.5",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
+    "@commitlint/config-conventional": "^15.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
+    "@types/jest": "^26.0.19",
+    "@types/lodash-es": "^4.17.5",
+    "@typescript-eslint/eslint-plugin": "^5.24.0",
+    "@typescript-eslint/parser": "^5.24.0",
+    "babel-plugin-add-import-extension": "^1.5.1",
+    "codecov": "^3.8.3",
+    "commitlint": "^15.0.0",
+    "darl": "^2.1.1",
+    "eslint": "^8.15.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "jest": "^26.6.3",
+    "ncp": "^2.0.0",
+    "prettier": "^2.6.2",
+    "rollup": "^2.35.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^26.4.4",
+    "ts-node": "^9.1.1",
+    "typedoc": "^0.22.7",
+    "typescript": "^4.1.3"
+  },
+  "optionalDependencies": {
+    "tslib": "^2.0.3"
+  }
+}

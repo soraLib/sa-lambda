@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "ES2021",
+    "outDir": "./es",
+    "strict": true,
+    "declaration": true,
+    "declarationDir": "./type",
+    "esModuleInterop": true,
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "./src/**/*.test.ts"
+  ]
+}
