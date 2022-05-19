@@ -1,13 +1,13 @@
 import { isSome, some, isNone, none, fromPredicate } from '../src/Maybe'
 
 test('isSome', () => {
-  expect(isSome(some(1))).toBe(true)
-  expect(isSome(none)).toBe(false)
+  expect(isSome(some(1))).toBeTruthy()
+  expect(isSome(none)).toBeFalsy()
 })
 
 test('isNone', () => {
-  expect(isNone(some(1))).toBe(false)
-  expect(isNone(none)).toBe(true)
+  expect(isNone(some(1))).toBeFalsy()
+  expect(isNone(none)).toBeTruthy()
 })
 
 test('fromPredicate', () => {
