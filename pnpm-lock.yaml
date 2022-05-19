@@ -19,11 +19,9 @@ specifiers:
   commitlint: ^15.0.0
   darl: ^2.1.1
   eslint: ^8.15.0
-  eslint-plugin-prettier: ^4.0.0
   husky: ^7.0.4
   jest: ^26.6.3
   ncp: ^2.0.0
-  prettier: ^2.6.2
   rollup: ^2.35.1
   rollup-plugin-node-resolve: ^5.2.0
   rollup-plugin-terser: ^7.0.2
@@ -55,11 +53,9 @@ devDependencies:
   commitlint: 15.0.0
   darl: 2.2.0
   eslint: 8.15.0
-  eslint-plugin-prettier: 4.0.0_bppm6sp3oxoychvfagx6tcd7pe
   husky: 7.0.4
   jest: 26.6.3_ts-node@9.1.1
   ncp: 2.0.0
-  prettier: 2.6.2
   rollup: 2.73.0
   rollup-plugin-node-resolve: 5.2.0_rollup@2.73.0
   rollup-plugin-terser: 7.0.2_rollup@2.73.0
@@ -2943,22 +2939,6 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-plugin-prettier/4.0.0_bppm6sp3oxoychvfagx6tcd7pe:
-    resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
-    engines: {node: '>=6.0.0'}
-    peerDependencies:
-      eslint: '>=7.28.0'
-      eslint-config-prettier: '*'
-      prettier: '>=2.0.0'
-    peerDependenciesMeta:
-      eslint-config-prettier:
-        optional: true
-    dependencies:
-      eslint: 8.15.0
-      prettier: 2.6.2
-      prettier-linter-helpers: 1.0.0
-    dev: true
-
   /eslint-scope/5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
     engines: {node: '>=8.0.0'}
@@ -3203,10 +3183,6 @@ packages:
 
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-    dev: true
-
-  /fast-diff/1.2.0:
-    resolution: {integrity: sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==}
     dev: true
 
   /fast-glob/3.2.11:
@@ -5069,19 +5045,6 @@ packages:
   /prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
-    dev: true
-
-  /prettier-linter-helpers/1.0.0:
-    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
-    engines: {node: '>=6.0.0'}
-    dependencies:
-      fast-diff: 1.2.0
-    dev: true
-
-  /prettier/2.6.2:
-    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
     dev: true
 
   /pretty-format/26.6.2:
