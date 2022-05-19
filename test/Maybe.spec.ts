@@ -1,4 +1,4 @@
-import { isSome, some, isNone, none, fromPredicate } from '../src/Maybe'
+import { isSome, some, isNone, none, fromPredicate, getOrElse } from '../src/Maybe'
 
 test('isSome', () => {
   expect(isSome(some(1))).toBeTruthy()
@@ -15,4 +15,10 @@ test('fromPredicate', () => {
 
   expect(getMaybe(1)).toEqual(some(1))
   expect(getMaybe(0)).toEqual(none)
+})
+
+
+test('getOrElse', () => {
+  expect(getOrElse(() => 0)(some(1))).toBe(1)
+  expect(getOrElse(() => 0)(none)).toBe(0)
 })
