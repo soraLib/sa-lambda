@@ -67,3 +67,10 @@ export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: () => E): 
 export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: () => E): (a: A) => Either<E, A> {
   return (a) => predicate(a) ? right(a) : left(onFalse())
 }
+
+/**
+ * Takes `onLeft` `onRight` functions and an `Either` value, if the value is `Left`,
+ * returns the `onLeft` function result, if the value is `Right`, returns the `onRight` function result.
+ */
+export const match = <E, B, A, C>(onLeft: (e: E) => B, onRight: (a: A) => C) => (ma: Either<E, A>): B | C =>
+  isLeft(ma) ? onLeft(ma.left) : onRight(ma.right)
