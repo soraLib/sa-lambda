@@ -13,7 +13,7 @@ export interface Some<A> {
 export type Maybe<A> = None | Some<A>
 
 /**
- * Return whether the maybe is `None` or not.
+ * Returns whether the maybe is `None` or not.
  *
  * ```ts
  * assert.deepStrictEqual(isNone(none), true)
@@ -23,7 +23,7 @@ export type Maybe<A> = None | Some<A>
 export const isNone = <A>(m: Maybe<A>): m is None => m._tag === 'None'
 
 /**
- * Return whether the maybe is `Some` or not.
+ * Returns whether the maybe is `Some` or not.
  *
  * ```ts
  * assert.deepStrictEqual(isSome(some(1)), true)
@@ -42,7 +42,7 @@ export const none: Maybe<never> = { _tag: 'None' }
 export const some = <A>(value: A): Maybe<A> => ({ _tag: 'Some', value })
 
 /**
- * Return `Some` or `None` based on the given predicate.
+ * Returns `Some` or `None` based on the given predicate.
  *
  * @example
  *
