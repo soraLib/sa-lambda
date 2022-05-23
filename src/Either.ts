@@ -97,3 +97,17 @@ export const match = <E, B, A, C>(onLeft: (e: E) => B, onRight: (a: A) => C) => 
  */
 export const getOrElse = <E, B>(onLeft: (e: E) => B) => <A>(ma: Either<E, A>): A | B =>
   isLeft(ma) ? onLeft(ma.left) : ma.right
+
+/**
+ * Composes computations in sequence.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(chain((n: number) => right(n + 1))(left(1)), left(1))
+ * assert.deepStrictEqual(chain((n: number) => right(n + 1))(right(1)), right(2))
+ * ```
+ */
+export const chain = <E2, A, B>(f: (a: A) => Either<E2, B>) => <E1>(ma: Either<E1, A>): Either<E1 | E2, B> =>
+  isLeft(ma) ? ma : f(ma.right)
+
