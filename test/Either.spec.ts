@@ -1,4 +1,4 @@
-import { isLeft, left, right, isRight, map, of, fromPredicate, match } from '../src/Either'
+import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse } from '../src/Either'
 
 test('isLeft', () => {
   expect(isLeft(left(0))).toBeTruthy()
@@ -33,4 +33,9 @@ test('match', () => {
   const f = match((n: number) => n - 1, (n: number) => n + 1)
   expect(f(left(1))).toBe(0)
   expect(f(right(1))).toBe(2)
+})
+
+test('getOrElse', () => {
+  expect(getOrElse(() => 0)(left(1))).toBe(0)
+  expect(getOrElse(() => 0)(right(1))).toBe(1)
 })

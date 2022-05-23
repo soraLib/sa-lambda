@@ -69,8 +69,31 @@ export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: () => E): 
 }
 
 /**
- * Takes `onLeft` `onRight` functions and an `Either` value, if the value is `Left`,
+ * Takes two functions and an `Either` value, if the value is `Left`,
  * returns the `onLeft` function result, if the value is `Right`, returns the `onRight` function result.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = match((n: number) => n - 1, (n: number) => n + 1)
+ *
+ * assert.deepStrictEqual(f(left(1)), 0)
+ * assert.deepStrictEqual(f(right(1)), 2)
+ * ```
  */
 export const match = <E, B, A, C>(onLeft: (e: E) => B, onRight: (a: A) => C) => (ma: Either<E, A>): B | C =>
   isLeft(ma) ? onLeft(ma.left) : onRight(ma.right)
+
+
+/**
+ * Returns the `Either` value if it's a `Right` or a default `onLeft` result value if it's a `Left`.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(getOrElse(() => 0)(left(1)), 0)
+ * assert.deepStrictEqual(getOrElse(() => 0)(right(1)), 1)
+ * ```
+ */
+export const getOrElse = <E, B>(onLeft: (e: E) => B) => <A>(ma: Either<E, A>): A | B =>
+  isLeft(ma) ? onLeft(ma.left) : ma.right
