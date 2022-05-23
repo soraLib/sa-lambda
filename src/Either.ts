@@ -121,3 +121,15 @@ export const chain = <E2, A, B>(f: (a: A) => Either<E2, B>) => <E1>(ma: Either<E
  */
 export const orElse = <E1, E2, B>(onLeft: (e: E1) => Either<E2, B>) => <A>(ma: Either<E1, A>): Either<E2, A | B> =>
   isLeft(ma) ? onLeft(ma.left) : ma
+
+/**
+ * Returns `false` if `Either` is a `Left`, otherwise returns the predicate result.
+ *
+ * @example
+ *
+ * assert.deepStrictEqual(exists((n: number) => n > 0)(left(0)), false)
+ * assert.deepStrictEqual(exists((n: number) => n > 0)(right(0)), false)
+ * assert.deepStrictEqual(exists((n: number) => n > 0)(right(1)), true)
+ */
+export const exists = <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>): boolean =>
+  isLeft(ma) ? false : predicate(ma.right)
