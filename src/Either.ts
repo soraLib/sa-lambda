@@ -111,3 +111,13 @@ export const getOrElse = <E, B>(onLeft: (e: E) => B) => <A>(ma: Either<E, A>): A
 export const chain = <E2, A, B>(f: (a: A) => Either<E2, B>) => <E1>(ma: Either<E1, A>): Either<E1 | E2, B> =>
   isLeft(ma) ? ma : f(ma.right)
 
+/**
+ * Returns `Either` if it's a `Right`, otherwise returns onLeft result.
+ *
+ * @example
+ *
+ * assert.deepStrictEqual(orElse((n: number) => right(n + 1))(left(1)), right(2))
+ * assert.deepStrictEqual(orElse((n: number) => right(n + 1))(right(1)), right(1))
+ */
+export const orElse = <E1, E2, B>(onLeft: (e: E1) => Either<E2, B>) => <A>(ma: Either<E1, A>): Either<E2, A | B> =>
+  isLeft(ma) ? onLeft(ma.left) : ma
