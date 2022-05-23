@@ -1,4 +1,8 @@
-import { pipe } from '../src/function'
+import { identity, pipe } from '../src/function'
+
+test('identity', () => {
+  expect(identity(1)).toBe(1)
+})
 
 test('pipe1', () => {
   const f = pipe(

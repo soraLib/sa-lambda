@@ -5,6 +5,11 @@ import { TupleLast } from './TupleT'
  */
 export type Lazy<A> = () => A
 
+/**
+ * Identity
+ */
+export const identity = <A>(a: A): A => a
+
 
 type PipeFn<A, B> = (a: A) => B
 
