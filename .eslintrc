@@ -24,7 +24,7 @@
     "no-multi-spaces": 1,
     "no-spaced-func": 2,
     "no-trailing-spaces": 1,
-    "no-use-before-define": 2,
+    "no-use-before-define": "off",
     "arrow-spacing": 0,
     "max-len": ["error", { "code": 200 }],
     "prefer-rest-params": "off"
