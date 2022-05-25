@@ -225,5 +225,5 @@ export function pipe(
   f0: any,
   ...fns: any[]
 ) {
-  return (...args: any[]) => [...fns].reduce((ret, fn) => fn(ret), f0(...args))
+  return (...args: any[]) => fns.reduce((ret, fn) => fn(ret), f0(...args))
 }
