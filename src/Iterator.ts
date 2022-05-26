@@ -1,4 +1,4 @@
-import { pipe } from './function'
+import { flow } from './function'
 
 
 /**
@@ -77,8 +77,8 @@ const _getStep = (step: number): number => {
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(pipe(to, collect)(3), [1, 2])
- * assert.deepStrictEqual(pipe(to, collect)(6, 2), [0, 2, 4])
+ * assert.deepStrictEqual(flow(to, collect)(3), [1, 2])
+ * assert.deepStrictEqual(flow(to, collect)(6, 2), [0, 2, 4])
  * ```
  */
 export function* to(end: number, step = 1): Iterable<number> {
@@ -95,9 +95,9 @@ export function* to(end: number, step = 1): Iterable<number> {
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(pipe(range, collect)(1, 3), [1, 2])
- * assert.deepStrictEqual(pipe(range, collect)(1, 6, 2), [1, 3, 5])
- * assert.deepStrictEqual(pipe(range, collect)(3, 1), [3, 2])
+ * assert.deepStrictEqual(flow(range, collect)(1, 3), [1, 2])
+ * assert.deepStrictEqual(flow(range, collect)(1, 6, 2), [1, 3, 5])
+ * assert.deepStrictEqual(flow(range, collect)(3, 1), [3, 2])
  * ```
  */
 export function* range(from: number, end: number, step = 1): Iterable<number> {
@@ -120,7 +120,7 @@ export function* range(from: number, end: number, step = 1): Iterable<number> {
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(pipe(makeBy, collect)(3, n => n * 2), [0, 2, 4])
+ * assert.deepStrictEqual(flow(makeBy, collect)(3, n => n * 2), [0, 2, 4])
  * ```
  */
 export function* makeBy<A>(n: number, f: (i: number) => A): Iterable<A> {
@@ -135,7 +135,7 @@ export function* makeBy<A>(n: number, f: (i: number) => A): Iterable<A> {
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(pipe(replicate, collect)('a', 2), ['a', 'a'])
+ * assert.deepStrictEqual(flow(replicate, collect)('a', 2), ['a', 'a'])
  * ```
  */
 export const replicate = <A>(ma: A, n: number): Iterable<A> => makeBy(n, () => ma)
@@ -160,7 +160,7 @@ export const collect = <A>(ma: Iterable<A>): A[] => [...ma]
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(pipe(join('-'))(['a', 'b', 'c']), 'a-b-c')
+ * assert.deepStrictEqual(flow(join('-'))(['a', 'b', 'c']), 'a-b-c')
  * ```
  */
 export const join = (seperator?: string) => <A>(ma: Iterable<A>): string => collect(ma).join(seperator)
@@ -193,8 +193,8 @@ export const count = <A>(ma: Iterable<A>): number => {
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(pipe(zipWith, collect)([1, 2], [1, 2], (a, b) => a + b), [2, 4])
- * assert.deepStrictEqual(pipe(zipWith, collect)(function* () { yield 1 }, [1, 2], (a, b) => a + b), [2])
+ * assert.deepStrictEqual(flow(zipWith, collect)([1, 2], [1, 2], (a, b) => a + b), [2, 4])
+ * assert.deepStrictEqual(flow(zipWith, collect)(function* () { yield 1 }, [1, 2], (a, b) => a + b), [2])
  * ```
  */
 export function* zipWith<A, B, C>(a: Iterable<A>, b: Iterable<B>, f: (a: A, b: B) => C): Iterable<C> {
@@ -217,8 +217,8 @@ export function* zipWith<A, B, C>(a: Iterable<A>, b: Iterable<B>, f: (a: A, b: B
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(pipe(zip, collect)([1, 2], [1, 2]), [[1, 1], [2, 2]])
- * assert.deepStrictEqual(pipe(zip, collect)(function* () { yield 1 }, [1, 2]), [[1, 1]])
+ * assert.deepStrictEqual(flow(zip, collect)([1, 2], [1, 2]), [[1, 1], [2, 2]])
+ * assert.deepStrictEqual(flow(zip, collect)(function* () { yield 1 }, [1, 2]), [[1, 1]])
  * ```
  */
 export function* zip<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<[A, B]> {
@@ -276,7 +276,7 @@ export function* flatten<A>(ma: Iterable<Iterable<A>>): Iterable<A> {
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(pipe(chainWithIndex((i, a) => `${i}-${a}`), collect)(['a', 'b']), ['0-a', '1-b'])
+ * assert.deepStrictEqual(flow(chainWithIndex((i, a) => `${i}-${a}`), collect)(['a', 'b']), ['0-a', '1-b'])
  * ```
  */
 export const chainWithIndex = <A, B>(f: (i: number, a: A) => Iterable<B>) => function* (as: Iterable<A>): Iterable<B> {
@@ -288,7 +288,7 @@ export const chainWithIndex = <A, B>(f: (i: number, a: A) => Iterable<B>) => fun
 }
 
 export const chain = <A, B>(f: (a: A) => Iterable<B>) => (ma: Iterable<A>): Iterable<B> =>
-  pipe(
+  flow(
     chainWithIndex((_, a: A) => f(a))
   )(ma)
 
@@ -319,26 +319,26 @@ export class Seq<A> implements Iterable<A> {
   }
 
   static of = of
-  static to = pipe(to, seq)
-  static range = pipe(range, seq)
-  static makeBy = pipe(makeBy, seq)
-  static replicate = pipe(replicate, seq)
+  static to = flow(to, seq)
+  static range = flow(range, seq)
+  static makeBy = flow(makeBy, seq)
+  static replicate = flow(replicate, seq)
 
-  map = <B>(f: (a: A) => B) => pipe(map(f), seq)(this.iter())
+  map = <B>(f: (a: A) => B) => flow(map(f), seq)(this.iter())
   toArray = (): A[] => toArray(this.iter())
   isEmpty= (): boolean => isEmpty(this.iter())
-  push = (...as: A[]): Seq<A> => pipe(push, seq)(this.iter(), ...as)
-  unshift = (...as: A[]) => pipe(unshift, seq)(this.iter(), ...as)
+  push = (...as: A[]): Seq<A> => flow(push, seq)(this.iter(), ...as)
+  unshift = (...as: A[]) => flow(unshift, seq)(this.iter(), ...as)
   collect = (): A[] => collect(this.iter())
-  join = (seperator?: string) => pipe(join(seperator))(this.iter())
+  join = (seperator?: string) => flow(join(seperator))(this.iter())
   count = () => count(this.iter())
-  zipWith = <B, C>(b: Iterable<B>, f: (a: A, b: B) => C) => pipe(zipWith, seq)(this.iter(), b, f)
-  zip = <B>(b: Iterable<B>) => pipe(zip, seq)(this.iter(), b)
+  zipWith = <B, C>(b: Iterable<B>, f: (a: A, b: B) => C) => flow(zipWith, seq)(this.iter(), b, f)
+  zip = <B>(b: Iterable<B>) => flow(zip, seq)(this.iter(), b)
   unzip = (): Seq<[
     (A extends [infer X, any] | readonly [infer X, any] | (infer X)[] ? X : unknown)[],
     (A extends [any, infer Y] | readonly [any, infer Y] | (infer Y)[] ? Y : unknown)[],
-  ]> => pipe(unzip, seq)(this.iter() as any) as any
-  flatten = (): A extends Iterable<infer R> ? Seq<R> : never => pipe(flatten, seq)(this.iter() as any) as any
+  ]> => flow(unzip, seq)(this.iter() as any) as any
+  flatten = (): A extends Iterable<infer R> ? Seq<R> : never => flow(flatten, seq)(this.iter() as any) as any
 }
 
 

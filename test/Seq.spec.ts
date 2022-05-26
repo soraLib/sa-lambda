@@ -1,5 +1,5 @@
 import { isEmpty, seq, Seq, collect, to, map, flatten, replicate, chain, join, chainWithIndex } from '../src/Iterator'
-import { pipe } from '../src/function'
+import { flow } from '../src/function'
 
 
 it('isEmpty', () => {
@@ -12,7 +12,7 @@ it('isEmpty', () => {
 
 describe('seq', () => {
   it('iterator', () => {
-    expect(pipe(seq, collect)([1, 2, 3])).toEqual([1, 2, 3])
+    expect(flow(seq, collect)([1, 2, 3])).toEqual([1, 2, 3])
   })
 
   it('arr', () => {
@@ -64,7 +64,7 @@ describe('seq', () => {
   })
 
   it('join', () => {
-    expect(pipe(join('-'))(['a', 'b', 'c'])).toBe('a-b-c')
+    expect(flow(join('-'))(['a', 'b', 'c'])).toBe('a-b-c')
     expect(seq(['a', 'b', 'c']).join('-')).toBe('a-b-c')
     expect(new Seq(function* () {
       yield 'a'
@@ -116,22 +116,22 @@ describe('seq', () => {
   })
 
   it('replicate', () => {
-    expect(pipe(replicate, collect)('a', 2)).toEqual(['a', 'a'])
+    expect(flow(replicate, collect)('a', 2)).toEqual(['a', 'a'])
   })
 
   it('chainWithIndex', () => {
-    expect(pipe(chainWithIndex((i, a) => [i, a]), collect)(['a', 'b'])).toEqual([0, 'a', 1, 'b'])
+    expect(flow(chainWithIndex((i, a) => [i, a]), collect)(['a', 'b'])).toEqual([0, 'a', 1, 'b'])
   })
 
   it('chain', () => {
-    const f = (n: number) => pipe(replicate, collect)(`${n}`, n)
+    const f = (n: number) => flow(replicate, collect)(`${n}`, n)
 
-    expect(pipe(map(f), collect)([1, 2, 3])).toEqual([['1'], ['2', '2'], ['3', '3', '3']])
-    expect(pipe(chain(f), collect)([1, 2, 3])).toEqual(['1', '2', '2', '3', '3', '3'])
+    expect(flow(map(f), collect)([1, 2, 3])).toEqual([['1'], ['2', '2'], ['3', '3', '3']])
+    expect(flow(chain(f), collect)([1, 2, 3])).toEqual(['1', '2', '2', '3', '3', '3'])
   })
 
   it('compose1', () => {
-    const f = pipe(
+    const f = flow(
       to,
       map(a => seq(to(2)).map(b => [a, b]).collect()),
       flatten,

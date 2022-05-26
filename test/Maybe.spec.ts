@@ -1,5 +1,5 @@
 import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match } from '../src/Maybe'
-import { pipe } from '../src/function'
+import { flow } from '../src/function'
 
 test('isSome', () => {
   expect(isSome(some(1))).toBeTruthy()
@@ -12,7 +12,7 @@ test('isNone', () => {
 })
 
 test('fromPredicate', () => {
-  const f = pipe(
+  const f = flow(
     fromPredicate((n: number) => n > 0)
   )
 
@@ -21,7 +21,7 @@ test('fromPredicate', () => {
 })
 
 test('getOrElse', () => {
-  const f = pipe(
+  const f = flow(
     getOrElse(() => 0)
   )
 
@@ -34,7 +34,7 @@ test('of', () => {
 })
 
 test('map', () => {
-  const f = pipe(
+  const f = flow(
     map((n: number) => n + 1),
     getOrElse(() => 0)
   )
@@ -43,7 +43,7 @@ test('map', () => {
 })
 
 test('chain', () => {
-  const f = pipe(
+  const f = flow(
     chain((n: number) => n > 0 ? some(n) : none),
     getOrElse(() => 0)
   )
@@ -54,7 +54,7 @@ test('chain', () => {
 })
 
 test('match', () => {
-  const f = pipe(
+  const f = flow(
     match(() => 0, (n: number) => n + 1)
   )
 

@@ -80,7 +80,7 @@ export const of = some
  * @example
  *
  * ```ts
- * const f = pipe(
+ * const f = flow(
  *  match(() => 0, (n: number) => n + 1)
  * )
  *
@@ -97,7 +97,7 @@ export const match = <B, A, C>(onNone: Lazy<B>, onSome: (a: A) => C) => (ma: May
  * @example
  *
  * ```ts
- * const f = pipe(
+ * const f = flow(
  *   chain((n: number) => some(n + 1)
  * )
  *
@@ -114,7 +114,7 @@ export const chain = <A, B>(f: (a: A) => Maybe<B>) => (ma: Maybe<A>): Maybe<B> =
  * @example
  *
  * ```ts
- * const f = pipe(
+ * const f = flow(
  *   toNullable
  * )
  *
@@ -130,7 +130,7 @@ export const toNullable: <A>(ma: Maybe<A>) => A | null = match(constNull, identi
  * @example
  *
  * ```ts
- * const f = pipe(
+ * const f = flow(
  *   toUndefined
  * )
  *
@@ -146,7 +146,7 @@ export const toUndefined: <A>(ma: Maybe<A>) => A | undefined = match(constUndefi
  * @example
  *
  * ```ts
- * const f = pipe(
+ * const f = flow(
  *   getOrElse(() => 0)
  * )
  *
