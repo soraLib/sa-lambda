@@ -1,4 +1,6 @@
+import { Lazy } from './function'
 import { Predicate } from './Predicate'
+import { Maybe, none, some } from './Maybe'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -51,6 +53,12 @@ export const map = <A, B>(f: (a: A) => B) => <E>(ma: Either<E, A>) => isLeft(ma)
 export const of = right
 
 /**
+ * instance `alt` operation.
+ */
+export const alt = <E2, B>(that: Lazy<Either<E2, B>>) => <E1, A>(ma: Either<E1, A>): Either<E2, A | B> =>
+  isLeft(ma) ? that() : ma
+
+/**
  * Returns `Left` or `Right` based on the given predicate.
  *
  * @example
@@ -84,7 +92,6 @@ export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: () => E): 
 export const match = <E, B, A, C>(onLeft: (e: E) => B, onRight: (a: A) => C) => (ma: Either<E, A>): B | C =>
   isLeft(ma) ? onLeft(ma.left) : onRight(ma.right)
 
-
 /**
  * Returns the `Either` value if it's a `Right` or a default `onLeft` result value if it's a `Left`.
  *
@@ -97,6 +104,32 @@ export const match = <E, B, A, C>(onLeft: (e: E) => B, onRight: (a: A) => C) => 
  */
 export const getOrElse = <E, B>(onLeft: (e: E) => B) => <A>(ma: Either<E, A>): A | B =>
   isLeft(ma) ? onLeft(ma.left) : ma.right
+
+/**
+ * Returns the `Left` value of an `Either` if possible.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(getLeft(right(1)), none)
+ * assert.deepStrictEqual(getLeft(left(1)), some(1))
+ * ```
+ */
+export const getLeft = <E, A>(ma: Either<E, A>): Maybe<E> =>
+  isRight(ma) ? none : some(ma.left)
+
+/**
+ * Returns the `Left` value of an `Either` if possible.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(getRight(right(1)), some(1))
+ * assert.deepStrictEqual(getRight(left(1)), none)
+ * ```
+ */
+export const getRight = <E, A>(ma: Either<E, A>): Maybe<A> =>
+  isRight(ma) ? some(ma.right) : none
 
 /**
  * Composes computations in sequence.

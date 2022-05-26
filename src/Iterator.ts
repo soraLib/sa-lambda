@@ -1,4 +1,5 @@
 import { flow } from './function'
+import { Predicate } from './Predicate'
 
 
 /**
@@ -16,6 +17,7 @@ import { flow } from './function'
 export const isEmpty = <A>(ma: Iterable<A>): boolean => {
   if ('length' in ma) return (ma as any).length == 0
   if ('size' in ma) return (ma as any).size == 0
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   for (const _ of ma) return false
 
   return true
@@ -51,7 +53,11 @@ export function* unshift<T>(a: Iterable<T>, ...items: T[]): Iterable<T> {
 /**
  * instance `of` operation.
  */
-export const of = <A>(...as: A[]): Seq<A> => seq(as)
+export function* of<A>(...as: A[]): Iterable<A> {
+  for(const a of as) {
+    yield a
+  }
+}
 
 /**
  * instance `map` operation.
@@ -188,6 +194,29 @@ export const count = <A>(ma: Iterable<A>): number => {
 }
 
 /**
+ * Returns an iterator that elements meet the condition specified in a predicate function.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     [1, 2, 3, 4],
+ *     filter(a => a % 2 === 0)
+ *   ),
+ *   [2, 4]
+ * )
+ * ```
+ */
+export const filter = <A>(predicate: Predicate<A>) => function* (ma: Iterable<A>): Iterable<A> {
+  for(const a of ma) {
+    if(predicate(a)) {
+      yield a
+    }
+  }
+}
+
+/**
  * Takes two iterator and returns an iterator of the function results. If one iterator is short, excess items of the longer iterator are discarded.
  *
  * @example
@@ -271,7 +300,7 @@ export function* flatten<A>(ma: Iterable<Iterable<A>>): Iterable<A> {
 }
 
 /**
- * Same as [`Seq`](#chain), but passing also the index to the iterating function.
+ * Same as [`Iter`](#chain), but passing also the index to the iterating function.
  *
  * @example
  *
@@ -294,51 +323,51 @@ export const chain = <A, B>(f: (a: A) => Iterable<B>) => (ma: Iterable<A>): Iter
 
 
 /**
- * Creates a `Seq` from an iterator.
+ * Creates a `Iter` from an iterator.
  *
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(seq([1]), new Seq(() => [1]))
+ * assert.deepStrictEqual(iter([1]), new Iter(() => [1]))
  * ```
  */
-export const seq = <A>(ma: Iterable<A>): Seq<A> => new Seq(() => ma)
+export const iter = <A>(ma: Iterable<A>): Iter<A> => new Iter(() => ma)
 
 /**
- * Seq
+ * Iter
  */
-export class Seq<A> implements Iterable<A> {
-  constructor(public readonly iter: () => Iterable<A>) {}
+export class Iter<A> implements Iterable<A> {
+  constructor(public readonly _iter: () => Iterable<A>) {}
 
   [Symbol.iterator](): Iterator<A> {
-    return this.iter()[Symbol.iterator]()
+    return this._iter()[Symbol.iterator]()
   }
 
   get arr() {
     return this.toArray()
   }
 
-  static of = of
-  static to = flow(to, seq)
-  static range = flow(range, seq)
-  static makeBy = flow(makeBy, seq)
-  static replicate = flow(replicate, seq)
+  static of = flow(of, iter)
+  static to = flow(to, iter)
+  static range = flow(range, iter)
+  static makeBy = flow(makeBy, iter)
+  static replicate = flow(replicate, iter)
 
-  map = <B>(f: (a: A) => B) => flow(map(f), seq)(this.iter())
-  toArray = (): A[] => toArray(this.iter())
-  isEmpty= (): boolean => isEmpty(this.iter())
-  push = (...as: A[]): Seq<A> => flow(push, seq)(this.iter(), ...as)
-  unshift = (...as: A[]) => flow(unshift, seq)(this.iter(), ...as)
-  collect = (): A[] => collect(this.iter())
-  join = (seperator?: string) => flow(join(seperator))(this.iter())
-  count = () => count(this.iter())
-  zipWith = <B, C>(b: Iterable<B>, f: (a: A, b: B) => C) => flow(zipWith, seq)(this.iter(), b, f)
-  zip = <B>(b: Iterable<B>) => flow(zip, seq)(this.iter(), b)
-  unzip = (): Seq<[
+  map = <B>(f: (a: A) => B) => flow(map(f), iter)(this._iter())
+  toArray = (): A[] => toArray(this._iter())
+  isEmpty= (): boolean => isEmpty(this._iter())
+  push = (...as: A[]): Iter<A> => flow(push, iter)(this._iter(), ...as)
+  unshift = (...as: A[]) => flow(unshift, iter)(this._iter(), ...as)
+  collect = (): A[] => collect(this._iter())
+  join = (seperator?: string) => flow(join(seperator))(this._iter())
+  count = () => count(this._iter())
+  zipWith = <B, C>(b: Iterable<B>, f: (a: A, b: B) => C) => flow(zipWith, iter)(this._iter(), b, f)
+  zip = <B>(b: Iterable<B>) => flow(zip, iter)(this._iter(), b)
+  unzip = (): Iter<[
     (A extends [infer X, any] | readonly [infer X, any] | (infer X)[] ? X : unknown)[],
     (A extends [any, infer Y] | readonly [any, infer Y] | (infer Y)[] ? Y : unknown)[],
-  ]> => flow(unzip, seq)(this.iter() as any) as any
-  flatten = (): A extends Iterable<infer R> ? Seq<R> : never => flow(flatten, seq)(this.iter() as any) as any
+  ]> => flow(unzip, iter)(this._iter() as any) as any
+  flatten = (): A extends Iterable<infer R> ? Iter<R> : never => flow(flatten, iter)(this._iter() as any) as any
 }
 
 

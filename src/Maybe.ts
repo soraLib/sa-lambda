@@ -70,9 +70,39 @@ export const map = <A, B>(f: (a: A) => B) => (fa: Maybe<A>): Maybe<B> =>
   isNone(fa) ? none : some(f(fa.value))
 
 /**
- * instance `of` operation
+ * instance `of` operation.
  */
 export const of = some
+
+/**
+ * instance `alt` operation.
+ */
+export const alt = <B>(that: Lazy<Maybe<B>>) => <A>(ma: Maybe< A>): Maybe<A | B> =>
+  isNone(ma) ? that() : ma
+
+/**
+ * instance `ap` operation.
+ */
+export const ap = <A, B>(f: (a: A) => B) => (ma: Maybe<A>): Maybe<B> =>
+  isNone(ma) ? none : some(f(ma.value))
+
+
+/**
+ * Returns the callback function result, if the `Maybe` is `Some`, otherwise returns undefined.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = flow(
+ *   then((n: number) => n + 1)
+ * )
+ *
+ * assert.deepStrictEqual(f(some(1)), 2)
+ * assert.deepStrictEqual(f(none), undefined)
+ * ```
+ */
+export const then = <A, B>(f: (a: A) => B) => (ma: Maybe<A>): B | undefined =>
+  isNone(ma) ? constUndefined() : f(ma.value)
 
 /**
  * Returns the onNone default value if the `Maybe` is `None`, otherwise returns the onSome function result with `Maybe`.
@@ -81,7 +111,7 @@ export const of = some
  *
  * ```ts
  * const f = flow(
- *  match(() => 0, (n: number) => n + 1)
+ *   match(() => 0, (n: number) => n + 1)
  * )
  *
  * assert.deepStrictEqual(f(some(1)), 2)

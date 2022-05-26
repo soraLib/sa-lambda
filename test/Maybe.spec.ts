@@ -1,4 +1,4 @@
-import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match } from '../src/Maybe'
+import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, then, ap } from '../src/Maybe'
 import { flow } from '../src/function'
 
 test('isSome', () => {
@@ -31,6 +31,36 @@ test('getOrElse', () => {
 
 test('of', () => {
   expect(of(1)).toEqual(some(1))
+})
+
+test('alt', () => {
+  const f = flow(
+    alt(() => some(1))
+  )
+  expect(f(some(2))).toEqual(some(2))
+  expect(f(none)).toEqual(some(1))
+
+  const f2 = flow(
+    alt(() => none)
+  )
+  expect(f2(some(2))).toEqual(some(2))
+  expect(f2(none)).toEqual(none)
+})
+
+test('ap', () => {
+  const f = flow(
+    ap((n: number) => n + 1)
+  )
+  expect(f(some(1))).toEqual(some(2))
+  expect(f(none)).toEqual(none)
+})
+
+test('then', () => {
+  const f = flow(
+    then((n: number) => n + 1)
+  )
+  expect(f(some(1))).toBe(2)
+  expect(f(none)).toBeUndefined()
 })
 
 test('map', () => {

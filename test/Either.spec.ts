@@ -1,4 +1,6 @@
-import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists } from '../src/Either'
+import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight } from '../src/Either'
+import { flow } from '../src/function'
+import { none, some } from '../src/Maybe'
 
 test('isLeft', () => {
   expect(isLeft(left(0))).toBeTruthy()
@@ -21,13 +23,26 @@ test('of', () => {
   expect(of(1)).toEqual(right(1))
 })
 
+test('alt', () => {
+  const f = flow(
+    alt(() => right(1))
+  )
+  expect(f(right(2))).toEqual(right(2))
+  expect(f(left(2))).toEqual(right(1))
+
+  const f2 = flow(
+    alt(() => left(1))
+  )
+  expect(f2(right(2))).toEqual(right(2))
+  expect(f2(left(2))).toEqual(left(1))
+})
+
 test('fromPredicate', () => {
   const f = fromPredicate((n: number) => n > 0, () => 'error')
 
   expect(f(1)).toEqual(right(1))
   expect(f(-1)).toEqual(left('error'))
 })
-
 
 test('match', () => {
   const f = match((n: number) => n - 1, (n: number) => n + 1)
@@ -38,6 +53,16 @@ test('match', () => {
 test('getOrElse', () => {
   expect(getOrElse(() => 0)(left(1))).toBe(0)
   expect(getOrElse(() => 0)(right(1))).toBe(1)
+})
+
+test('getLeft', () => {
+  expect(getLeft(right(1))).toEqual(none)
+  expect(getLeft(left(1))).toEqual(some(1))
+})
+
+test('getRight', () => {
+  expect(getRight(right(1))).toEqual(some(1))
+  expect(getRight(left(1))).toEqual(none)
 })
 
 test('chain', () => {
