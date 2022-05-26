@@ -1,4 +1,4 @@
-import { flow } from './function'
+import { flow, pipe } from './function'
 import { Predicate } from './Predicate'
 
 
@@ -273,10 +273,10 @@ export function* zip<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<[A, B]> {
  * assert.deepStrictEqual(unzip([[1, 2], [3, 4]]), [[1, 3], [2, 4]])
  * ```
  */
-export const unzip = <A, B>(ma: Iterable<[A, B]>): [A[], B[]] => {
+export const unzip = <A, B>(as: Iterable<[A, B]>): [A[], B[]] => {
   const fa: A[] = []
   const fb: B[] = []
-  for (const a of ma) {
+  for (const a of as) {
     fa.push(a[0])
     fb.push(a[1])
   }
@@ -293,14 +293,14 @@ export const unzip = <A, B>(ma: Iterable<[A, B]>): [A[], B[]] => {
  * assert.deepStrictEqual(flatten([["a"], ["b", "c"], ["d", "e", "f"]]), ["a", "b", "c", "d", "e", "f"])
  * ```
  */
-export function* flatten<A>(ma: Iterable<Iterable<A>>): Iterable<A> {
-  for (const item of ma) {
-    yield* item
+export function* flatten<A>(as: Iterable<Iterable<A>>): Iterable<A> {
+  for (const a of as) {
+    yield* a
   }
 }
 
 /**
- * Same as [`Iter`](#chain), but passing also the index to the iterating function.
+ * Same as [`chain`](#chain), but passing also the index to the iterating function.
  *
  * @example
  *
@@ -316,10 +316,23 @@ export const chainWithIndex = <A, B>(f: (i: number, a: A) => Iterable<B>) => fun
   }
 }
 
+/**
+ * Returns a iterator that concatenates the function result into a single interator (like [`flatten`](#flatten)).
+ *
+ * @example
+ *
+ * ```ts
+ * const f = (n: number) => flow(replicate, collect)(`${n}`, n)
+ *
+ * assert.deepStrictEqual(flow(map(f), collect)([1, 2, 3]))([['1'], ['2', '2'], ['3', '3', '3']])
+ * assert.deepStrictEqual(flow(chain(f), collect)([1, 2, 3]))(['1', '2', '2', '3', '3', '3'])
+ * ```
+ */
 export const chain = <A, B>(f: (a: A) => Iterable<B>) => (ma: Iterable<A>): Iterable<B> =>
-  flow(
+  pipe(
+    ma,
     chainWithIndex((_, a: A) => f(a))
-  )(ma)
+  )
 
 
 /**

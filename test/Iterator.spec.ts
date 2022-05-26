@@ -1,5 +1,5 @@
-import { isEmpty, iter, Iter, collect, to, map, flatten, replicate, chain, join, chainWithIndex, filter } from '../src/Iterator'
-import { flow } from '../src/function'
+import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, chainWithIndex, filter } from '../src/Iterator'
+import { flow, pipe } from '../src/function'
 
 it('isEmpty', () => {
   expect(isEmpty([])).toBeTruthy()
@@ -139,13 +139,20 @@ describe('iter', () => {
   })
 
   it('compose1', () => {
+    const size = 2
+
     const f = flow(
       to,
-      map(a => iter(to(2)).map(b => [a, b]).collect()),
-      flatten,
+      chain(
+        x => pipe(
+          size,
+          to,
+          map(y => [x, y])
+        )
+      ),
       collect,
     )
 
-    expect(f(2)).toEqual([[0, 0], [0, 1], [1, 0], [1, 1]])
+    expect(f(size)).toEqual([[0, 0], [0, 1], [1, 0], [1, 1]])
   })
 })
