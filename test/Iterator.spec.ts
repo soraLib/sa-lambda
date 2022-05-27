@@ -1,4 +1,4 @@
-import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, chainWithIndex, filter } from '../src/Iterator'
+import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, filter, reduce } from '../src/Iterator'
 import { flow, pipe } from '../src/function'
 
 it('isEmpty', () => {
@@ -89,6 +89,16 @@ describe('iter', () => {
     )
 
     expect(f([1, 2, 3, 4])).toEqual([2, 4])
+    expect(iter([1, 2, 3, 4].filter((a: number) => a % 2 === 0)).collect()).toEqual([2, 4])
+  })
+
+  it('reduce', () => {
+    const f = flow(
+      reduce((acc: number, cur: number) => acc + cur, 1)
+    )
+
+    expect(f([2, 3, 4])).toBe(10)
+    expect(iter([2, 3, 4]).reduce((acc: number, cur: number) => acc + cur, 1)).toBe(10)
   })
 
   it('zipWith', () => {
@@ -125,10 +135,6 @@ describe('iter', () => {
 
   it('replicate', () => {
     expect(flow(replicate, collect)('a', 2)).toEqual(['a', 'a'])
-  })
-
-  it('chainWithIndex', () => {
-    expect(flow(chainWithIndex((i, a) => [i, a]), collect)(['a', 'b'])).toEqual([0, 'a', 1, 'b'])
   })
 
   it('chain', () => {

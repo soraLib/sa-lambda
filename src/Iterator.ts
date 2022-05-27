@@ -217,6 +217,29 @@ export const filter = <A>(predicate: Predicate<A>) => function* (ma: Iterable<A>
 }
 
 /**
+ * Reduces an iterator.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = flow(
+ *   reduce((acc: number, cur: number) => acc + cur, 1)
+ * )
+ *
+ * assert.deepStrictEqual(f([2, 3, 4]), 10)
+ * ```
+ */
+export const reduce = <A, B>(f:(b: B, a: A) => B, b: B) => (as: Iterable<A>): B => {
+  let ret = b
+  for(const a of as) {
+    ret = f(ret, a)
+  }
+
+  return ret
+}
+
+
+/**
  * Takes two iterator and returns an iterator of the function results. If one iterator is short, excess items of the longer iterator are discarded.
  *
  * @example
@@ -300,23 +323,6 @@ export function* flatten<A>(as: Iterable<Iterable<A>>): Iterable<A> {
 }
 
 /**
- * Same as [`chain`](#chain), but passing also the index to the iterating function.
- *
- * @example
- *
- * ```ts
- * assert.deepStrictEqual(flow(chainWithIndex((i, a) => `${i}-${a}`), collect)(['a', 'b']), ['0-a', '1-b'])
- * ```
- */
-export const chainWithIndex = <A, B>(f: (i: number, a: A) => Iterable<B>) => function* (as: Iterable<A>): Iterable<B> {
-  let i = 0
-  for (const item of as) {
-    yield* f(i, item)
-    i++
-  }
-}
-
-/**
  * Returns a iterator that concatenates the function result into a single interator (like [`flatten`](#flatten)).
  *
  * @example
@@ -328,12 +334,13 @@ export const chainWithIndex = <A, B>(f: (i: number, a: A) => Iterable<B>) => fun
  * assert.deepStrictEqual(flow(chain(f), collect)([1, 2, 3]))(['1', '2', '2', '3', '3', '3'])
  * ```
  */
-export const chain = <A, B>(f: (a: A) => Iterable<B>) => (ma: Iterable<A>): Iterable<B> =>
-  pipe(
-    ma,
-    chainWithIndex((_, a: A) => f(a))
-  )
-
+export const chain = <A, B>(f: (a: A, i: number) => Iterable<B>) => function* (as: Iterable<A>): Iterable<B> {
+  let i = 0
+  for (const item of as) {
+    yield* f(item, i)
+    i++
+  }
+}
 
 /**
  * Creates a `Iter` from an iterator.
@@ -366,13 +373,15 @@ export class Iter<A> implements Iterable<A> {
   static makeBy = flow(makeBy, iter)
   static replicate = flow(replicate, iter)
 
-  map = <B>(f: (a: A) => B) => flow(map(f), iter)(this._iter())
+  map = <B>(f: (a: A) => B) => pipe(this._iter(), map(f), iter)
   toArray = (): A[] => toArray(this._iter())
   isEmpty= (): boolean => isEmpty(this._iter())
   push = (...as: A[]): Iter<A> => flow(push, iter)(this._iter(), ...as)
   unshift = (...as: A[]) => flow(unshift, iter)(this._iter(), ...as)
+  filter = (predicate: Predicate<A>) => pipe(this._iter(), filter(predicate), iter)
+  reduce = <B>(f:(b: B, a: A) => B, b: B) => pipe(this._iter(), reduce(f, b))
   collect = (): A[] => collect(this._iter())
-  join = (seperator?: string) => flow(join(seperator))(this._iter())
+  join = (seperator?: string) => pipe(this._iter(), join(seperator))
   count = () => count(this._iter())
   zipWith = <B, C>(b: Iterable<B>, f: (a: A, b: B) => C) => flow(zipWith, iter)(this._iter(), b, f)
   zip = <B>(b: Iterable<B>) => flow(zip, iter)(this._iter(), b)
@@ -380,7 +389,8 @@ export class Iter<A> implements Iterable<A> {
     (A extends [infer X, any] | readonly [infer X, any] | (infer X)[] ? X : unknown)[],
     (A extends [any, infer Y] | readonly [any, infer Y] | (infer Y)[] ? Y : unknown)[],
   ]> => flow(unzip, iter)(this._iter() as any) as any
-  flatten = (): A extends Iterable<infer R> ? Iter<R> : never => flow(flatten, iter)(this._iter() as any) as any
+  flatten = (): A extends Iterable<infer R> ? Iter<R> : never => pipe(this._iter() as any, flatten, iter) as any
+  chain = <B>(f: (a: A, i: number) => Iterable<B>) => pipe(this._iter(), chain(f), iter)
 }
 
 
