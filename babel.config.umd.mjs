@@ -2,7 +2,7 @@ import { fileURLToPath } from 'url'
 import { basename, dirname, join, normalize, extname } from 'path'
 import fs from 'fs'
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const dir = join(__dirname, './es')
@@ -13,8 +13,9 @@ const moduleIds = new Map
 function getModuleId(/** @type {string} */name) {
   const file = basename(name, '.js')
 
-  if (file == 'index') return ['sa']
-  return ['sa', file]
+  if (file == 'index') return ['sa-lambda']
+
+  return ['sa-lambda', file]
 }
 
 function getDoduleIds(/** @type {string} */dir) {
@@ -44,18 +45,19 @@ const globals = Object.fromEntries([...moduleIds.entries()].flatMap(([k, id]) =>
 export default {
   moduleIds: true,
   getModuleId(/** @type {string} */name) {
-    const r = getModuleId(name).join('/');
+    const r = getModuleId(name).join('/')
+
     return r
   },
   plugins: [
     ['@babel/plugin-transform-modules-umd', {
       globals: globals,
-      exactGlobals: true,
+      exactGlobals: true
     }],
     ['babel-plugin-add-import-extension', {
       extension: 'js'
     }],
-    "@babel/plugin-proposal-nullish-coalescing-operator",
-    "@babel/plugin-proposal-optional-chaining"
-  ],
+    '@babel/plugin-proposal-nullish-coalescing-operator',
+    '@babel/plugin-proposal-optional-chaining'
+  ]
 }

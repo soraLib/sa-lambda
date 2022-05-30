@@ -27,7 +27,7 @@ export default {
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
-    "\\\\node_modules\\\\"
+    '\\\\node_modules\\\\'
   ],
 
   // Indicates which provider should be used to instrument code for coverage
@@ -62,7 +62,8 @@ export default {
   // A set of global variables that need to be available in all test environments
   //globals: {},
 
-  // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
+  // The maximum amount of workers used to run your tests. Can be specified as % or a number.
+  // E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
@@ -82,7 +83,7 @@ export default {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    "^lodash-es$": "lodash"
+    '^lodash-es$': 'lodash'
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -148,7 +149,7 @@ export default {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: ['<rootDir>/test/**/*spec.[jt]s?(x)'],
+  testMatch: ['<rootDir>/test/**/*spec.[jt]s?(x)']
 
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
@@ -191,4 +192,4 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}

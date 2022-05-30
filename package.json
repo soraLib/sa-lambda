@@ -1,13 +1,13 @@
 {
   "name": "sa-lambda",
-  "version": "1.0.0-pre.0",
+  "version": "1.0.0-pre.1",
   "description": "Typescript library for functional programming.",
   "main": "./cjs/index.js",
   "module": "./esm/index.mjs",
   "browser": "./dist/sa-lambda.min.js",
   "umd::main": "./dist/sa-lambda.js",
-  "types": "./type/index.d.ts",
-  "typings": "./type/index.d.ts",
+  "types": "./index.d.ts",
+  "typings": "./index.d.ts",
   "exports": {
     ".": {
       "import": "./esm/index.mjs",
@@ -48,6 +48,12 @@
     "do:pack": "node ./dev/publish.mjs pack",
     "do:publish": "node ./dev/publish.mjs"
   },
+  "tags": [
+    "typescript",
+    "js",
+    "library",
+    "functional-programming"
+  ],
   "keywords": [
     "typescript",
     "js",

@@ -1,4 +1,4 @@
-import { npm, node, sub, once, queue } from 'darl'
+import { npm, sub, once, queue } from 'darl'
 
 export const build = once([
   queue(
@@ -12,5 +12,5 @@ export const build = once([
   npm`rollup`('--', '-c'),
   npm`rollup`('--', '-c', 'rollup.config.cjs.js'),
   npm`rollup`('--', '-c', 'rollup.config.es.js'),
-  npm`rollup`('--', '-c', 'rollup.config.min.js'),
+  npm`rollup`('--', '-c', 'rollup.config.min.js')
 ])
