@@ -37,7 +37,8 @@
   ],
   "scripts": {
     "tsc": "tsc",
-    "doc": "cd docs && npm run build",
+    "docs": "pnpm -C docs run dev",
+    "docs:build": "pnpm -C docs run build",
     "babel": "babel",
     "rollup": "rollup",
     "prebuild": "node ./dev/prebuild.mjs",
