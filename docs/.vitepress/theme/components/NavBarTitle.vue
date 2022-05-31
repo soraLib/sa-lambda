@@ -1,7 +1,7 @@
 <template>
   <a
     class="nav-bar-title"
-    href="/"
+    href="/sa-lambda/"
     aria-label="Sa Lambda, back to home`"
   >
     <span class="title">Sa Lambda</span>
