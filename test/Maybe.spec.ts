@@ -1,4 +1,4 @@
-import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, then, ap } from '../src/Maybe'
+import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, then, ap, tryCatch } from '../src/Maybe'
 import { flow } from '../src/function'
 
 test('isSome', () => {
@@ -90,4 +90,18 @@ test('match', () => {
 
   expect(f(some(1))).toBe(2)
   expect(f(none)).toBe(0)
+})
+
+test('tryCatch', () => {
+  const unsafeDiv = (top: number, bottom: number) => {
+    if(bottom === 0) throw new Error('unsafe division')
+
+    return top / bottom
+  }
+
+  const div = (top: number, bottom: number) =>
+    tryCatch(() => unsafeDiv(top, bottom))
+
+  expect(div(2, 0)).toEqual(none)
+  expect(div(2, 1)).toEqual(some(2))
 })

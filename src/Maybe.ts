@@ -185,3 +185,28 @@ export const toUndefined: <A>(ma: Maybe<A>) => A | undefined = match(constUndefi
  * ```
  */
 export const getOrElse = <A>(onNone: Lazy<A>) => <B>(ma: Maybe<B>): A | B => isNone(ma) ? onNone() : ma.value
+
+/**
+ *  Returns a `Maybe` from a function that might throw.
+ *
+ * @example
+ *
+ * ```ts
+ * const unsafeDiv = (top: number, bottom: number) => {
+ *   if(bottom === 0) throw new Error('unsafe division')
+ *   return top / bottom
+ * }
+ * const div = (top: number, bottom: number) =>
+ *   tryCatch(() => unsafeDiv(top, bottom))
+ *
+ * assert.deepStrictEqual(div(2, 0), none)
+ * assert.deepStrictEqual(div(2, 1), some(2))
+ * ```
+ */
+export const tryCatch = <A>(f: Lazy<A>): Maybe<A> => {
+  try {
+    return some(f())
+  } catch (_) {
+    return none
+  }
+}
