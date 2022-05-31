@@ -1,4 +1,4 @@
-import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight } from '../src/Either'
+import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight, fromMaybe, tryCatch } from '../src/Either'
 import { flow } from '../src/function'
 import { none, some } from '../src/Maybe'
 
@@ -44,6 +44,13 @@ test('fromPredicate', () => {
   expect(f(-1)).toEqual(left('error'))
 })
 
+test('fromMaybe', () => {
+  const f = fromMaybe(() => 'error')
+
+  expect(f(some(1))).toEqual(right(1))
+  expect(f(none)).toEqual(left('error'))
+})
+
 test('match', () => {
   const f = match((n: number) => n - 1, (n: number) => n + 1)
   expect(f(left(1))).toBe(0)
@@ -79,4 +86,18 @@ test('exists', () => {
   expect(exists((n: number) => n > 0)(left(0))).toBeFalsy()
   expect(exists((n: number) => n > 0)(right(0))).toBeFalsy()
   expect(exists((n: number) => n > 0)(right(1))).toBeTruthy()
+})
+
+test('tryCatch', () => {
+  const unsafeDiv = (top: number, bottom: number) => {
+    if(bottom === 0) throw new Error('unsafe division')
+
+    return top / bottom
+  }
+
+  const div = (top: number, bottom: number) =>
+    tryCatch(() => unsafeDiv(top, bottom), () => 0)
+
+  expect(div(2, 0)).toEqual(left(0))
+  expect(div(2, 1)).toEqual(right(2))
 })

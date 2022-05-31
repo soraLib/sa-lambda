@@ -1,6 +1,6 @@
 import { Lazy } from './function'
 import { Predicate } from './Predicate'
-import { Maybe, none, some } from './Maybe'
+import { isNone, Maybe, none, some } from './Maybe'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -70,11 +70,27 @@ export const alt = <E2, B>(that: Lazy<Either<E2, B>>) => <E1, A>(ma: Either<E1, 
  * assert.deepStrictEqual(getEither(-1), left('error'))
  * ```
  */
-export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: () => E): <B extends A>(b: B) => Either<E, B>
-export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: () => E): (a: A) => Either<E, A>
-export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: () => E): (a: A) => Either<E, A> {
+export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): <B extends A>(b: B) => Either<E, B>
+export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): (a: A) => Either<E, A>
+export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): (a: A) => Either<E, A> {
   return (a) => predicate(a) ? right(a) : left(onFalse())
 }
+
+/**
+ * Returns `Left` or `Right` based on the given `Maybe`.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = flow(
+ *   fromMaybe(() => 'error')
+ * )
+ *
+ * assert.deepStrictEqual(f(some(1)), right(1))
+ * assert.deepStrictEqual(f(none), left('error'))
+ * ```
+ */
+export const fromMaybe = <E>(onNone: Lazy<E>) => <A>(ma: Maybe<A>) => isNone(ma) ? left(onNone()) : right(ma.value)
 
 /**
  * Takes two functions and an `Either` value, if the value is `Left`,
@@ -166,3 +182,28 @@ export const orElse = <E1, E2, B>(onLeft: (e: E1) => Either<E2, B>) => <A>(ma: E
  */
 export const exists = <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>): boolean =>
   isLeft(ma) ? false : predicate(ma.right)
+
+/**
+ *  Returns a `Either` from a function that might throw.
+ *
+ * @example
+ *
+ * ```ts
+ * const unsafeDiv = (top: number, bottom: number) => {
+ *   if(bottom === 0) throw new Error('unsafe division')
+ *   return top / bottom
+ * }
+ * const div = (top: number, bottom: number) =>
+ *   tryCatch(() => unsafeDiv(top, bottom), () => 0)
+ *
+ * assert.deepStrictEqual(div(2, 0), left(0))
+ * assert.deepStrictEqual(div(2, 1), right(2))
+ * ```
+ */
+export const tryCatch = <E, A>(f: Lazy<A>, onThrow: (e: unknown) => E): Either<E, A> => {
+  try {
+    return right(f())
+  } catch (e) {
+    return left(onThrow(e))
+  }
+}
