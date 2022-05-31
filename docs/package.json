@@ -1,0 +1,41 @@
+{
+  "name": "sa-lambda-docs",
+  "version": "0.0.0",
+  "private": "true",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "serve": "npm run build && serve .vitepress/dist"
+  },
+  "dependencies": {
+    "@vueuse/core": "^8.5.0",
+    "@vueuse/shared": "^8.5.0",
+    "vue": "^3.2.35",
+    "vue-global-api": "^0.4.1"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.1.47",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^17.0.36",
+    "@vueuse/core": "^8.5.0",
+    "esbuild-register": "^3.3.2",
+    "eslint": "^8.16.0",
+    "esno": "^0.16.3",
+    "fast-glob": "^3.2.11",
+    "fs-extra": "^10.1.0",
+    "https-localhost": "^4.7.1",
+    "prism-theme-vars": "^0.2.3",
+    "typescript": "^4.6.4",
+    "unplugin-icons": "^0.14.3",
+    "unplugin-vue-components": "^0.19.5",
+    "vite": "^2.9.9",
+    "vite-plugin-pwa": "^0.12.0",
+    "vite-plugin-windicss": "^1.8.4",
+    "vitepress": "^0.22.4",
+    "workbox-core": "^6.5.3",
+    "workbox-precaching": "^6.5.3",
+    "workbox-routing": "^6.5.3",
+    "workbox-window": "^6.5.3"
+  }
+}

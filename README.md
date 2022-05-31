@@ -20,6 +20,7 @@ Typescript library for functional programming.
 - [ ] Iterator
 - [x] Pipe & Flow
 - [ ] Task (Promise-Like)
+- [ ] Docs
 - [ ] some math utils
 
 ## Installation
