@@ -43,23 +43,29 @@ export const isLeft = <E>(ma: Either<E, unknown>): ma is Left<E> => ma._tag === 
 export const isRight = <A>(ma: Either<unknown, A>): ma is Right<A> => ma._tag === 'Right'
 
 /**
- * instance `map` operation.
+ * Maps the `Right` value.
  */
 export const map = <A, B>(f: (a: A) => B) => <E>(ma: Either<E, A>) => isLeft(ma) ? ma : right(f(ma.right))
 
 /**
- * instance `of` operation.
+ * Takes a value and wraps it into a `Right`.
  */
 export const of = right
 
 /**
- * instance `alt` operation.
+ * Returns the `Either` if it is `Right`, otherwise returns the function result.
  */
 export const alt = <E2, B>(that: Lazy<Either<E2, B>>) => <E1, A>(ma: Either<E1, A>): Either<E2, A | B> =>
   isLeft(ma) ? that() : ma
 
 /**
- * Returns `Left` or `Right` based on the given predicate.
+ * Applies a `Right` function over a `Right` value. Returns `Left` if `Either` or the function are `Left`.
+ */
+export const ap = <E2, A>(ma: Either<E2, A>) => <E1, B>(fab: Either<E1, (a: A) => B>): Either<E1 | E2, B> =>
+  isLeft(fab) ? fab : isLeft(ma) ? ma : right(fab.right(ma.right))
+
+/**
+ * Constructs a `Left` or `Right` based on the given predicate.
  *
  * @example
  *
@@ -207,3 +213,31 @@ export const tryCatch = <E, A>(f: Lazy<A>, onThrow: (e: unknown) => E): Either<E
     return left(onThrow(e))
   }
 }
+
+/**
+ * Returns Right if `Either` is `Left` and vice versa.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(swap(right(1)), left(1))
+ * assert.deepStrictEqual(swap(left(1)), right(1))
+ * ```
+ */
+export const swap = <E, A>(ma: Either<E, A>): Either<A, E> =>
+  isLeft(ma) ? right(ma.left) : left(ma.right)
+
+/**
+ * Compares one `Either` to another `Either`. Returns false if eithers or the wrapped values are different.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(equals(right(1), right(1)), true)
+ * assert.deepStrictEqual(equals(right(1), left(1)), false)
+ * assert.deepStrictEqual(equals(left(1), left(1)), true)
+ * assert.deepStrictEqual(equals(left(1), right(1)), false)
+ * ```
+ */
+export const equals = <E, A>(a: Either<E, A>, b: Either<E, A>): boolean =>
+  a === b || (isLeft(a) ? isLeft(b) && a.left === b.left : isRight(b) && a.right === b.right)

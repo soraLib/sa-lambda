@@ -1,4 +1,4 @@
-import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight, fromMaybe, tryCatch } from '../src/Either'
+import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight, fromMaybe, tryCatch, swap, equals, ap } from '../src/Either'
 import { flow } from '../src/function'
 import { none, some } from '../src/Maybe'
 
@@ -35,6 +35,20 @@ test('alt', () => {
   )
   expect(f2(right(2))).toEqual(right(2))
   expect(f2(left(2))).toEqual(left(1))
+})
+
+test('ap', () => {
+  const f1 = flow(
+    ap(left(0))
+  )
+  expect(f1(left(1))).toEqual(left(1))
+  expect(f1(right(n => n + 1))).toEqual(left(0))
+
+  const f2 = flow(
+    ap(right(0))
+  )
+  expect(f2(left(1))).toEqual(left(1))
+  expect(f2(right(n => n + 1))).toEqual(right(1))
 })
 
 test('fromPredicate', () => {
@@ -100,4 +114,16 @@ test('tryCatch', () => {
 
   expect(div(2, 0)).toEqual(left(0))
   expect(div(2, 1)).toEqual(right(2))
+})
+
+test('swap', () => {
+  expect(swap(right(1))).toEqual(left(1))
+  expect(swap(left(1))).toEqual(right(1))
+})
+
+test('equals', () => {
+  expect(equals(right(1), right(1))).toBeTruthy()
+  expect(equals(right(1), left(1))).toBeFalsy()
+  expect(equals(left(1), left(1))).toBeTruthy()
+  expect(equals(left(1), right(1))).toBeFalsy()
 })
