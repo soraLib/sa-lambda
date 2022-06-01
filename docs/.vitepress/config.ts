@@ -14,15 +14,15 @@ const Guide = [
 const Adts = [
   {
     text: 'Either',
-    link: '/adts/either',
+    link: '/adts/Either',
   },
   {
     text: 'Maybe',
-    link: '/adts/maybe',
+    link: '/adts/Maybe',
   },
   {
     text: 'Function',
-    link: '/adts/function',
+    link: '/adts/Function',
   },
 ]
 
@@ -47,7 +47,7 @@ const config: UserConfig = {
   title: 'Sa Lambda',
   description: 'Typescript library for functional programming.',
   lang: 'en-US',
-  base: '/sa-lambda/',
+  base: '/sa-lambda',
   head: [
     ['meta', { name: 'theme-color', content: '#ffffff' }],
     // ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
