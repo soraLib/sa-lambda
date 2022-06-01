@@ -67,9 +67,9 @@ export default defineConfig({
       ],
       manifest: {
         id: '/',
-        name: 'Vite Plugin PWA',
-        short_name: 'PWA for Vite',
-        description: 'Zero-config PWA for Vite',
+        name: 'Sa Lambda',
+        short_name: 'Sa Lambda',
+        description: 'Typescript library for functional programming.',
         theme_color: '#ffffff',
         icons: [
           {
