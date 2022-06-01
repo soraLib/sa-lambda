@@ -1,5 +1,5 @@
 import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight, fromMaybe, tryCatch, swap, equals, ap } from '../src/Either'
-import { flow } from '../src/function'
+import { flow, pipe } from '../src/function'
 import { none, some } from '../src/Maybe'
 
 test('isLeft', () => {
@@ -104,7 +104,7 @@ test('exists', () => {
 
 test('tryCatch', () => {
   const unsafeDiv = (top: number, bottom: number) => {
-    if(bottom === 0) throw new Error('unsafe division')
+    if (bottom === 0) throw new Error('unsafe division')
 
     return top / bottom
   }
@@ -126,4 +126,12 @@ test('equals', () => {
   expect(equals(right(1), left(1))).toBeFalsy()
   expect(equals(left(1), left(1))).toBeTruthy()
   expect(equals(left(1), right(1))).toBeFalsy()
+})
+
+test('example1', () => {
+  const parseJson = (s: string) =>
+    tryCatch(() => JSON.parse(s), () => `Couldn't parse from ${s}.`)
+
+  expect(pipe('{"name":"clyne"}', parseJson, getOrElse(() => ({ name: 'sora' })))).toEqual({ name: 'clyne' })
+  expect(pipe('{"name""clyne"}', parseJson, getOrElse(() => ({ name: 'sora' })))).toEqual({ name: 'sora' })
 })

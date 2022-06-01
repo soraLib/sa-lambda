@@ -4,26 +4,28 @@ title: Getting Started | Guide
 
 # Getting Started
 
-Typescript library for functional programming.
+Sa Lambda is a typescript library for functional programming. Its purpose is to allow developers to use popular patterns and abstractions that are available in most functional languages.
 
 ## Installation
 
-### npm
+Add `sa-lambda` dependency to your project as a `dependency`:
 
-```
-npm install sa-lambda
-```
+With **NPM**
 
-### yarn
-
-```
-yarn add sa-lambda
+```shell
+npm install sa-lambda -S
 ```
 
-### pnpm
+With **yarn**
 
+```shell
+yarn add sa-lambda -S
 ```
-pnpm add sa-lambda
+
+With **pnpm**
+
+```shell
+pnpm add sa-lambda -S
 ```
 
 ## Use

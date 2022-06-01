@@ -141,7 +141,7 @@ export const getLeft = <E, A>(ma: Either<E, A>): Maybe<E> =>
   isRight(ma) ? none : some(ma.left)
 
 /**
- * Returns the `Left` value of an `Either` if possible.
+ * Returns the `Right` value of an `Either` if possible.
  *
  * @example
  *
@@ -154,7 +154,7 @@ export const getRight = <E, A>(ma: Either<E, A>): Maybe<A> =>
   isRight(ma) ? some(ma.right) : none
 
 /**
- * Composes computations in sequence.
+ * Composes computations in sequence. Useful for chaining many computations that may fail.
  *
  * @example
  *

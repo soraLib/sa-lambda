@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": "true",
   "scripts": {
-    "dev": "vitepress dev",
+    "dev": "nodemon --ext md,vue --watch .vitepress --watch . --exec vitepress dev",
     "build": "vitepress build",
     "serve": "npm run build && serve .vitepress/dist"
   },
@@ -25,6 +25,7 @@
     "fast-glob": "^3.2.11",
     "fs-extra": "^10.1.0",
     "https-localhost": "^4.7.1",
+    "nodemon": "^2.0.16",
     "prism-theme-vars": "^0.2.3",
     "typescript": "^4.6.4",
     "unplugin-icons": "^0.14.3",
