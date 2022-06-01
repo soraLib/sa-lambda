@@ -11,18 +11,18 @@ const Guide = [
   },
 ]
 
-const Modules = [
+const Adts = [
   {
     text: 'Either',
-    link: '/modules/either',
+    link: '/adts/either',
   },
   {
     text: 'Maybe',
-    link: '/modules/maybe',
+    link: '/adts/maybe',
   },
   {
     text: 'Function',
-    link: '/modules/function',
+    link: '/adts/function',
   },
 ]
 
@@ -35,9 +35,9 @@ const slidebars = [
     }),
   },
   {
-    text: 'Modules',
-    children: Modules.map((e) => {
-      (e as any).useLinkText = `${e.text} | Modules`
+    text: 'Adts',
+    children: Adts.map((e) => {
+      (e as any).useLinkText = `${e.text} | Adts`
       return e
     }),
   },
@@ -78,13 +78,13 @@ const config: UserConfig = {
         items: Guide,
       },
       {
-        text: 'Modules',
-        items: Modules,
+        text: 'Adts',
+        items: Adts,
       },
     ],
     sidebar: {
       'guide/': slidebars,
-      'modules/': slidebars,
+      'adts/': slidebars,
       '/sa-lambda/': slidebars,
       '/': slidebars,
     },
