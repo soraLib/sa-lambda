@@ -59,7 +59,7 @@ export const alt = <E2, B>(that: Lazy<Either<E2, B>>) => <E1, A>(ma: Either<E1, 
   isLeft(ma) ? that() : ma
 
 /**
- * Applies a `Right` function over a `Right` value. Returns `Left` if `Either` or the function are `Left`.
+ * Applies a `Right` function over a `Right` value. Returns `Left` if the `Either` or the function is `Left`.
  */
 export const ap = <E2, A>(ma: Either<E2, A>) => <E1, B>(fab: Either<E1, (a: A) => B>): Either<E1 | E2, B> =>
   isLeft(fab) ? fab : isLeft(ma) ? ma : right(fab.right(ma.right))
@@ -234,6 +234,7 @@ export const swap = <E, A>(ma: Either<E, A>): Either<A, E> =>
  *
  * ```ts
  * assert.deepStrictEqual(equals(right(1), right(1)), true)
+ * assert.deepStrictEqual(equals(right(2), right(1)), true)
  * assert.deepStrictEqual(equals(right(1), left(1)), false)
  * assert.deepStrictEqual(equals(left(1), left(1)), true)
  * assert.deepStrictEqual(equals(left(1), right(1)), false)

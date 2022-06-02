@@ -1,5 +1,6 @@
-import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, then, ap, tryCatch } from '../src/Maybe'
+import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, then, ap, tryCatch, equals, orElse, toEither, toNullable, toUndefined, empty } from '../src/Maybe'
 import { flow } from '../src/function'
+import { left, right } from '../src/Either'
 
 test('isSome', () => {
   expect(isSome(some(1))).toBeTruthy()
@@ -20,6 +21,34 @@ test('fromPredicate', () => {
   expect(f(0)).toEqual(none)
 })
 
+
+test('toEither', () => {
+  const f = flow(
+    toEither(() => 0)
+  )
+
+  expect(f(some(1))).toEqual(right(1))
+  expect(f(none)).toEqual(left(0))
+})
+
+test('toNullable', () => {
+  const f = flow(
+    toNullable
+  )
+
+  expect(f(some(1))).toEqual(1)
+  expect(f(none)).toEqual(null)
+})
+
+test('toUndefined', () => {
+  const f = flow(
+    toUndefined
+  )
+
+  expect(f(some(1))).toEqual(1)
+  expect(f(none)).toEqual(undefined)
+})
+
 test('getOrElse', () => {
   const f = flow(
     getOrElse(() => 0)
@@ -27,6 +56,19 @@ test('getOrElse', () => {
 
   expect(f(some(1))).toBe(1)
   expect(f(none)).toBe(0)
+})
+
+test('orElse', () => {
+  const f = flow(
+    orElse(() => some('0'))
+  )
+
+  expect(f(none)).toEqual(some('0'))
+  expect(f(some(1))).toEqual(some(1))
+})
+
+test('empty', () => {
+  expect(empty()).toEqual(none)
 })
 
 test('of', () => {
@@ -48,11 +90,17 @@ test('alt', () => {
 })
 
 test('ap', () => {
-  const f = flow(
-    ap((n: number) => n + 1)
+  const f1 = flow(
+    ap(none)
   )
-  expect(f(some(1))).toEqual(some(2))
-  expect(f(none)).toEqual(none)
+  expect(f1(none)).toEqual(none)
+  expect(f1(some(n => n + 1))).toEqual(none)
+
+  const f2 = flow(
+    ap(some(0))
+  )
+  expect(f2(none)).toEqual(none)
+  expect(f2(some(n => n + 1))).toEqual(some(1))
 })
 
 test('then', () => {
@@ -104,4 +152,12 @@ test('tryCatch', () => {
 
   expect(div(2, 0)).toEqual(none)
   expect(div(2, 1)).toEqual(some(2))
+})
+
+test('equals', () => {
+  expect(equals(some(1), some(1))).toBeTruthy()
+  expect(equals(some(2), some(1))).toBeFalsy()
+  expect(equals(some(1), none)).toBeFalsy()
+  expect(equals(none, none)).toBeTruthy()
+  expect(equals(none, some(1))).toBeFalsy()
 })

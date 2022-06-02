@@ -1,5 +1,6 @@
 import { Predicate } from './Predicate'
 import { Lazy, constNull, identity, constUndefined } from './function'
+import { Either, right, left } from './Either'
 
 export interface None {
   readonly _tag: 'None'
@@ -64,28 +65,32 @@ export function fromPredicate<A>(predicate: Predicate<A>): (a: A) => Maybe<A> {
 }
 
 /**
- * instance `map` operation.
+ * Transforms the `Maybe` with a given function. Returns `None` if the `Maybe` is `None`.
  */
 export const map = <A, B>(f: (a: A) => B) => (fa: Maybe<A>): Maybe<B> =>
   isNone(fa) ? none : some(f(fa.value))
 
 /**
- * instance `of` operation.
+ * Takes a value and wraps it into a `Some`.
  */
 export const of = some
 
 /**
- * instance `alt` operation.
+ * Returns the `Maybe` if it is `Some`, otherwise returns the function result.
  */
 export const alt = <B>(that: Lazy<Maybe<B>>) => <A>(ma: Maybe< A>): Maybe<A | B> =>
   isNone(ma) ? that() : ma
 
 /**
- * instance `ap` operation.
+ * Applies a `Some` function over a `Some` value. Returns `None` if the `Maybe` or the function is `None`.
  */
-export const ap = <A, B>(f: (a: A) => B) => (ma: Maybe<A>): Maybe<B> =>
-  isNone(ma) ? none : some(f(ma.value))
+export const ap = <A>(ma: Maybe<A>) => <B>(fab: Maybe<(a: A) => B>): Maybe<B> =>
+  isNone(fab) ? none : isNone(ma) ? none : some(fab.value(ma.value))
 
+/**
+ * Returns `None`.
+ */
+export const empty = () => none
 
 /**
  * Returns the callback function result, if the `Maybe` is `Some`, otherwise returns undefined.
@@ -122,7 +127,7 @@ export const match = <B, A, C>(onNone: Lazy<B>, onSome: (a: A) => C) => (ma: May
   isNone(ma) ? onNone() : onSome(ma.value)
 
 /**
- * Composes computations in sequence
+ * Composes computations in sequence. Useful for chaining many computations that may result in a missing value.
  *
  * @example
  *
@@ -137,6 +142,23 @@ export const match = <B, A, C>(onNone: Lazy<B>, onSome: (a: A) => C) => (ma: May
  */
 export const chain = <A, B>(f: (a: A) => Maybe<B>) => (ma: Maybe<A>): Maybe<B> =>
   isNone(ma) ? none : f(ma.value)
+
+/**
+ * Returns a `Right` from a `Some` or a `Left` with a default left value if `Maybe` is `None`.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = flow(
+ *   () => 0
+ * )
+ *
+ * assert.deepStrictEqual(f(some(1)), right(1))
+ * assert.deepStrictEqual(f(none), left(0))
+ * ```
+ */
+export const toEither = <E>(f: Lazy<E>) => <A>(ma: Maybe<A>): Either<E, A> =>
+  isNone(ma) ? left(f()) : right(ma.value)
 
 /**
  * Extracts the value out of `Maybe`, if it exists. Otherwise returns `null`.
@@ -186,6 +208,21 @@ export const toUndefined: <A>(ma: Maybe<A>) => A | undefined = match(constUndefi
  */
 export const getOrElse = <A>(onNone: Lazy<A>) => <B>(ma: Maybe<B>): A | B => isNone(ma) ? onNone() : ma.value
 
+
+/**
+ * Returns `Maybe` if it's a `Some`, otherwise returns onNone result.
+ *
+ * @example
+ * const f = flow(
+ *   orElse(() => some(1))
+ * )
+ *
+ * assert.deepStrictEqual(f(some(0)), some(0))
+ * assert.deepStrictEqual(f(none), some(1))
+ */
+export const orElse = <B>(onNone: Lazy<Maybe<B>>) => <A>(ma: Maybe<A>): Maybe<A | B> =>
+  isNone(ma) ? onNone() : ma
+
 /**
  *  Returns a `Maybe` from a function that might throw.
  *
@@ -210,3 +247,19 @@ export const tryCatch = <A>(f: Lazy<A>): Maybe<A> => {
     return none
   }
 }
+
+/**
+ * Compares one `Maybe` to another `Maybe`. Returns false if maybes or the wrapped values are different.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(equals(some(1), some(1)), true)
+ * assert.deepStrictEqual(equals(some(2), some(1)), false)
+ * assert.deepStrictEqual(equals(some(1), none), false)
+ * assert.deepStrictEqual(equals(none, none), true)
+ * assert.deepStrictEqual(equals(none, right(1)), false)
+ * ```
+ */
+export const equals = <A>(a: Maybe<A>, b: Maybe<A>): boolean =>
+  a === b || (isNone(a) ? isNone(b) : isSome(b) && a.value === b.value)

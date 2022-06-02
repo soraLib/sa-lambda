@@ -123,6 +123,7 @@ test('swap', () => {
 
 test('equals', () => {
   expect(equals(right(1), right(1))).toBeTruthy()
+  expect(equals(right(2), right(1))).toBeFalsy()
   expect(equals(right(1), left(1))).toBeFalsy()
   expect(equals(left(1), left(1))).toBeTruthy()
   expect(equals(left(1), right(1))).toBeFalsy()

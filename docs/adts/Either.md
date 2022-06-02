@@ -136,7 +136,7 @@ pipe(left(2), alt(() => left(1)))   ➔ left(1)
 <E2, A>(ma: Either<E2, A>) => <E1, B>(fab: Either<E1, (a: A) => B>) => Either<E2 | E1, B>
 ```
 
-Applies a `Right` function over a `Right` value. Returns `Left` if `Either` or the function are `Left`.
+Applies a `Right` function over a `Right` value. Returns `Left` if the `Either` or the function is `Left`.
 
 ```ts
 pipe(left(1), ap(left(0)))                      ➔ left(1)
