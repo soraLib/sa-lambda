@@ -11,18 +11,18 @@ const Guide = [
   },
 ]
 
-const Adts = [
+const Modules = [
   {
     text: 'Either',
-    link: '/adts/Either',
+    link: '/modules/Either',
   },
   {
     text: 'Maybe',
-    link: '/adts/Maybe',
+    link: '/modules/Maybe',
   },
   {
     text: 'Function',
-    link: '/adts/Function',
+    link: '/modules/Function',
   },
 ]
 
@@ -35,9 +35,9 @@ const slidebars = [
     }),
   },
   {
-    text: 'Adts',
-    children: Adts.map((e) => {
-      (e as any).useLinkText = `${e.text} | Adts`
+    text: 'Modules',
+    children: Modules.map((e) => {
+      (e as any).useLinkText = `${e.text} | Modules`
       return e
     }),
   },
@@ -56,7 +56,7 @@ const config: UserConfig = {
     // ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }],
     ['meta', { name: 'author', content: 'Hfutsora' }],
     ['meta', { name: 'keywords', content: 'functional programming, typescript' }],
-    ['meta', { property: 'og:title', content: 'Vite Plugin PWA' }],
+    ['meta', { property: 'og:title', content: 'Sa Lambda' }],
     ['meta', { property: 'og:description', content: 'Typescript library for functional programming.' }],
   ],
   themeConfig: {
@@ -78,13 +78,13 @@ const config: UserConfig = {
         items: Guide,
       },
       {
-        text: 'Adts',
-        items: Adts,
+        text: 'Modules',
+        items: Modules,
       },
     ],
     sidebar: {
       'guide/': slidebars,
-      'adts/': slidebars,
+      'modules/': slidebars,
       '/sa-lambda/': slidebars,
       '/': slidebars,
     },
