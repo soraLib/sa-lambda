@@ -161,3 +161,13 @@ test('equals', () => {
   expect(equals(none, none)).toBeTruthy()
   expect(equals(none, some(1))).toBeFalsy()
 })
+
+test('example1', () => {
+  const f = flow(
+    map((n: number) => n + 1),
+    match(() => '', (n: number) => `${n}`),
+  )
+
+  expect(f(some(1))).toBe('2')
+  expect(f(none)).toBe('')
+})

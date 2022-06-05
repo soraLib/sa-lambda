@@ -1,5 +1,9 @@
 # Either
 
+```ts
+type Either<E, B> = Left<E> | Right<B>
+```
+
 `Either` is a data type with two sides (`Left` and `Right`). It is most commonly used for error handling similar as [Maybe](Maybe.md).
 
 It is also important to note that `Either` is right-biased which means that `map`, `chain` and other similar methods will operate on the right side.
