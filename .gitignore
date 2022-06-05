@@ -8,6 +8,7 @@ lib/
 tsout/
 /sa-lambda.js
 /sa-lambda.mjs
+/dist
 coverage/
 /publish
 /pack
