@@ -109,7 +109,7 @@ test('filter', () => {
   )
   expect(f(some(1))).toEqual(some(1))
   expect(f(some(0))).toEqual(none)
-  expect(none).toEqual(none)
+  expect(f(none)).toEqual(none)
 })
 
 

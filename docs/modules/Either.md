@@ -53,7 +53,7 @@ let parsed = pipe(/* some content */, parseJson, getOrElse(() => ({/* default va
 Constructs a new `Either` holding a `Left` value. Represents a failure value.
 
 ```ts
-left(1) ➔ { _tag: 'Left', left: 1 }
+left(1) ➔ { readonly _tag: 'Left', readonly left: 1 }
 ```
 
 ### right
@@ -65,7 +65,7 @@ left(1) ➔ { _tag: 'Left', left: 1 }
 Constructs a new `Either` holding a `Right` value. Represents a successful value.
 
 ```ts
-right(1) ➔ { _tag: 'Right', right: 1 }
+right(1) ➔ { readonly _tag: 'Right', readonly right: 1 }
 ```
 
 ### isLeft
@@ -74,7 +74,7 @@ right(1) ➔ { _tag: 'Right', right: 1 }
 <E>(ma: Either<E, unknown>) => ma is Left<E>
 ```
 
-Returns whether the Either is `Left` or not.
+Returns whether the `Either` is `Left` or not.
 
 ```ts
 isLeft(left(1))  ➔ true
@@ -87,7 +87,7 @@ isLeft(right(1)) ➔ false
 <A>(ma: Either<unknown, A>) => ma is Right<A>
 ```
 
-Returns whether the Either is `Right` or not.
+Returns whether the `Either` is `Right` or not.
 
 ```ts
 isRight(left(1))  ➔ false

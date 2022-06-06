@@ -24,7 +24,7 @@ export const left = <E, A = never>(e: E): Either<E, A> => ({ _tag: 'Left', left:
 export const right = <A, E = never>(a: A): Either<E, A> => ({ _tag: 'Right', right: a })
 
 /**
- * Returns whether the Either is `Left` or not.
+ * Returns whether the `Either` is `Left` or not.
  *
  * ```ts
  * assert.deepStrictEqual(isLeft(left(0)), true)
@@ -33,7 +33,7 @@ export const right = <A, E = never>(a: A): Either<E, A> => ({ _tag: 'Right', rig
  */
 export const isLeft = <E>(ma: Either<E, unknown>): ma is Left<E> => ma._tag === 'Left'
 /**
- * Returns whether the Either is `Right` or not.
+ * Returns whether the `Either` is `Right` or not.
  *
  * ```ts
  * assert.deepStrictEqual(isRight(right(1)), true)

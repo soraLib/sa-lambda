@@ -15,7 +15,7 @@ Typescript library for functional programming.
 ## TODO
 
 - [x] Either
-- [ ] Maybe
+- [x] Maybe
 - [ ] Iterator
 - [x] Pipe & Flow
 - [ ] Task (Promise-Like)

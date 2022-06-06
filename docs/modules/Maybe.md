@@ -38,3 +38,55 @@ const f = flow(
 f(some(1)) // => '2'
 f(none)    // => ''
 ```
+
+## API
+
+### some
+
+```ts
+<A>(value: A) => Maybe<A>
+```
+
+Constructs a `Some`. Represents an optional value that exists.
+
+```ts
+some(1) ➔ { readonly _tag: 'Some', readonly value: A }
+```
+
+### none
+
+```ts
+Maybe<never>
+```
+
+`None` value. Represents a missing value.
+
+```ts
+none ➔ { readonly _tag: 'None' }
+```
+
+### isSome
+
+```ts
+<A>(ma: Maybe<A>) => ma is Some<A>
+```
+
+Returns whether the `Maybe` is `Some` or not.
+
+```ts
+isSome(some(1)) ➔ true
+isSome(none)    ➔ false
+```
+
+### isNone
+
+```ts
+<A>(ma: Maybe<A>) => ma is None
+```
+
+Returns whether the `Maybe` is `None` or not.
+
+```ts
+isNone(some(1)) ➔ false
+isNone(none)    ➔ true
+```

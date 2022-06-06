@@ -23,7 +23,7 @@ export type Maybe<A> = None | Some<A>
  * assert.deepStrictEqual(isNone(some(1)), false)
  * ```
  */
-export const isNone = <A>(m: Maybe<A>): m is None => m._tag === 'None'
+export const isNone = <A>(ma: Maybe<A>): ma is None => ma._tag === 'None'
 
 /**
  * Returns whether the maybe is `Some` or not.
@@ -35,7 +35,7 @@ export const isNone = <A>(m: Maybe<A>): m is None => m._tag === 'None'
  * assert.deepStrictEqual(isSome(none), false)
  * ```
  */
-export const isSome = <A>(m: Maybe<A>): m is Some<A> => m._tag === 'Some'
+export const isSome = <A>(ma: Maybe<A>): ma is Some<A> => ma._tag === 'Some'
 
 /**
  * `None` value. Represents a missing value.
@@ -108,7 +108,7 @@ export const empty = () => none
  * ```
  */
 export const filter = <A>(predicate: Predicate<A>) => (ma: Maybe<A>): Maybe<A> =>
-  isNone(ma) ? none: predicate(ma.value) ? ma : none
+  isNone(ma) ? none : predicate(ma.value) ? ma : none
 
 /**
  * Returns the callback function result, if the `Maybe` is `Some`, otherwise returns undefined.
