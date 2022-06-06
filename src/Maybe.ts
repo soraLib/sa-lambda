@@ -93,6 +93,24 @@ export const ap = <A>(ma: Maybe<A>) => <B>(fab: Maybe<(a: A) => B>): Maybe<B> =>
 export const empty = () => none
 
 /**
+ * Takes a predicate function and a `Maybe`, returns the `Maybe` if it's `Some` and the predicate returns true, otherwise returns `None`.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = flow(
+ *  filter((n: number) => n > 0)
+ * )
+ *
+ * assert.deepStrictEqual(f(some(1)), some(1))
+ * assert.deepStrictEqual(f(some(0)), none)
+ * assert.deepStrictEqual(none, none)
+ * ```
+ */
+export const filter = <A>(predicate: Predicate<A>) => (ma: Maybe<A>): Maybe<A> =>
+  isNone(ma) ? none: predicate(ma.value) ? ma : none
+
+/**
  * Returns the callback function result, if the `Maybe` is `Some`, otherwise returns undefined.
  *
  * @example
