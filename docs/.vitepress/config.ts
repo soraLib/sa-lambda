@@ -47,7 +47,7 @@ const config: UserConfig = {
   title: 'Sa Lambda',
   description: 'Typescript library for functional programming.',
   lang: 'en-US',
-  base: '/sa-lambda',
+  base: '/',
   head: [
     ['meta', { name: 'theme-color', content: '#ffffff' }],
     // ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
@@ -85,7 +85,6 @@ const config: UserConfig = {
     sidebar: {
       'guide/': slidebars,
       'modules/': slidebars,
-      '/sa-lambda/': slidebars,
       '/': slidebars,
     },
   },

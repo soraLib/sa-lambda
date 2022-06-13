@@ -15,7 +15,7 @@ const getMsg = () => {
   <div class="theme">
     <h1>404</h1>
     <blockquote>{{ getMsg() }}</blockquote>
-    <a href="/sa-lambda/" aria-label="go to home">Take me home.</a>
+    <a href="/" aria-label="go to home">Take me home.</a>
   </div>
 </template>
 
