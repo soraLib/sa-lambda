@@ -10,7 +10,7 @@
 
 Typescript library for functional programming.
 
-[Document](http://www.sa-lambda.soralib.com)
+[Document](https://www.sa-lambda.soralib.com)
 
 ## TODO
 
