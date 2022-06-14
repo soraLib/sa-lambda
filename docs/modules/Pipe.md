@@ -100,11 +100,11 @@ pipe(0, n => n + 1, n => n + 2) ➔ 0 + 1 + 2
 ### flow
 
 ```ts
-export function flow<Args extends unknown[], A>(a: (...args: Args) => A): (...args: Args) => A
-export function flow<Args extends unknown[], A, B>(a: (...args: Args) => A, ab: PipeFn<A, B>): (...args: Args) => B
-export function flow<Args extends unknown[], A, B, C>(a: (...args: Args) => A, ab: PipeFn<A, B>, bc: PipeFn<B, C>): (...args: Args) => C
+function flow<Args extends unknown[], A>(a: (...args: Args) => A): (...args: Args) => A
+function flow<Args extends unknown[], A, B>(a: (...args: Args) => A, ab: PipeFn<A, B>): (...args: Args) => B
+function flow<Args extends unknown[], A, B, C>(a: (...args: Args) => A, ab: PipeFn<A, B>, bc: PipeFn<B, C>): (...args: Args) => C
 // and so on...
-export function flow<Args extends unknown[], A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
+function flow<Args extends unknown[], A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R>(
   a: (...args: Args) => A,
   ab: PipeFn<A, B>,
   bc: PipeFn<B, C>,
@@ -124,7 +124,7 @@ export function flow<Args extends unknown[], A, B, C, D, E, F, G, H, I, J, K, L,
   pq: PipeFn<P, Q>,
   qr: PipeFn<Q, R>
 ): (...args: Args) => R
-export function flow<Args extends unknown[], A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, Other extends PipeFn<any, any>[]>(
+function flow<Args extends unknown[], A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, Other extends PipeFn<any, any>[]>(
   a: (...args: Args) => A,
   ab: PipeFn<A, B>,
   bc: PipeFn<B, C>,
