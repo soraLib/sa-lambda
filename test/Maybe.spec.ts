@@ -1,4 +1,4 @@
-import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, then, ap, tryCatch, equals, orElse, toEither, toNullable, toUndefined, empty, filter } from '../src/Maybe'
+import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, ap, tryCatch, equals, orElse, toEither, toNullable, toUndefined, empty, filter } from '../src/Maybe'
 import { flow } from '../src/function'
 import { left, right } from '../src/Either'
 
@@ -110,15 +110,6 @@ test('filter', () => {
   expect(f(some(1))).toEqual(some(1))
   expect(f(some(0))).toEqual(none)
   expect(f(none)).toEqual(none)
-})
-
-
-test('then', () => {
-  const f = flow(
-    then((n: number) => n + 1)
-  )
-  expect(f(some(1))).toBe(2)
-  expect(f(none)).toBeUndefined()
 })
 
 test('map', () => {

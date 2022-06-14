@@ -111,23 +111,6 @@ export const filter = <A>(predicate: Predicate<A>) => (ma: Maybe<A>): Maybe<A> =
   isNone(ma) ? none : predicate(ma.value) ? ma : none
 
 /**
- * Returns the callback function result, if the `Maybe` is `Some`, otherwise returns undefined.
- *
- * @example
- *
- * ```ts
- * const f = flow(
- *   then((n: number) => n + 1)
- * )
- *
- * assert.deepStrictEqual(f(some(1)), 2)
- * assert.deepStrictEqual(f(none), undefined)
- * ```
- */
-export const then = <A, B>(f: (a: A) => B) => (ma: Maybe<A>): B | undefined =>
-  isNone(ma) ? constUndefined() : f(ma.value)
-
-/**
  * Returns the onNone default value if the `Maybe` is `None`, otherwise returns the onSome function result with `Maybe`.
  *
  * @example
@@ -179,7 +162,7 @@ export const toEither = <E>(f: Lazy<E>) => <A>(ma: Maybe<A>): Either<E, A> =>
   isNone(ma) ? left(f()) : right(ma.value)
 
 /**
- * Extracts the value out of `Maybe`, if it exists. Otherwise returns `null`.
+ * Extracts the value out of `Maybe` if it exists, otherwise returns `null`.
  *
  * @example
  *
@@ -195,7 +178,7 @@ export const toEither = <E>(f: Lazy<E>) => <A>(ma: Maybe<A>): Either<E, A> =>
 export const toNullable: <A>(ma: Maybe<A>) => A | null = match(constNull, identity)
 
 /**
- * Extracts the value out of `Maybe`, if it exists. Otherwise returns `undefined`.
+ * Extracts the value out of `Maybe` if it exists, otherwise returns `undefined`.
  *
  * @example
  *
@@ -211,7 +194,7 @@ export const toNullable: <A>(ma: Maybe<A>) => A | null = match(constNull, identi
 export const toUndefined: <A>(ma: Maybe<A>) => A | undefined = match(constUndefined, identity)
 
 /**
- * Extracts the value of `Maybe`, if it exists. Otherwise return then default onNone value.
+ * Extracts the value of `Maybe` if it exists, otherwise returns then default onNone value.
  *
  * @example
  *
@@ -242,7 +225,7 @@ export const orElse = <B>(onNone: Lazy<Maybe<B>>) => <A>(ma: Maybe<A>): Maybe<A 
   isNone(ma) ? onNone() : ma
 
 /**
- *  Returns a `Maybe` from a function that might throw.
+ * Returns a `Maybe` from a function that might throw.
  *
  * @example
  *
