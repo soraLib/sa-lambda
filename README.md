@@ -45,9 +45,9 @@ pnpm add sa-lambda
 ## Use
 
 ```ts
-import { function_ } from "sa-lambda";
+import { pipe } from "sa-lambda";
 
-function_.pipe(
+pipe(
   1,
   (num: number) => num + 1,
   (num: number) => num + 2
@@ -55,7 +55,7 @@ function_.pipe(
 ```
 
 ```ts
-import { flow } from "sa-lambda/function";
+import { flow } from "sa-lambda/pipe";
 
 const f = flow(
   (num: number) => num + 1,
@@ -63,4 +63,5 @@ const f = flow(
 );
 
 f(1);
+f(2);
 ```

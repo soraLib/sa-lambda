@@ -1,5 +1,5 @@
 import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, filter, reduce } from '../src/Iterator'
-import { flow, pipe } from '../src/function'
+import { flow, pipe } from '../src/Pipe'
 
 it('isEmpty', () => {
   expect(isEmpty([])).toBeTruthy()

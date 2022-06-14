@@ -1,4 +1,5 @@
-import { identity, flow, pipe } from '../src/function'
+import { identity } from '../src/function'
+import { flow, pipe } from '../src/Pipe'
 
 test('identity', () => {
   expect(identity(1)).toBe(1)

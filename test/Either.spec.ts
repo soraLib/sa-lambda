@@ -1,5 +1,5 @@
 import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight, fromMaybe, tryCatch, swap, equals, ap } from '../src/Either'
-import { flow, pipe } from '../src/function'
+import { flow, pipe } from '../src/Pipe'
 import { none, some } from '../src/Maybe'
 
 test('isLeft', () => {

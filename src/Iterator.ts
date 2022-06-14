@@ -1,4 +1,4 @@
-import { flow, pipe } from './function'
+import { flow, pipe } from './Pipe'
 import { Predicate } from './Predicate'
 
 

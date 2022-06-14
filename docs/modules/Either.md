@@ -34,7 +34,7 @@ With **Either**
 
 ```ts
 import { tryCatch, getOrElse } from 'sa-lambda/either'
-import { pipe } from 'sa-lambda/function'
+import { pipe } from 'sa-lambda/pipe'
 
 const parseJson = (s: string) => 
   tryCatch(() => JSON.parse(s), () => `Couldn't parse from ${s}.`)

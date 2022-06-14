@@ -21,8 +21,8 @@ const Modules = [
     link: '/modules/Maybe',
   },
   {
-    text: 'Function',
-    link: '/modules/Function',
+    text: 'Pipe',
+    link: '/modules/Pipe',
   },
 ]
 
@@ -45,7 +45,7 @@ const slidebars = [
 
 const config: UserConfig = {
   title: 'Sa Lambda',
-  description: 'Typescript library for functional programming.',
+  description: 'Typescript library for Pipeal programming.',
   lang: 'en-US',
   base: '/',
   head: [
