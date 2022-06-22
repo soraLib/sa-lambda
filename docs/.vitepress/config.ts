@@ -21,6 +21,10 @@ const Modules = [
     link: '/modules/Maybe',
   },
   {
+    text: 'Iterator',
+    link: '/modules/Iterator',
+  },
+  {
     text: 'Pipe',
     link: '/modules/Pipe',
   },

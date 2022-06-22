@@ -1,9 +1,9 @@
 import { flow, pipe } from './Pipe'
 import { Predicate } from './Predicate'
-
+import { some, none, getOrElse } from './Maybe'
 
 /**
- * Returns whether the array-like object is empty.
+ * Returns whether an iterator is empty.
  *
  * @example
  *
@@ -24,18 +24,19 @@ export const isEmpty = <A>(ma: Iterable<A>): boolean => {
 }
 
 /**
- * Returns if it's instanceof `Array`, otherwise returns a new array created by `Array.from`.
+ * Returns if the iterator is instanceof `Array`, otherwise returns a new array created by `Array.from`.
  *
  * @example
  *
  * ```ts
  * assert.deepStrictEqual(toArray([1, 2, 3]), [1, 2, 3])
+ * assert.deepStrictEqual(toArray(new Set([1, 2, 3])), [1, 2, 3])
  * ```
  */
 export const toArray = <A>(ma: Iterable<A>): A[] => ma instanceof Array ? ma : Array.from(ma)
 
 /**
- * Returns a iterator with the push elements at last.
+ * Returns an iterator with the elements at last.
  */
 export function* push<A>(a: Iterable<A>, ...as: A[]): Iterable<A> {
   yield* a
@@ -43,7 +44,7 @@ export function* push<A>(a: Iterable<A>, ...as: A[]): Iterable<A> {
 }
 
 /**
- * Returns a iterator with the unshift elements at start.
+ * Returns an iterator with the elements at start.
  */
 export function* unshift<T>(a: Iterable<T>, ...items: T[]): Iterable<T> {
   yield* items
@@ -51,7 +52,7 @@ export function* unshift<T>(a: Iterable<T>, ...items: T[]): Iterable<T> {
 }
 
 /**
- * instance `of` operation.
+ * Creates an iterator with an array.
  */
 export function* of<A>(...as: A[]): Iterable<A> {
   for(const a of as) {
@@ -60,7 +61,7 @@ export function* of<A>(...as: A[]): Iterable<A> {
 }
 
 /**
- * instance `map` operation.
+ * Calls a callback function on each element of the iterator, and returns an iterator contains the results.
  */
 export const map = <A, B>(f: (a: A) => B) => function* (ma: Iterable<A>): Iterable<B> {
   for (const a of ma) {
@@ -78,25 +79,7 @@ const _getStep = (step: number): number => {
 }
 
 /**
- * Returns a iterator from a range starting from 0 and to the with step.
- *
- * @example
- *
- * ```ts
- * assert.deepStrictEqual(flow(to, collect)(3), [1, 2])
- * assert.deepStrictEqual(flow(to, collect)(6, 2), [0, 2, 4])
- * ```
- */
-export function* to(end: number, step = 1): Iterable<number> {
-  step = _getStep(step)
-
-  for (let i = 0; i < end; i += step) {
-    yield i
-  }
-}
-
-/**
- * Returns a iterator from a given range with step.
+ * Creates an iterator from a given range with step.
  *
  * @example
  *
@@ -121,7 +104,20 @@ export function* range(from: number, end: number, step = 1): Iterable<number> {
 }
 
 /**
- * Returns a iterator of length `n` with index `i` initialized with `f(i)`.
+ * Creates an iterator from a range starting from `0` to end with step.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(flow(to, collect)(3), [1, 2])
+ * assert.deepStrictEqual(flow(to, collect)(6, 2), [0, 2, 4])
+ * ```
+ */
+export const to = (end: number, step = 1): Iterable<number> => range(0, end, step)
+
+
+/**
+ * Creates an iterator of length `n` initialized with `f(i)`.
  *
  * @example
  *
@@ -136,7 +132,7 @@ export function* makeBy<A>(n: number, f: (i: number) => A): Iterable<A> {
 }
 
 /**
- * Returns a iterator from a value repeated the specified number of times.
+ * Creates an iterator from a value repeated the specified number of times.
  *
  * @example
  *
@@ -161,19 +157,18 @@ export const replicate = <A>(ma: A, n: number): Iterable<A> => makeBy(n, () => m
 export const collect = <A>(ma: Iterable<A>): A[] => [...ma]
 
 /**
- * Returns a function creates a string with all the item of an iterator, separated by the specified separator string.
+ * Adds all the elements of an iterator into a string, separated by the specified separator string.
  *
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(flow(join('-'))(['a', 'b', 'c']), 'a-b-c')
+ * assert.deepStrictEqual(pipe(['a', 'b', 'c'], join('-')), 'a-b-c')
  * ```
  */
 export const join = (seperator?: string) => <A>(ma: Iterable<A>): string => collect(ma).join(seperator)
 
-
 /**
- * Returns the count of the iterator.
+ * Returns the length or size of an iterator.
  *
  * @example
  *
@@ -217,25 +212,82 @@ export const filter = <A>(predicate: Predicate<A>) => function* (ma: Iterable<A>
 }
 
 /**
- * Reduces an iterator.
+ * Calls the specified callback function for all the elements in an iterator.
+ * The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
  *
  * @example
  *
  * ```ts
- * const f = flow(
- *   reduce((acc: number, cur: number) => acc + cur, 1)
+ * assert.deepStrictEqual(
+ *   pipe([2, 3, 4], reduce((acc: number, cur: number) => acc + cur, 1)), 10
  * )
- *
- * assert.deepStrictEqual(f([2, 3, 4]), 10)
  * ```
  */
-export const reduce = <A, B>(f:(b: B, a: A) => B, b: B) => (as: Iterable<A>): B => {
-  let ret = b
-  for(const a of as) {
-    ret = f(ret, a)
+export function reduce<A>(f:(b: A, a: A, i: number, as: Iterable<A>) => A): (as: Iterable<A>) => A
+export function reduce<A>(f:(b: A, a: A, i: number, as: Iterable<A>) => A, b: A): (as: Iterable<A>) => A
+export function reduce<A, B>(f:(b: B, a: A, i: number, as: Iterable<A>) => B, b: B): (as: Iterable<A>) => B
+export function reduce<A, B>(f:(b: B, a: A, i: number, as: Iterable<A>) => B, b?: B): (as: Iterable<A>) => B {
+  return (as: Iterable<A>) => {
+    let cur = 0
+    let ret: B
+
+    if(arguments.length === 1) {
+      ret = pipe(as, head, getOrElse(() => { throw '[ERR]: Reduce of empty iterator with no initial value ' })) as unknown as B
+      cur = 1
+      let i = 0
+
+      for(const a of as) {
+        if(i === cur) {
+          ret = f(ret, a, i, as)
+          cur++
+        }
+        i++
+      }
+    } else {
+      ret = b!
+      for(const a of as) {
+        ret = f(ret, a, cur, as)
+        cur++
+      }
+    }
+
+    return ret
+  }
+}
+
+/**
+ * Returns `Some` the first element of an iterable if it exists, otherwise returns `None`.
+ *
+ * @example
+ *
+ * assert.deepStrictEqual(head([1, 2, 3]), some(1))
+ * assert.deepStrictEqual(head([]), none)
+ */
+export const head = <A>(ma: Iterable<A>) => {
+  for(const a of ma) {
+    return some(a)
   }
 
-  return ret
+  return none
+}
+
+/**
+ * Returns `Some` the last element of an iterable if it exists, otherwise returns `None`.
+ *
+ * @example
+ *
+ * assert.deepStrictEqual(tail([1, 2, 3]), some(3))
+ * assert.deepStrictEqual(tail([]), none)
+ */
+export const tail = <A>(ma: Iterable<A>) => {
+  let i = 1
+  const len = count(ma)
+  for(const a of ma) {
+    if(i === len) return some(a)
+    i++
+  }
+
+  return none
 }
 
 
@@ -323,7 +375,7 @@ export function* flatten<A>(as: Iterable<Iterable<A>>): Iterable<A> {
 }
 
 /**
- * Returns a iterator that concatenates the function result into a single interator (like [`flatten`](#flatten)).
+ * Returns an iterator that concatenates the function result into a single interator (like [`flatten`](#flatten)).
  *
  * @example
  *
@@ -343,7 +395,7 @@ export const chain = <A, B>(f: (a: A, i: number) => Iterable<B>) => function* (a
 }
 
 /**
- * Creates a `Iter` from an iterator.
+ * Creates an `Iter` from an iterator.
  *
  * @example
  *
@@ -357,7 +409,7 @@ export const iter = <A>(ma: Iterable<A>): Iter<A> => new Iter(() => ma)
  * Iter
  */
 export class Iter<A> implements Iterable<A> {
-  constructor(public readonly _iter: () => Iterable<A>) {}
+  constructor(private readonly _iter: () => Iterable<A>) {}
 
   [Symbol.iterator](): Iterator<A> {
     return this._iter()[Symbol.iterator]()
@@ -373,6 +425,8 @@ export class Iter<A> implements Iterable<A> {
   static makeBy = flow(makeBy, iter)
   static replicate = flow(replicate, iter)
 
+  head = () => head(this._iter())
+  tail = () => tail(this._iter())
   map = <B>(f: (a: A) => B) => pipe(this._iter(), map(f), iter)
   toArray = (): A[] => toArray(this._iter())
   isEmpty= (): boolean => isEmpty(this._iter())
