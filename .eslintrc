@@ -27,6 +27,7 @@
     "no-use-before-define": "off",
     "arrow-spacing": 0,
     "max-len": ["error", { "code": 200 }],
-    "prefer-rest-params": "off"
+    "prefer-rest-params": "off",
+    "@typescript-eslint/no-empty-interface": "off"
   }
 }
