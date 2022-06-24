@@ -9,7 +9,6 @@ export interface HKT<URI, A> {
   readonly _URI: URI
   readonly _A: A
 }
-
 /**
  * `* -> * -> *` constructors
  */

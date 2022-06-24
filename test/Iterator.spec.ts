@@ -1,4 +1,4 @@
-import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, filter, reduce, head, tail } from '../src/Iterator'
+import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, filter, reduce } from '../src/Iterator'
 import { none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
 
