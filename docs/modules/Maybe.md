@@ -138,9 +138,9 @@ pipe(none, alt(() => some(1)))    ➔ some(1)
 Applies a `Some` function over a `Some` value. Returns `None` if the `Maybe` or the function is `None`.
 
 ```ts
-pipe(some(1), some((n: number) => n + 1)) ➔ some(2)
-pipe(none, some((n: number) => n + 1))    ➔ none
-pipe(some(1), none)                       ➔ none
+pipe(some((n: number) => n + 1), ap(some(1))) ➔ some(2)
+pipe(none, ap(some(1)))                       ➔ none
+pipe(some((n: number) => n + 1), ap(none))    ➔ none
 ```
 
 ### match

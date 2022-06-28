@@ -1,5 +1,5 @@
 import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, ap, tryCatch, equals, orElse, toEither, toNullable, toUndefined, empty, filter } from '../src/Maybe'
-import { flow } from '../src/Pipe'
+import { pipe, flow } from '../src/Pipe'
 import { left, right } from '../src/Either'
 
 test('isSome', () => {
@@ -90,17 +90,9 @@ test('alt', () => {
 })
 
 test('ap', () => {
-  const f1 = flow(
-    ap(none)
-  )
-  expect(f1(none)).toEqual(none)
-  expect(f1(some(n => n + 1))).toEqual(none)
-
-  const f2 = flow(
-    ap(some(0))
-  )
-  expect(f2(none)).toEqual(none)
-  expect(f2(some(n => n + 1))).toEqual(some(1))
+  expect(pipe(some((n: number) => n + 1), ap(some(1)))).toEqual(some(2))
+  expect(pipe(none, ap(some(1)))).toEqual(none)
+  expect(pipe(some((n: number) => n + 1), ap(none))).toEqual(none)
 })
 
 test('filter', () => {
