@@ -1,8 +1,6 @@
 import { Lazy } from './function'
 import { Predicate } from './Predicate'
 import { isNone, Maybe, none, some } from './Maybe'
-import { Pointed2 } from './Functors/Pointed'
-import { Functor2 } from './Functors/Functor'
 import { pipe } from './Pipe'
 
 export interface Left<E> {
@@ -25,9 +23,6 @@ declare module './Functors/HKT' {
     readonly [EitherKind]: Either<T[0], T[1]>
   }
 }
-
-// non-pipeables
-const _map: Functor2<EitherKind>['map'] = (ma, f) => pipe(ma, map(f))
 
 /**
  * Constructs a new `Either` holding a `Left` value. Represents a failure value.
@@ -63,25 +58,9 @@ export const isRight = <A>(ma: Either<unknown, A>): ma is Right<A> => ma._tag ==
 export const map = <A, B>(f: (a: A) => B) => <E>(ma: Either<E, A>) => isLeft(ma) ? ma : right(f(ma.right))
 
 /**
- * Functor
- */
-export const Functor: Functor2<EitherKind> = {
-  URI: EitherKind,
-  map: _map
-}
-
-/**
  * Takes a value and wraps it into a `Right`.
  */
 export const of = right
-
-/**
- * Pointed Functor
- */
-export const Pointed: Pointed2<EitherKind> = {
-  URI: EitherKind,
-  of
-}
 
 /**
  * Returns the `Either` if it is `Right`, otherwise returns the function result.

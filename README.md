@@ -65,3 +65,7 @@ const f = flow(
 f(1);
 f(2);
 ```
+
+## Functors
+
+![dependencies](dependencies.png)
