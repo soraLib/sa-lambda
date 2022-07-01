@@ -21,6 +21,7 @@ Typescript library for functional programming.
 - [ ] Task (Promise-Like)
 - [ ] Docs
 - [ ] some math utils
+- [ ] Functors
 
 ## Installation
 
