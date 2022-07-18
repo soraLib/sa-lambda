@@ -12,7 +12,9 @@ Typescript library for functional programming.
 
 [Document](https://www.sa-lambda.soralib.com)
 
-## TODO
+## Modules
+
+⚠️ `sa-lambda` is currently working in progress. ⚠️
 
 - [x] Either
 - [x] Maybe
