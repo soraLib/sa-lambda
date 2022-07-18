@@ -10,13 +10,16 @@
 import { HKT, KindOf, URIS } from './HKT'
 
 export interface Functor<F> {
+  readonly URI: F
   readonly map: <A, B>(ma: HKT<F, A>, f: (a: A) => B) => HKT<F, B>
 }
 
 export interface Functor1<F extends URIS> {
+  readonly URI: F
   readonly map: <A, B>(ma: KindOf<F, [A]>, f: (a: A) => B) => KindOf<F, [B]>
 }
 
 export interface Functor2<F extends URIS> {
+  readonly URI: F
   readonly map: <E, A, B>(ma: KindOf<F, [E, A]>, f: (a: A) => B) => KindOf<F, [E, B]>
 }

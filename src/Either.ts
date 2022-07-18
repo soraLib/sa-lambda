@@ -2,6 +2,7 @@ import { Lazy } from './function'
 import { Predicate } from './Predicate'
 import { isNone, Maybe, none, some } from './Maybe'
 import { pipe } from './Pipe'
+import { Monad2 } from './Functors/Monad'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -252,3 +253,20 @@ export const swap = <E, A>(ma: Either<E, A>): Either<A, E> =>
  */
 export const equals = <E, A>(a: Either<E, A>, b: Either<E, A>): boolean =>
   a === b || (isLeft(a) ? isLeft(b) && a.left === b.left : isRight(b) && a.right === b.right)
+
+
+// none-pipeables
+const _ap: Monad2<EitherKind>['ap'] = (fab, fa) => pipe(fab, ap(fa))
+const _map: Monad2<EitherKind>['map'] = (ma, f) => pipe(ma, map(f))
+const _chain: Monad2<EitherKind>['chain'] = (ma, f) => pipe(ma, chain(f))
+
+/**
+ * Monad Functor
+ */
+export const Monad: Monad2<EitherKind> = {
+  URI: EitherKind,
+  of,
+  map: _map,
+  ap: _ap,
+  chain: _chain
+}
