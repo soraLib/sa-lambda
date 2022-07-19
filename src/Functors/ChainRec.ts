@@ -10,15 +10,18 @@
 
 import { HKT, URIS, KindOf } from './HKT'
 import { Chain, Chain1, Chain2 } from './Chain'
+import { Predicate } from '../Predicate'
+
+// TODO:
 
 export interface ChainRec<F> extends Chain<F> {
-  readonly chainRec: <A, B, C>(f: (loop: (a: A) => C, done: (b: B) => C, init: A) => HKT<F, C>, fi: A) => HKT<F, B>
+  readonly chainRec: <A, B>(init: A, f: (a: A) => HKT<F, A>) => HKT<F, B>
 }
 
 export interface ChainRec1<F extends URIS> extends Chain1<F> {
-  readonly chainRec: <A, B, C>(f: (loop: (a: A) => C, done: (b: B) => C, init: A) => KindOf<F, [C]>, fi: A) => KindOf<F, [B]>
+  readonly chainRec: <A, B>(init: A, f: (a: A) => KindOf<F, [A, B]>) => KindOf<F, [B]>
 }
 
 export interface ChainRec2<F extends URIS> extends Chain2<F> {
-  readonly chainRec: <E, A, B, C>(f: (loop: (a: A) => C, done: (b: B) => C, init: A) => KindOf<F, [E, C]>, fi: A) => KindOf<F, [E, B]>
+  readonly chainRec: <E, A, B, C>(loop: (a: A) => C, done: Predicate<B>, init: KindOf<F, [E, A]>) => KindOf<F, [E, B]>
 }

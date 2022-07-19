@@ -181,6 +181,36 @@ export const chain = <E2, A, B>(f: (a: A) => Either<E2, B>) => <E1>(ma: Either<E
   isLeft(ma) ? ma : f(ma.right)
 
 /**
+ * Chains recursively until the loop is done.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(
+ *  pipe(
+ *    right(1),
+ *    chainRec(
+ *      a => a + 1,
+ *      b => b > 4,
+ *    )
+ *  )
+ * , right(5))
+ * ```
+ */
+export const chainRec: <E, A, B>(loop: (a: A) => B, done: Predicate<B>) => (init: Either<E, A>) => Either<E, B> = (loop, done) => // FIXME: loop generics
+  init => {
+    if(isLeft(init)) return init
+
+    let next = loop(init.right)
+
+    while(!done(next)) {
+      next = loop(next as any)
+    }
+
+    return right(next)
+  }
+
+/**
  * Returns `Either` if it's a `Right`, otherwise returns onLeft result.
  *
  * @example
