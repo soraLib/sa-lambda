@@ -11,13 +11,16 @@
 import { HKT, URIS, KindOf } from './HKT'
 
 export interface Setoid<F> {
+  readonly URI: F
   readonly equals: <A>(a: HKT<F, A>, b: HKT<F, A>) => boolean
- }
+}
 
 export interface Setoid1<F extends URIS> {
+  readonly URI: F
   readonly equals: <A>(a: KindOf<F, [A]>, b: KindOf<F, [A]>) => boolean
- }
+}
 
 export interface Setoid2<F extends URIS> {
+  readonly URI: F
   readonly equals: <E, A>(a: KindOf<F, [E, A]>, b: KindOf<F, [E, A]>) => boolean
 }

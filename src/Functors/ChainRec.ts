@@ -8,7 +8,7 @@
  * chainRec :: ChainRec m => ((a -> c, b -> c, a) -> m c, a) -> m b
  */
 
-import { HKT, URIS, KindOf, Kind } from './HKT'
+import { HKT, URIS, KindOf } from './HKT'
 import { Chain, Chain1, Chain2 } from './Chain'
 
 export interface ChainRec<F> extends Chain<F> {

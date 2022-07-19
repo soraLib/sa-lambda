@@ -7,7 +7,7 @@
  * promap :: Profunctor p => p b c ~> (a -> b, c -> d) -> p a d
  */
 
-import { HKT, URIS, KindOf } from './HKT' // TODO: HKT2
+import { URIS, KindOf } from './HKT'
 import { Functor2 } from './Functor'
 
 export interface Profunctor2<F extends URIS> extends Functor2<F> {

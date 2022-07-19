@@ -12,13 +12,16 @@ import { HKT, URIS, KindOf } from './HKT'
 import { Predicate } from '../Predicate'
 
 export interface Filterable<F> {
+  readonly URI: F
   readonly filter: <A>(ma: HKT<F, A>, predicate: Predicate<A>) => HKT<F, A>
 }
 
 export interface Filterable1<F extends URIS> {
+  readonly URI: F
   readonly filter: <A>(ma: KindOf<F, [A]>, predicate: Predicate<A>) => KindOf<F, [A]>
 }
 
 export interface Filterable2<F extends URIS> {
+  readonly URI: F
   readonly filter: <E, A>(ma: KindOf<F, [E, A]>, predicate: Predicate<A>) => KindOf<F, [E, A]>
 }
