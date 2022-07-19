@@ -2,7 +2,10 @@ import { Lazy } from './function'
 import { Predicate } from './Predicate'
 import { isNone, Maybe, none, some } from './Maybe'
 import { pipe } from './Pipe'
+import { Alternative2 } from './Functors/Alternative'
 import { Monad2 } from './Functors/Monad'
+import { Alt2 } from './Functors/Alt'
+import { ChainRec2 } from './Functors/ChainRec'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -255,10 +258,25 @@ export const equals = <E, A>(a: Either<E, A>, b: Either<E, A>): boolean =>
   a === b || (isLeft(a) ? isLeft(b) && a.left === b.left : isRight(b) && a.right === b.right)
 
 
+/**
+ * Alias of `left`.
+ */
+export const zero = left
+
 // none-pipeables
 const _ap: Monad2<EitherKind>['ap'] = (fab, fa) => pipe(fab, ap(fa))
 const _map: Monad2<EitherKind>['map'] = (ma, f) => pipe(ma, map(f))
+const _alt: Alternative2<EitherKind>['alt'] = (ma, f) => pipe(ma, alt(f))
 const _chain: Monad2<EitherKind>['chain'] = (ma, f) => pipe(ma, chain(f))
+
+/**
+ * Alt Functor
+ */
+export const Alt: Alt2<EitherKind> = {
+  URI: EitherKind,
+  map: _map,
+  alt: _alt
+}
 
 /**
  * Monad Functor
