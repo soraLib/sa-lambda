@@ -94,36 +94,21 @@ test('chain', () => {
 test('chainRec', () => {
   expect(
     pipe(
-      right(1),
+      1,
       chainRec(
-        a => a + 1,
-        b => b > 4,
-      ),
-
-    )
-  ).toEqual(right(5))
-
-  expect(
-    pipe(
-      right(1),
-      chainRec(
-        a => a < 5 ? a + 1 : `${5}`,
-        b => typeof b === 'string',
-      ),
-
+        a => a < 5 ? right(left(a + 1)) : right(right(`${a}`)),
+      )
     )
   ).toEqual(right('5'))
 
   expect(
     pipe(
-      left(1),
+      1,
       chainRec(
-        a => a + 1,
-        b => b > 4,
-      ),
-
+        () => left(0),
+      )
     )
-  ).toEqual(left(1))
+  ).toEqual(left(0))
 })
 
 test('orElse', () => {

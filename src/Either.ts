@@ -5,7 +5,7 @@ import { pipe } from './Pipe'
 import { Alternative2 } from './Functors/Alternative'
 import { Monad2 } from './Functors/Monad'
 import { Alt2 } from './Functors/Alt'
-import { ChainRec2 } from './Functors/ChainRec'
+import { ChainRec2, tailRec } from './Functors/ChainRec'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -181,7 +181,7 @@ export const chain = <E2, A, B>(f: (a: A) => Either<E2, B>) => <E1>(ma: Either<E
   isLeft(ma) ? ma : f(ma.right)
 
 /**
- * Chains recursively until the loop is done.
+ * Chains recursively until the next is `Right`.
  *
  * @example
  *
@@ -190,25 +190,18 @@ export const chain = <E2, A, B>(f: (a: A) => Either<E2, B>) => <E1>(ma: Either<E
  *  pipe(
  *    right(1),
  *    chainRec(
- *      a => a + 1,
- *      b => b > 4,
+ *      a => a < 5 ? left(a + 1) : right(`${a}`)
  *    )
  *  )
  * , right(5))
  * ```
  */
-export const chainRec: <E, A, B>(loop: (a: A) => B, done: Predicate<B>) => (init: Either<E, A>) => Either<E, B> = (loop, done) => // FIXME: loop generics
-  init => {
-    if(isLeft(init)) return init
-
-    let next = loop(init.right)
-
-    while(!done(next)) {
-      next = loop(next as any)
-    }
-
-    return right(next)
-  }
+export const chainRec: <E, A, B>(f: (a: A) => Either<E, Either<A, B>>) => (ma: A) => Either<E, B> = (f) =>
+  ma => tailRec(
+    f(ma),
+    (e) =>
+      isLeft(e) ? right(left(e.left)) : isLeft(e.right) ? left(f(e.right.left)) : right(right(e.right.right))
+  )
 
 /**
  * Returns `Either` if it's a `Right`, otherwise returns onLeft result.
@@ -298,6 +291,7 @@ const _ap: Monad2<EitherKind>['ap'] = (fab, fa) => pipe(fab, ap(fa))
 const _map: Monad2<EitherKind>['map'] = (ma, f) => pipe(ma, map(f))
 const _alt: Alternative2<EitherKind>['alt'] = (ma, f) => pipe(ma, alt(f))
 const _chain: Monad2<EitherKind>['chain'] = (ma, f) => pipe(ma, chain(f))
+const _chainRec: ChainRec2<EitherKind>['chainRec'] = (ma, f) => pipe(ma, chainRec(f))
 
 /**
  * Alt Functor
@@ -314,6 +308,13 @@ export const Alt: Alt2<EitherKind> = {
 export const Monad: Monad2<EitherKind> = {
   URI: EitherKind,
   of,
+  map: _map,
+  ap: _ap,
+  chain: _chain
+}
+
+export const ChainRec: ChainRec2<EitherKind> = {
+  URI: EitherKind,
   map: _map,
   ap: _ap,
   chain: _chain

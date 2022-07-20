@@ -10,18 +10,28 @@
 
 import { HKT, URIS, KindOf } from './HKT'
 import { Chain, Chain1, Chain2 } from './Chain'
-import { Predicate } from '../Predicate'
-
-// TODO:
+import { Either } from '../Either'
 
 export interface ChainRec<F> extends Chain<F> {
-  readonly chainRec: <A, B>(init: A, f: (a: A) => HKT<F, A>) => HKT<F, B>
+  readonly chainRec: <A, B>(fa: HKT<F, A>, f: (a: A) => Either<HKT<F, A>, HKT<F, B>>) => HKT<F, B>
 }
 
 export interface ChainRec1<F extends URIS> extends Chain1<F> {
-  readonly chainRec: <A, B>(init: A, f: (a: A) => KindOf<F, [A, B]>) => KindOf<F, [B]>
+  readonly chainRec: <A, B>(fa: KindOf<F, [A]>, f: (a: A) => Either<KindOf<F, [A]>, KindOf<F, [B]>>) => KindOf<F, [B]>
 }
 
 export interface ChainRec2<F extends URIS> extends Chain2<F> {
-  readonly chainRec: <E, A, B, C>(loop: (a: A) => C, done: Predicate<B>, init: KindOf<F, [E, A]>) => KindOf<F, [E, B]>
+  readonly chainRec: <E, A, B>(fa: KindOf<F, [E, A]>, f: (a: A) => KindOf<F, [E, Either<A, B>]>) => KindOf<F, [E, B]>
+}
+
+/**
+ * `ChainRec` helper. Returns until the next is `Right`.
+ */
+export const tailRec = <A, B>(init: A, f: (a: A) => Either<A, B>): B => {
+  let next = f(init)
+  while (next._tag === 'Left') {
+    next = f(next.left)
+  }
+
+  return next.right
 }
