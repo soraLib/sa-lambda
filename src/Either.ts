@@ -313,9 +313,13 @@ export const Monad: Monad2<EitherKind> = {
   chain: _chain
 }
 
+/**
+ * ChainRec Functor
+ */
 export const ChainRec: ChainRec2<EitherKind> = {
   URI: EitherKind,
   map: _map,
   ap: _ap,
-  chain: _chain
+  chain: _chain,
+  chainRec: _chainRec
 }
