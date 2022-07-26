@@ -10,14 +10,14 @@
 import { HKT, URIS, KindOf } from './HKT'
 import { Extend, Extend1, Extend2 } from './Extend'
 
-export interface Comonad<W> extends Extend<W> {
-  readonly extract: <A>(wa: HKT<W, A>) => A
+export interface Comonad<F> extends Extend<F> {
+  readonly extract: <A>(ma: HKT<F, A>) => A
 }
 
-export interface Comonad1<W extends URIS> extends Extend1<W> {
-  readonly extract: <A>(wa: KindOf<W, [A]>) => A
+export interface Comonad1<F extends URIS> extends Extend1<F> {
+  readonly extract: <A>(ma: KindOf<F, [A]>) => A
 }
 
-export interface Comonad2<W extends URIS> extends Extend2<W> {
-  readonly extract: <E, A>(wa: KindOf<W, [E, A]>) => A
+export interface Comonad2<F extends URIS> extends Extend2<F> {
+  readonly extract: <E, A>(ma: KindOf<F, [E, A]>) => E | A
 }

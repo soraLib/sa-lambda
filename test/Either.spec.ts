@@ -1,4 +1,6 @@
-import { isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight, fromMaybe, tryCatch, swap, equals, ap, chainRec } from '../src/Either'
+import {
+  isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight,
+  fromMaybe, tryCatch, swap, equals, ap, chainRec, extend, extract } from '../src/Either'
 import { flow, pipe } from '../src/Pipe'
 import { none, some } from '../src/Maybe'
 
@@ -84,6 +86,17 @@ test('getLeft', () => {
 test('getRight', () => {
   expect(getRight(right(1))).toEqual(some(1))
   expect(getRight(left(1))).toEqual(none)
+})
+
+test('extract', () => {
+  expect(extract(right(1))).toBe(1)
+  expect(extract(left('err'))).toBe('err')
+})
+
+
+test('extend', () => {
+  expect(pipe(right(1), extend(e => isRight(e) ? e.right + 1 : e.left))).toEqual(right(2))
+  expect(pipe(left(1), extend(e => isRight(e) ? e.right + 1 : e.left))).toEqual(left(1))
 })
 
 test('chain', () => {

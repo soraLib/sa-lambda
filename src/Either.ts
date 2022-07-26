@@ -6,6 +6,8 @@ import { Alternative2 } from './Functors/Alternative'
 import { Monad2 } from './Functors/Monad'
 import { Alt2 } from './Functors/Alt'
 import { ChainRec2, tailRec } from './Functors/ChainRec'
+import { Comonad2 } from './Functors/Comonad'
+import { Extend2 } from './Functors/Extend'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -168,6 +170,32 @@ export const getRight = <E, A>(ma: Either<E, A>): Maybe<A> =>
   isRight(ma) ? some(ma.right) : none
 
 /**
+ * Extracts the value out of `Either`.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(extract(right(1)), 1)
+ * assert.deepStrictEqual(extract(left('err')), 'err')
+ * ```
+ */
+export const extract = <E, A>(ma: Either<E, A>): E | A =>
+  isLeft(ma) ? ma.left : ma.right
+
+/**
+ * Returns the `Either` if it's a `Left`, otherwise returns the result of the applying function and wrapped in a `Right`.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(pipe(right(1), extend(() => 2)), right(2))
+ * assert.deepStrictEqual(pipe(left(1), extend(() => 2)), left(1))
+ * ```
+ */
+export const extend = <E, A, B>(f: (ma: Either<E, A>) => B) => (ma: Either<E, A>) =>
+  isLeft(ma) ? ma : right(f(ma))
+
+/**
  * Composes computations in sequence. Useful for chaining many computations that may fail.
  *
  * @example
@@ -292,6 +320,7 @@ const _map: Monad2<EitherKind>['map'] = (ma, f) => pipe(ma, map(f))
 const _alt: Alternative2<EitherKind>['alt'] = (ma, f) => pipe(ma, alt(f))
 const _chain: Monad2<EitherKind>['chain'] = (ma, f) => pipe(ma, chain(f))
 const _chainRec: ChainRec2<EitherKind>['chainRec'] = (ma, f) => pipe(ma, chainRec(f))
+const _extend: Extend2<EitherKind>['extend'] = (ma, f) => pipe(ma, extend(f))
 
 /**
  * Alt Functor
@@ -322,4 +351,14 @@ export const ChainRec: ChainRec2<EitherKind> = {
   ap: _ap,
   chain: _chain,
   chainRec: _chainRec
+}
+
+/**
+ * Comonad Functor
+ */
+export const Comonad: Comonad2<EitherKind> = {
+  URI: EitherKind,
+  map: _map,
+  extend: _extend,
+  extract
 }
