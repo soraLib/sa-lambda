@@ -1,6 +1,6 @@
 import {
   isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight,
-  fromMaybe, tryCatch, swap, equals, ap, chainRec, extend, extract, reduce, traverse } from '../src/Either'
+  fromMaybe, tryCatch, swap, equals, ap, chainRec, extend, extract, reduce, traverse, filterOrElse } from '../src/Either'
 import { flow, pipe } from '../src/Pipe'
 import { none, some } from '../src/Maybe'
 
@@ -169,6 +169,17 @@ test('equals', () => {
   expect(equals(right(1), left(1))).toBeFalsy()
   expect(equals(left(1), left(1))).toBeTruthy()
   expect(equals(left(1), right(1))).toBeFalsy()
+})
+
+test('filterOrElse', () => {
+  const f = filterOrElse(
+    (n: number) => n > 0,
+    () => 'err'
+  )
+
+  expect(pipe(right(1), f)).toEqual(right(1))
+  expect(pipe(right(-1), f)).toEqual(left('err'))
+  expect(pipe(left(1), f)).toEqual(left(1))
 })
 
 test('example1', () => {

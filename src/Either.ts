@@ -10,7 +10,7 @@ import { Comonad2 } from './Functors/Comonad'
 import { Extend2 } from './Functors/Extend'
 import { Traversable2 } from './Functors/Traversable'
 import { Applicative } from './Functors/Applicative'
-import { KindOf, HKT } from './Functors/HKT'
+import { HKT } from './Functors/HKT'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -333,6 +333,25 @@ export const equals = <E, A>(a: Either<E, A>, b: Either<E, A>): boolean =>
 
 
 /**
+ * Returns `Either` if it is a `Left` or the result of predicate is true,
+ * otherwise returns the result of applying onFalse function to value inside `Either` and wrapped in a `Left`.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = filterOrElse(
+ *   (n: number) => n > 0,
+ *   () => 'err'
+ * )
+ * assert.deepStrictEqual(pipe(right(1), f), right(1))
+ * assert.deepStrictEqual(pipe(right(-1), f), left('err'))
+ * assert.deepStrictEqual(pipe(left(1), f), left(1))
+ * ```
+ */
+export const filterOrElse = <A, E2>(predicate: Predicate<A>, onFalse: (a: A) => E2) => <E1, B extends A>(ma: Either<E1, B>) =>
+  isLeft(ma) ? ma : predicate(ma.right) ? ma : left(onFalse(ma.right))
+
+/**
  * Alias of `left`.
  */
 export const zero = left
@@ -388,7 +407,9 @@ export const Comonad: Comonad2<EitherKind> = {
   extract
 }
 
-
+/**
+ * Traversable Functor
+ */
 export const Traversable: Traversable2<EitherKind> = {
   URI: EitherKind,
   map: _map,
