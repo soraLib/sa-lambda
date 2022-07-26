@@ -1,4 +1,4 @@
-import { delay, microtask } from '../src/delay'
+import { delay, microtask } from '../src/Delay'
 
 test('delay', () => {
   let num = 0
