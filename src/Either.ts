@@ -8,6 +8,9 @@ import { Alt2 } from './Functors/Alt'
 import { ChainRec2, tailRec } from './Functors/ChainRec'
 import { Comonad2 } from './Functors/Comonad'
 import { Extend2 } from './Functors/Extend'
+import { Traversable2 } from './Functors/Traversable'
+import { Applicative } from './Functors/Applicative'
+import { KindOf, HKT } from './Functors/HKT'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -232,6 +235,26 @@ export const chainRec: <E, A, B>(f: (a: A) => Either<E, Either<A, B>>) => (ma: A
   )
 
 /**
+ * Takes a function and an initial value and returns the initial value if `Either` is `Left`,
+ * otherwise returns the result of applying the function to the initial value and the value inside `Either`.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(pipe(right(1), reduce((acc, a) => acc + a, 1), 2)
+ * assert.deepStrictEqual(pipe(left(0), reduce((acc, a) => acc + a, 1), 1)
+ * ```
+ */
+export const reduce = <E, A, B>(f: (acc: B, a: A) => B, b: B) => (ma: Either<E, A>): B =>
+  isLeft(ma) ? b : f(b, ma.right)
+
+/**
+ * TODO:
+ */
+export const traverse: <F>(F: Applicative<F>) => <A, B>(f: (a: A) => HKT<F, B>) => <E>(e: Either<E, A>) => HKT<F, Either<E, B>> =
+  F => f => e => isLeft(e) ? F.of(left(e.left)) : F.map(f(e.right), right)
+
+/**
  * Returns `Either` if it's a `Right`, otherwise returns onLeft result.
  *
  * @example
@@ -321,6 +344,8 @@ const _alt: Alternative2<EitherKind>['alt'] = (ma, f) => pipe(ma, alt(f))
 const _chain: Monad2<EitherKind>['chain'] = (ma, f) => pipe(ma, chain(f))
 const _chainRec: ChainRec2<EitherKind>['chainRec'] = (ma, f) => pipe(ma, chainRec(f))
 const _extend: Extend2<EitherKind>['extend'] = (ma, f) => pipe(ma, extend(f))
+const _reduce: Traversable2<EitherKind>['reduce'] = (ma, b, f) => pipe(ma, reduce(f, b))
+const _traverse: Traversable2<EitherKind>['traverse'] = <F>(F: Applicative<F>) => <E, A, B>(ma: Either<E, A>, f: (a: A) => HKT<F, B>): HKT<F, Either<E, B>> => pipe(ma, traverse(F)(f))
 
 /**
  * Alt Functor
@@ -361,4 +386,12 @@ export const Comonad: Comonad2<EitherKind> = {
   map: _map,
   extend: _extend,
   extract
+}
+
+
+export const Traversable: Traversable2<EitherKind> = {
+  URI: EitherKind,
+  map: _map,
+  reduce: _reduce,
+  traverse: _traverse
 }

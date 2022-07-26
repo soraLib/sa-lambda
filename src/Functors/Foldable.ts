@@ -15,10 +15,10 @@ export interface Foldable<F> {
 
 export interface Foldable1<F extends URIS> {
   readonly URI: F
-  readonly reduce: <A, B>(fa: KindOf<F, [A]>, b: B, f: (b: B, a: A) => B) => KindOf<F, [A]>
+  readonly reduce: <A, B>(fa: KindOf<F, [A]>, b: B, f: (b: B, a: A) => B) => B
 }
 
 export interface Foldable2<F extends URIS> {
   readonly URI: F
-  readonly reduce: <E, A, B>(fa: KindOf<F, [E, A]>, b: B, f: (b: B, a: A) => B) => KindOf<F, [E, A]>
+  readonly reduce: <E, A, B>(fa: KindOf<F, [E, A]>, b: B, f: (b: B, a: A) => B) => B
 }

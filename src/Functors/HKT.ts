@@ -9,12 +9,6 @@ export interface HKT<URI, A> {
   readonly _URI: URI
   readonly _A: A
 }
-/**
- * `* -> * -> *` constructors
- */
-export interface HKT2<URI, E, A> extends HKT<URI, A> {
-  readonly _E: E
-}
 
 export const Kind = Symbol('Kind')
 export type Kind = typeof Kind;

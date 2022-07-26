@@ -1,6 +1,6 @@
 import {
   isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight,
-  fromMaybe, tryCatch, swap, equals, ap, chainRec, extend, extract } from '../src/Either'
+  fromMaybe, tryCatch, swap, equals, ap, chainRec, extend, extract, reduce, traverse } from '../src/Either'
 import { flow, pipe } from '../src/Pipe'
 import { none, some } from '../src/Maybe'
 
@@ -122,6 +122,15 @@ test('chainRec', () => {
       )
     )
   ).toEqual(left(0))
+})
+
+test('reduce', () => {
+  expect(pipe(right(1), reduce((acc, a) => acc + a, 1))).toBe(2)
+  expect(pipe(left(0), reduce((acc, a) => acc + a, 1))).toBe(1)
+})
+
+test('traverse', () => {
+  // TODO:
 })
 
 test('orElse', () => {
