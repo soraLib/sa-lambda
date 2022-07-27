@@ -8,7 +8,7 @@ import { Alt2 } from './Functors/Alt'
 import { ChainRec2, tailRec } from './Functors/ChainRec'
 import { Comonad2 } from './Functors/Comonad'
 import { Extend2 } from './Functors/Extend'
-import { Traversable2 } from './Functors/Traversable'
+import { Traversable2, PipeableTraverse2 } from './Functors/Traversable'
 import { Applicative } from './Functors/Applicative'
 import { HKT } from './Functors/HKT'
 
@@ -258,10 +258,22 @@ export const reduce = <E, A, B>(f: (acc: B, a: A) => B, b: B) => (ma: Either<E, 
   isLeft(ma) ? b : f(b, ma.right)
 
 /**
- * TODO:
+ * Maps each element of a `HKT` structure to an action, and collects the results wrapped in `Right`.
+ *
+ * Returns a `HKT` contains a left with the value of `Either` if the `Either` is a `Left`.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = traverse(Maybe.Monad)((n: number) => n > 0 ? some(n): none)
+ * assert.deepStrictEqual(pipe(left('err'), f), some(left('err')))
+ * assert.deepStrictEqual(pipe(right(1), f), some(right(1)))
+ * assert.deepStrictEqual(pipe(right(-1), f), none)
+ * ```
  */
-export const traverse: <F>(F: Applicative<F>) => <A, B>(f: (a: A) => HKT<F, B>) => <E>(e: Either<E, A>) => HKT<F, Either<E, B>> =
-  F => f => e => isLeft(e) ? F.of(left(e.left)) : F.map(f(e.right), right)
+export const traverse: PipeableTraverse2<EitherKind> =
+  <F>(F: Applicative<F>): <A, B>(f: (a: A) => HKT<F, B>) => <E>(e: Either<E, A>) => HKT<F, Either<E, B>> =>
+    f => e => isLeft(e) ? F.of(left(e.left)) : F.map(f(e.right), right)
 
 /**
  * Returns `Either` if it's a `Right`, otherwise returns onLeft result.

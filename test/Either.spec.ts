@@ -2,7 +2,8 @@ import {
   isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight,
   fromMaybe, tryCatch, swap, equals, ap, chainRec, extend, extract, reduce, traverse, filterOrElse } from '../src/Either'
 import { flow, pipe } from '../src/Pipe'
-import { none, some } from '../src/Maybe'
+import { none, some, Monad as MM } from '../src/Maybe'
+
 
 test('isLeft', () => {
   expect(isLeft(left(0))).toBeTruthy()
@@ -130,7 +131,10 @@ test('reduce', () => {
 })
 
 test('traverse', () => {
-  // TODO:
+  const f = traverse(MM)((n: number) => n > 0 ? some(n): none)
+  expect(pipe(left('err'), f)).toEqual(some(left('err')))
+  expect(pipe(right(1), f)).toEqual(some(right(1)))
+  expect(pipe(right(-1), f)).toEqual(none)
 })
 
 test('orElse', () => {
