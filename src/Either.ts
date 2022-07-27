@@ -62,6 +62,15 @@ export const isLeft = <E>(ma: Either<E, unknown>): ma is Left<E> => ma._tag === 
 export const isRight = <A>(ma: Either<unknown, A>): ma is Right<A> => ma._tag === 'Right'
 
 /**
+ * Alias of `left`.
+ */
+export const zero = left
+/**
+  * Alias of `left`.
+  */
+export const empty = left
+
+/**
  * Maps the `Right` value.
  */
 export const map = <A, B>(f: (a: A) => B) => <E>(ma: Either<E, A>) => isLeft(ma) ? ma : right(f(ma.right))
@@ -350,11 +359,6 @@ export const equals = <E, A>(a: Either<E, A>, b: Either<E, A>): boolean =>
  */
 export const filterOrElse = <A, E2>(predicate: Predicate<A>, onFalse: (a: A) => E2) => <E1, B extends A>(ma: Either<E1, B>) =>
   isLeft(ma) ? ma : predicate(ma.right) ? ma : left(onFalse(ma.right))
-
-/**
- * Alias of `left`.
- */
-export const zero = left
 
 // none-pipeables
 const _ap: Monad2<EitherKind>['ap'] = (fab, fa) => pipe(fab, ap(fa))
