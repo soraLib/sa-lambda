@@ -1,6 +1,8 @@
 import { Predicate } from './Predicate'
 import { Lazy, constNull, identity, constUndefined } from './function'
 import { Either, right, left } from './Either'
+import { Monad1 } from './Functors/Monad'
+import { pipe } from './Pipe'
 
 export interface None {
   readonly _tag: 'None'
@@ -12,6 +14,15 @@ export interface Some<A> {
 }
 
 export type Maybe<A> = None | Some<A>
+
+export const MaybeKind = Symbol('Maybe')
+export type MaybeKind = typeof MaybeKind
+
+declare module './Functors/HKT' {
+  interface Kinded<T> {
+    readonly [MaybeKind]: Maybe<T[0]>
+  }
+}
 
 /**
  * Returns whether the maybe is `None` or not.
@@ -91,6 +102,11 @@ export const ap = <A>(ma: Maybe<A>) => <B>(fab: Maybe<(a: A) => B>): Maybe<B> =>
  * Returns `None`.
  */
 export const empty = () => none
+
+/**
+ * Alias of `empty`.
+ */
+export const zero = empty
 
 /**
  * Takes a predicate function and a `Maybe`, returns the `Maybe` if it's `Some` and the predicate returns true, otherwise returns `None`.
@@ -264,3 +280,19 @@ export const tryCatch = <A>(f: Lazy<A>): Maybe<A> => {
  */
 export const equals = <A>(a: Maybe<A>, b: Maybe<A>): boolean =>
   a === b || (isNone(a) ? isNone(b) : isSome(b) && a.value === b.value)
+
+// none-pipeables
+const _map: Monad1<MaybeKind>['map'] = (ma, f) => pipe(ma, map(f))
+const _ap: Monad1<MaybeKind>['ap'] = (fab, fa) => pipe(fab, ap(fa))
+const _chain: Monad1<MaybeKind>['chain'] = (ma, f) => pipe(ma, chain(f))
+
+/**
+ * Monad Functor
+ */
+export const Monad: Monad1<MaybeKind> = {
+  URI: MaybeKind,
+  of,
+  map: _map,
+  ap: _ap,
+  chain: _chain
+}
