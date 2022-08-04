@@ -3,6 +3,9 @@ import { Lazy, constNull, identity, constUndefined } from './function'
 import { Either, right, left } from './Either'
 import { Monad1 } from './Functors/Monad'
 import { pipe } from './Pipe'
+import { Alternative1 } from './Functors/Alternative'
+import { Chain1 } from './Functors/Chain'
+import { Extend1 } from './Functors/Extend'
 
 export interface None {
   readonly _tag: 'None'
@@ -161,6 +164,19 @@ export const chain = <A, B>(f: (a: A) => Maybe<B>) => (ma: Maybe<A>): Maybe<B> =
   isNone(ma) ? none : f(ma.value)
 
 /**
+ * Returns none if the `Maybe` is a `None`, otherwise returns the result of the applying function and wrapped in a `Some`.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(pipe(some(1), extend(getOrElse(zero))), some(1))
+ * assert.deepStrictEqual(pipe(none, extend(getOrElse(zero))), none)
+ * ```
+ */
+export const extend = <A, B>(f: (a: Maybe<A>) => B) => (ma: Maybe<A>): Maybe<B> =>
+  isNone(ma) ? none : some(f(ma))
+
+/**
  * Returns a `Right` from a `Some` or a `Left` with a default left value if `Maybe` is `None`.
  *
  * @example
@@ -285,6 +301,20 @@ export const equals = <A>(a: Maybe<A>, b: Maybe<A>): boolean =>
 const _map: Monad1<MaybeKind>['map'] = (ma, f) => pipe(ma, map(f))
 const _ap: Monad1<MaybeKind>['ap'] = (fab, fa) => pipe(fab, ap(fa))
 const _chain: Monad1<MaybeKind>['chain'] = (ma, f) => pipe(ma, chain(f))
+const _alt: Alternative1<MaybeKind>['alt'] = (fa, that) => pipe(fa, alt(that))
+const _extend: Extend1<MaybeKind>['extend'] = (ma, f) => pipe(ma, extend(f))
+
+/**
+ * Alternative Functor
+ */
+export const Alternative: Alternative1<MaybeKind> = {
+  URI: MaybeKind,
+  map: _map,
+  ap: _ap,
+  of,
+  alt: _alt,
+  zero
+}
 
 /**
  * Monad Functor
@@ -295,4 +325,20 @@ export const Monad: Monad1<MaybeKind> = {
   map: _map,
   ap: _ap,
   chain: _chain
+}
+
+/**
+ * Chain Functor
+ */
+export const Chain: Chain1<MaybeKind> = {
+  URI: MaybeKind,
+  map: _map,
+  ap: _ap,
+  chain: _chain
+}
+
+export const Extend: Extend1<MaybeKind> = {
+  URI: MaybeKind,
+  map: _map,
+  extend: _extend
 }

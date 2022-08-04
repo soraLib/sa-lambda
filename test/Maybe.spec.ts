@@ -1,4 +1,5 @@
-import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, ap, tryCatch, equals, orElse, toEither, toNullable, toUndefined, empty, filter } from '../src/Maybe'
+import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match,
+  alt, ap, tryCatch, equals, orElse, toEither, toNullable, toUndefined, empty, filter, extend, zero } from '../src/Maybe'
 import { pipe, flow } from '../src/Pipe'
 import { left, right } from '../src/Either'
 
@@ -122,6 +123,11 @@ test('chain', () => {
   expect(f(some(1))).toEqual(1)
   expect(f(some(-1))).toEqual(0)
   expect(f(none)).toEqual(0)
+})
+
+test('extend', () => {
+  expect(pipe(some(1), extend(getOrElse(zero)))).toEqual(some(1))
+  expect(pipe(none, extend(getOrElse(zero)))).toEqual(none)
 })
 
 test('match', () => {

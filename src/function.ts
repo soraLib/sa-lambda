@@ -4,6 +4,11 @@
 export type Lazy<A> = () => A
 
 /**
+ * Creates a lazy function.
+ */
+export const lazy: <A>(a: A) => Lazy<A> = <A>(a: A) => () => a
+
+/**
   * Identity
   */
 export const identity = <A>(a: A): A => a
