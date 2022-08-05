@@ -1,11 +1,14 @@
 import { Predicate } from './Predicate'
 import { Lazy, constNull, identity, constUndefined } from './function'
-import { Either, right, left } from './Either'
+import { Either, right, left, getRight } from './Either'
 import { Monad1 } from './Functors/Monad'
 import { pipe } from './Pipe'
 import { Alternative1 } from './Functors/Alternative'
 import { Chain1 } from './Functors/Chain'
 import { Extend1 } from './Functors/Extend'
+import { PipeableTraverse1, Traversable1 } from './Functors/Traversable'
+import { Applicative } from './Functors/Applicative'
+import { HKT } from './Functors/HKT'
 
 export interface None {
   readonly _tag: 'None'
@@ -282,6 +285,39 @@ export const tryCatch = <A>(f: Lazy<A>): Maybe<A> => {
 }
 
 /**
+ * Maps each element of a `HKT` structure to an action, and collects the results wrapped in `Some`.
+ *
+ * Returns a `HKT` contains a none if the `Maybe` is a `None`.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = traverse(Maybe.Monad)((n: number) => n > 0 ? some(n): none)
+ * assert.deepStrictEqual(pipe(some(1), f), some(some(1)))
+ * assert.deepStrictEqual(pipe(none, f), some(none))
+ * assert.deepStrictEqual(pipe(some(-1), f), none)
+ * ```
+ */
+export const traverse: PipeableTraverse1<MaybeKind> = /* TODO: expect a better case, use iter */
+  <F>(F: Applicative<F>): <A, B>(f: (a: A) => HKT<F, B>) => (ma: Maybe<A>) => HKT<F, Maybe<B>> =>
+    f => ma => isNone(ma) ? F.of(none) : F.map(f(ma.value), some)
+
+
+/**
+ * Takes a function and an initial value and returns the initial value if `Maybe` is `none`,
+ * otherwise returns the result of applying the function to the initial value and the value inside `Maybe`.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(pipe(some(1), reduce((acc, a) => acc + a, 1), 2)
+ * assert.deepStrictEqual(pipe(none, reduce((acc, a) => acc + a, 1), 1)
+ * ```
+ */
+export const reduce = <A, B>(f: (acc: B, a: A) => B, b: B) => (ma: Maybe<A>): B =>
+  isNone(ma) ? b : f(b, ma.value)
+
+/**
  * Compares one `Maybe` to another `Maybe`. Returns false if maybes or the wrapped values are different.
  *
  * @example
@@ -303,6 +339,8 @@ const _ap: Monad1<MaybeKind>['ap'] = (fab, fa) => pipe(fab, ap(fa))
 const _chain: Monad1<MaybeKind>['chain'] = (ma, f) => pipe(ma, chain(f))
 const _alt: Alternative1<MaybeKind>['alt'] = (fa, that) => pipe(fa, alt(that))
 const _extend: Extend1<MaybeKind>['extend'] = (ma, f) => pipe(ma, extend(f))
+const _reduce: Traversable1<MaybeKind>['reduce'] = (ma, b, f) => pipe(ma, reduce(f, b))
+const _traverse: Traversable1<MaybeKind>['traverse'] = <F>(F: Applicative<F>) => <A, B>(ma: Maybe<A>, f: (a: A) => HKT<F, B>): HKT<F, Maybe<B>> => pipe(ma, traverse(F)(f))
 
 /**
  * Alternative Functor
@@ -337,8 +375,21 @@ export const Chain: Chain1<MaybeKind> = {
   chain: _chain
 }
 
+/**
+ * Extend Functor
+ */
 export const Extend: Extend1<MaybeKind> = {
   URI: MaybeKind,
   map: _map,
   extend: _extend
+}
+
+/**
+ * Traversable Functor
+ */
+export const Traversable: Traversable1<MaybeKind> = {
+  URI: MaybeKind,
+  map: _map,
+  reduce: _reduce,
+  traverse: _traverse
 }

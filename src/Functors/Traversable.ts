@@ -39,6 +39,12 @@ export interface Traverse2<T extends URIS> {
   <F>(F: Applicative<F>): <E, A, B>(ma: KindOf<T, [E, A]>, f: (a: A) => HKT<F, B>) => HKT<F, KindOf<T, [E, B]>>
 }
 
+export interface PipeableTraverse1<T extends URIS> {
+  <F extends URIS>(F: Applicative2<F>): <A, FE, B>(f: (a: A) => KindOf<F, [FE, B]>) => (ta: KindOf<T, [A]>) => KindOf<F, [FE, KindOf<T, [B]>]>
+  <F extends URIS>(F: Applicative1<F>): <A, B>(f: (a: A) => KindOf<F, [B]>) => (ta: KindOf<T, [A]>) => KindOf<F, [KindOf<T, [B]>]>
+  <F>(F: Applicative<F>): <A, B>(f: (a: A) => HKT<F, B>) => (ta: KindOf<T, [A]>) => HKT<F, KindOf<T, [B]>>
+}
+
 export interface PipeableTraverse2<T extends URIS> {
   <F extends URIS>(F: Applicative2<F>): <A, FE, B>(f: (a: A) => KindOf<F, [FE, B]>) => <TE>(ta: KindOf<T, [TE, A]>) => KindOf<F, [FE, KindOf<T, [TE, B]>]>
   <F extends URIS>(F: Applicative1<F>): <A, B>(f: (a: A) => KindOf<F, [B]>) => <TE>(ta: KindOf<T, [TE, A]>) => KindOf<F, [KindOf<T, [TE, B]>]>

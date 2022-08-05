@@ -1,5 +1,5 @@
-import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match,
-  alt, ap, tryCatch, equals, orElse, toEither, toNullable, toUndefined, empty, filter, extend, zero } from '../src/Maybe'
+import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, ap, tryCatch, equals,
+  orElse, toEither, toNullable, toUndefined, empty, filter, extend, zero, traverse, Monad as MM, reduce } from '../src/Maybe'
 import { pipe, flow } from '../src/Pipe'
 import { left, right } from '../src/Either'
 
@@ -151,6 +151,18 @@ test('tryCatch', () => {
 
   expect(div(2, 0)).toEqual(none)
   expect(div(2, 1)).toEqual(some(2))
+})
+
+test('reduce', () => {
+  expect(pipe(some(1), reduce((acc, a) => acc + a, 1))).toBe(2)
+  expect(pipe(none, reduce((acc, a) => acc + a, 1))).toBe(1)
+})
+
+test('traverse', () => {
+  const f = traverse(MM)((n: number) => n > 0 ? some(n): none)
+  expect(pipe(some(1), f)).toEqual(some(some(1)))
+  expect(pipe(none, f)).toEqual(some(none))
+  expect(pipe(some(-1), f)).toEqual(none)
 })
 
 test('equals', () => {
