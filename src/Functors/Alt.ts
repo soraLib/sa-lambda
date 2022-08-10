@@ -12,13 +12,13 @@ import { Functor, Functor1, Functor2 } from './Functor'
 import { Lazy } from '../function'
 
 export interface Alt<F> extends Functor<F> {
-  readonly alt: <A>(fa: HKT<F, A>, that: Lazy<HKT<F, A>>) => HKT<F, A>
+  readonly alt: <A, B>(fa: HKT<F, A>, that: Lazy<HKT<F, B>>) => HKT<F, A | B>
 }
 
 export interface Alt1<F extends URIS> extends Functor1<F> {
-  readonly alt: <A>(fa: KindOf<F, [A]>, that: Lazy<KindOf<F, [A]>>) => KindOf<F, [A]>
+  readonly alt: <A, B>(fa: KindOf<F, [A]>, that: Lazy<KindOf<F, [B]>>) => KindOf<F, [A | B]>
 }
 
 export interface Alt2<F extends URIS> extends Functor2<F> {
-  readonly alt: <E, A>(fa: KindOf<F, [E, A]>, that: Lazy<KindOf<F, [E, A]>>) => KindOf<F, [E, A]>
+  readonly alt: <E, A, B>(fa: KindOf<F, [E, A]>, that: Lazy<KindOf<F, [E, B]>>) => KindOf<F, [E, A | B]>
 }

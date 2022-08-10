@@ -1,6 +1,18 @@
 import { flow, pipe } from './Pipe'
 import { Predicate } from './Predicate'
 import { some, none, getOrElse } from './Maybe'
+import { Alternative1 } from './Functors/Alternative'
+import { Lazy } from './function'
+
+
+export const IterKind = Symbol('Iterator')
+export type IterKind = typeof IterKind
+
+declare module './Functors/HKT' {
+  interface Kinded<T> {
+    readonly [IterKind]: Iterable<T[0]>
+  }
+}
 
 /**
  * Returns whether an iterator is empty.
@@ -59,6 +71,16 @@ export function* of<A>(...as: A[]): Iterable<A> {
     yield a
   }
 }
+
+/**
+ * Returns an empty list.
+ * @returns
+ */
+export const empty = <A>(): Iterable<A> => []
+/**
+ * Alias of `empty`.
+ */
+export const zero = empty
 
 /**
  * Calls a callback function on each element of the iterator, and returns an iterator contains the results.
@@ -212,6 +234,29 @@ export const filter = <A>(predicate: Predicate<A>) => function* (ma: Iterable<A>
 }
 
 /**
+ * Concats two iterators that have different types.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(pipe([1], alt(() => ['2', '3']), collect), [1, '2', '3'])
+ * ```
+ */
+export const alt = <B>(that: Lazy<Iterable<B>>) => <A>(ma: Iterable<A>): Iterable<A | B> => pipe(ma, concat(that()))
+
+/**
+ * Chains the result of the applying function to the iterator with the other.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = (s: string) => (n: number) => s + n
+ * assert.deepStrictEqual(pipe(['a', 'b'], map(f), ap([1, 2]), collect), ['a1', 'a2', 'b1', 'b2'])
+ * ```
+ */
+export const ap: <A>(ma: Iterable<A>) => <B>(f: Iterable<(a: A) => B>) => Iterable<B> = ma => chain(f => pipe(ma, map(f)))
+
+/**
  * Calls the specified callback function for all the elements in an iterator.
  * The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
  *
@@ -288,6 +333,24 @@ export const tail = <A>(ma: Iterable<A>) => {
   }
 
   return none
+}
+
+/**
+ * Combines two or more iterators.
+ *
+ * @example
+ *
+ * assert.deepStrictEqual(pipe([1], concat([2, 3], [4, 5]), collect), [1, 2, 3, 4, 5])
+ */
+export const concat = <A>(...items: Iterable<A>[]) => function*<B>(ma: Iterable<B>): Iterable<A | B> {
+  for(const a of ma) {
+    yield a
+  }
+  for(const item of items) {
+    for(const b of item) {
+      yield b
+    }
+  }
 }
 
 
@@ -382,8 +445,8 @@ export function* flatten<A>(as: Iterable<Iterable<A>>): Iterable<A> {
  * ```ts
  * const f = (n: number) => flow(replicate, collect)(`${n}`, n)
  *
- * assert.deepStrictEqual(flow(map(f), collect)([1, 2, 3]))([['1'], ['2', '2'], ['3', '3', '3']])
- * assert.deepStrictEqual(flow(chain(f), collect)([1, 2, 3]))(['1', '2', '2', '3', '3', '3'])
+ * assert.deepStrictEqual(pipe([1,2,3], map(f), collect), [['1'],['2','2'],['3','3','3']])
+ * assert.deepStrictEqual(pipe([1,2,3], chain(f), collect), ['1','2','2','3','3','3'])
  * ```
  */
 export const chain = <A, B>(f: (a: A, i: number) => Iterable<B>) => function* (as: Iterable<A>): Iterable<B> {
@@ -419,6 +482,7 @@ export class Iter<A> implements Iterable<A> {
     return this.toArray()
   }
 
+  static zero = flow(zero, iter)
   static of = flow(of, iter)
   static to = flow(to, iter)
   static range = flow(range, iter)
@@ -447,4 +511,19 @@ export class Iter<A> implements Iterable<A> {
   chain = <B>(f: (a: A, i: number) => Iterable<B>) => pipe(this._iter(), chain(f), iter)
 }
 
+// none-pipeables
+const _map: Alternative1<IterKind>['map'] = (ma, f) => pipe(ma, map(f))
+const _alt: Alternative1<IterKind>['alt'] = (ma, f) => pipe(ma, alt(f))
+const _ap: Alternative1<IterKind>['ap'] = (f, ma) => pipe(f, ap(ma))
 
+/**
+ * Alternative Functor
+ */
+export const Alternative: Alternative1<IterKind> = {
+  URI: IterKind,
+  of,
+  zero,
+  map: _map,
+  alt: _alt,
+  ap: _ap
+}
