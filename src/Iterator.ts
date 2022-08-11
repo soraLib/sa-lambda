@@ -3,6 +3,9 @@ import { Predicate } from './Predicate'
 import { some, none, getOrElse } from './Maybe'
 import { Alternative1 } from './Functors/Alternative'
 import { Lazy } from './function'
+import { Monad1 } from './Functors/Monad'
+import { ChainRec1 } from './Functors/ChainRec'
+import { Either, isLeft } from './Either'
 
 
 export const IterKind = Symbol('Iterator')
@@ -458,6 +461,37 @@ export const chain = <A, B>(f: (a: A, i: number) => Iterable<B>) => function* (a
 }
 
 /**
+ * Depth-first chainRec.
+ *
+ * Chains until the next iterable is empty.
+ *
+ * @example
+ *
+ * ```ts
+ * const f = (n: number) => n < 5 ? [right(n), left(n + 1)] : [right(n)]
+ * assert.deepStrictEqual(pipe(1, chainRec(f), collect), [1, 2, 3, 4, 5])
+ *
+ * const f2 = (n: number) => n < 5 ? [left(n + 1), right(n)] : [right(n)]
+ * assert.deepStrictEqual(pipe(1, chainRec(f2), collect), [5, 4, 3, 2, 1])
+ * ```
+ */
+export const chainRec = <A, B>(f: (a: A) => Iterable<Either<A, B>>) => function* (a: A): Iterable<B> {
+  const next: Array<Either<A, B>> = collect(f(a))
+  const out: Array<B> = []
+
+  while (count(next)) {
+    const e = next.shift()!
+    if (isLeft(e)) {
+      next.unshift(...f(e.left))
+    } else {
+      out.push(e.right)
+    }
+  }
+
+  return yield* out
+}
+
+/**
  * Creates an `Iter` from an iterator.
  *
  * @example
@@ -509,12 +543,17 @@ export class Iter<A> implements Iterable<A> {
   ]> => flow(unzip, iter)(this._iter() as any) as any
   flatten = (): A extends Iterable<infer R> ? Iter<R> : never => pipe(this._iter() as any, flatten, iter) as any
   chain = <B>(f: (a: A, i: number) => Iterable<B>) => pipe(this._iter(), chain(f), iter)
+  concat = <B>(...items: Iterable<B>[]) => pipe(this._iter(), concat(items), iter)
+  ap = <B>(ma: Iterable<B>) => pipe(this._iter() as unknown as Iterable<(a: B) => A>, ap(ma), iter) /* FIXME: remove unknown */
+  alt = <B>(that: Lazy<Iterable<B>>) => pipe(this._iter(), alt(that), iter)
 }
 
 // none-pipeables
 const _map: Alternative1<IterKind>['map'] = (ma, f) => pipe(ma, map(f))
 const _alt: Alternative1<IterKind>['alt'] = (ma, f) => pipe(ma, alt(f))
 const _ap: Alternative1<IterKind>['ap'] = (f, ma) => pipe(f, ap(ma))
+const _chain: Monad1<IterKind>['chain'] = (ma, f) => pipe(ma, chain(f))
+const _chainRec: ChainRec1<IterKind>['chainRec'] = (ma, f) => pipe(ma, chainRec(f))
 
 /**
  * Alternative Functor
@@ -526,4 +565,26 @@ export const Alternative: Alternative1<IterKind> = {
   map: _map,
   alt: _alt,
   ap: _ap
+}
+
+/**
+ * Monad Functor
+ */
+export const Monad: Monad1<IterKind> = {
+  URI: IterKind,
+  of,
+  ap: _ap,
+  map: _map,
+  chain: _chain
+}
+
+/**
+ * ChainRec Functor
+ */
+export const ChainRec: ChainRec1<IterKind> = {
+  URI: IterKind,
+  ap: _ap,
+  map: _map,
+  chain: _chain,
+  chainRec: _chainRec
 }

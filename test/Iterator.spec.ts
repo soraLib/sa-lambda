@@ -1,4 +1,5 @@
-import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, filter, reduce, zero, concat, of, alt, ap } from '../src/Iterator'
+import { right, left } from '../src/Either'
+import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, filter, reduce, zero, concat, of, alt, ap, chainRec } from '../src/Iterator'
 import { none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
 
@@ -131,6 +132,15 @@ it('chain', () => {
   expect(iter([1, 2, 3]).chain(f).collect()).toEqual(['1', '2', '2', '3', '3', '3'])
 })
 
+it('chainRec', () => {
+  const f = (n: number) => n < 5 ? [right(n), left(n + 1)] : [right(n)]
+  const f2 = (n: number) => n < 5 ? [left(n + 1), right(n)] : [right(n)]
+
+  expect(pipe(1, chainRec(() => []), collect)).toEqual([])
+  expect(pipe(1, chainRec(f), collect)).toEqual([1, 2, 3, 4, 5])
+  expect(pipe(1, chainRec(f2), collect)).toEqual([5, 4, 3, 2, 1])
+})
+
 it('isEmpty', () => {
   expect(isEmpty([])).toBeTruthy()
   expect(isEmpty(new Map())).toBeTruthy()
@@ -174,16 +184,19 @@ it('zero', () => {
 
 it('alt', () => {
   expect(pipe([1], alt(() => ['2', '3']), collect)).toEqual([1, '2', '3'])
+  expect(iter([1]).alt(() => ['2', '3']).collect()).toEqual([1, '2', '3'])
 })
 
 it('ap', () => {
   const f = (s: string) => (n: number) => s + n
   expect(pipe(['a', 'b'], map(f), ap([1, 2]), collect)).toEqual(['a1', 'a2', 'b1', 'b2'])
+  expect(iter(['a', 'b']).map(f).ap([1, 2]).collect()).toEqual(['a1', 'a2', 'b1', 'b2'])
 })
 
 it('concat', () => {
   expect(pipe(of(1), concat([2, 3], [4, 5]), collect)).toEqual([1, 2, 3, 4, 5])
   expect(pipe(of(1), concat(['2', 3], [4, 5]), collect)).toEqual([1, '2', 3, 4, 5])
+  expect(Iter.of(1).concat(['2', 3], [4, 5]))
 })
 
 it('compose1', () => {
