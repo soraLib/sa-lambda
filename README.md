@@ -72,3 +72,12 @@ f(2);
 ## Functors
 
 ![dependencies](dependencies.png)
+
+## Inspired by
+
+- [fp-ts](https://github.com/gcanti/fp-ts) - Functional programming in TypeScript
+- [sugar.js](https://github.com/libsugar/sugar.js) - Like syntactic sugar, but is library
+
+## License
+
+The MIT License (MIT)
