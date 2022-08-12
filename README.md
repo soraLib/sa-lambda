@@ -76,6 +76,7 @@ f(2);
 ## Inspired by
 
 - [fp-ts](https://github.com/gcanti/fp-ts) - Functional programming in TypeScript
+- [fantasy-land](https://github.com/fantasyland/fantasy-land) - Specification for interoperability of common algebraic structures in JavaScript
 - [sugar.js](https://github.com/libsugar/sugar.js) - Like syntactic sugar, but is library
 
 ## License
