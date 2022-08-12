@@ -544,7 +544,7 @@ export class Iter<A> implements Iterable<A> {
   flatten = (): A extends Iterable<infer R> ? Iter<R> : never => pipe(this._iter() as any, flatten, iter) as any
   chain = <B>(f: (a: A, i: number) => Iterable<B>) => pipe(this._iter(), chain(f), iter)
   concat = <B>(...items: Iterable<B>[]) => pipe(this._iter(), concat(items), iter)
-  ap = <B>(ma: Iterable<B>) => pipe(this._iter() as unknown as Iterable<(a: B) => A>, ap(ma), iter) /* FIXME: remove unknown */
+  ap = <B>(ma: A extends (a: B) => any ? Iterable<B> : never): Iter<A extends (a: B) => any ? ReturnType<A> : never> => pipe(this._iter() as any, ap(ma), iter) as any
   alt = <B>(that: Lazy<Iterable<B>>) => pipe(this._iter(), alt(that), iter)
 }
 
