@@ -15,3 +15,8 @@ export type TupleTail<T extends any[]> = T extends [any, ...infer R] ? R : never
   * ```
   */
 export type TupleLast<T extends any[]> = T[TupleTail<T>['length']]
+
+/**
+ * A array that has at least one element.
+ */
+export type NonEmptyArray<T> = [T, ...T[]]
