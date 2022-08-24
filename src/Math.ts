@@ -58,6 +58,14 @@ export const abs = (num: number): number => max(num, -num)
  * - `a > b` => `1`
  * - `a < b` => `-1`
  * - `a == b` => `0`
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(cmp(1, 1), 0)
+ * assert.deepStrictEqual(cmp(1, 0), 1)
+ * assert.deepStrictEqual(cmp(0, 1), -1)
+ * ```
  */
 export function cmp(a: number, b: number): -1 | 0 | 1
 export function cmp(a: bigint, b: bigint): -1n | 0n | 1n
@@ -66,3 +74,15 @@ export function cmp(a: any, b: any): any {
 
   return a > b ? 1 : a < b ? -1 : 0
 }
+
+/**
+ * Computes the sum of the values.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(sum(1, 2, 3), 6)
+ * ```
+ */
+export const sum = (...as: NonEmptyArray<number>): number =>
+  as.reduce((a, b) => a + b, 0)

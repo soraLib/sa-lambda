@@ -1,4 +1,4 @@
-import { max, min, abs, cmp } from '../src/Math'
+import { max, min, abs, cmp, sum } from '../src/Math'
 
 it('max', () => {
   expect(max(1, 2, 3)).toBe(3)
@@ -24,4 +24,9 @@ it('cmp', () => {
   expect(cmp(1n, 1n)).toBe(0n)
   expect(cmp(1n, 0n)).toBe(1n)
   expect(cmp(0n, 1n)).toBe(-1n)
+})
+
+it('sum', () => {
+  expect(sum(1)).toBe(1)
+  expect(sum(1, 2, 3)).toBe(6)
 })
