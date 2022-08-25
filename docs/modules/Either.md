@@ -23,10 +23,11 @@ function parseJson(s: string): never | Record<string, unknown> {
 
 let parsed: Record<string, unknown>
 
+// try to parse some content that may not be parsed
 try {
-  parsed = parseJson(/* some content that may not be parsed */)
+  parsed = parseJson('some content')
 } catch(e) {
-  parsed = {/* set default value */}
+  parsed = { message: 'err' }
 }
 ```
 
@@ -34,12 +35,12 @@ With **Either**
 
 ```ts
 import { tryCatch, getOrElse } from 'sa-lambda/either'
-import { pipe } from 'sa-lambda/pipe'
+import { pipe } from 'sa-lambda'
 
-const parseJson = (s: string) => 
+const parseJson = (s: string) =>
   tryCatch(() => JSON.parse(s), () => `Couldn't parse from ${s}.`)
 
-let parsed = pipe(/* some content */, parseJson, getOrElse(() => ({/* default value */})))
+let parsed = pipe('some content', parseJson, getOrElse(() => ({ message: 'err' })))
 ```
 
 ## API
