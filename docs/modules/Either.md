@@ -227,8 +227,8 @@ Takes a function and an initial value and returns the initial value if `Either` 
 otherwise returns the result of applying the function to the initial value and the value inside `Either`.
 
 ```ts
-pipe(right(1), reduce((acc, a) => acc + a, 1) ➔ 2
-pipe(left(0), reduce((acc, a) => acc + a, 1)  ➔ 1
+pipe(right(1), reduce((acc, a) => acc + a, 1)) ➔ 2
+pipe(left(0), reduce((acc, a) => acc + a, 1))  ➔ 1
 ```
 
 ### traverse
