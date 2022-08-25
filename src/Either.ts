@@ -233,7 +233,7 @@ export const chain = <E2, A, B>(f: (a: A) => Either<E2, B>) => <E1>(ma: Either<E
  *      a => a < 5 ? left(a + 1) : right(`${a}`)
  *    )
  *  )
- * , right(5))
+ * , right('5'))
  * ```
  */
 export const chainRec: <E, A, B>(f: (a: A) => Either<E, Either<A, B>>) => (ma: A) => Either<E, B> = (f) =>

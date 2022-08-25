@@ -106,6 +106,22 @@ Takes a value and wraps it into a `Right`.
 of(1) ➔ right(1)
 ```
 
+### zero
+
+```ts
+<E, A = never>(e: E) => Either<E, A>
+```
+
+Alias of `left`
+
+### empty
+
+```ts
+<E, A = never>(e: E) => Either<E, A>
+```
+
+Alias of `left`
+
 ### map
 
 ```ts
@@ -163,6 +179,19 @@ pipe(left(1), match((n: number) => n -1), (n: number) => n + 1)  ➔ 0
 pipe(right(1), match((n: number) => n -1), (n: number) => n + 1) ➔ 2
 ```
 
+### extend
+
+```ts
+<E, A, B>(f: (ma: Either<E, A>) => B) => (ma: Either<E, A>) => Left<E> | Right<B>
+```
+
+Returns the `Either` if it's a `Left`, otherwise returns the result of the applying function and wrapped in a `Right`.
+
+```ts
+pipe(right(1), extend(() => 2)) ➔ right(2)
+pipe(left(1), extend(() => 2))  ➔ left(1)
+```
+
 ### chain
 
 ```ts
@@ -174,6 +203,48 @@ Composes computations in sequence. Useful for chaining many computations that ma
 ```ts
 pipe(left(1), chain((n: number) => right(n + 1)))  ➔ left(1)
 pipe(right(1), chain((n: number) => right(n + 1))) ➔ right(2)
+```
+
+### chainRec
+
+```ts
+<E, A, B>(f: (a: A) => Either<E, Either<A, B>>) => (ma: A) => Either<E, B>
+```
+
+Chains recursively until the next is `Right`.
+
+```ts
+pipe(right(1), chainRec( a => a < 5 ? left(a + 1) : right(`${a}`))) ➔ right('5')
+```
+
+### reduce
+
+```ts
+<E, A, B>(f: (acc: B, a: A) => B, b: B) => (ma: Either<E, A>) => B
+```
+
+Takes a function and an initial value and returns the initial value if `Either` is `Left`,
+otherwise returns the result of applying the function to the initial value and the value inside `Either`.
+
+```ts
+pipe(right(1), reduce((acc, a) => acc + a, 1) ➔ 2
+pipe(left(0), reduce((acc, a) => acc + a, 1)  ➔ 1
+```
+
+### traverse
+
+```ts
+PipeableTraverse2<EitherKind>
+```
+Maps each element of a `HKT` structure to an action, and collects the results wrapped in `Right`.
+
+Returns a `HKT` contains a left with the value of `Either` if the `Either` is a `Left`.
+
+```ts
+const f = traverse(Maybe.Monad)((n: number) => n > 0 ? some(n): none
+pipe(left('err'), f) ➔ some(left('err'))
+pipe(right(1), f)    ➔ some(right(1))
+pipe(right(-1), f)   ➔ none
 ```
 
 ### swap
@@ -253,6 +324,19 @@ pipe(left(1), orElse((n: number) => right(n + 1)))  ➔ right(2)
 pipe(right(1), orElse((n: number) => right(n + 1))) ➔ right(1)
 ```
 
+### extract
+
+```ts
+<E, A>(ma: Either<E, A>) => E | A
+```
+
+Extracts the value out of `Either`.
+
+```ts
+extract(right(1))    ➔ 1
+extract(left('err')) ➔ 'err'
+```
+
 ### getLeft
 
 ```ts
@@ -290,6 +374,25 @@ Returns the `Either` value if it's a `Right` or a default `onLeft` result value 
 ```ts
 pipe(left(1), getOrElse(() => 0))  ➔ 0
 pipe(right(1), getOrElse(() => 0)) ➔ 1
+```
+
+### filterOrElse
+
+```ts
+<A, E2>(predicate: Predicate<A>, onFalse: (a: A) => E2) => <E1, B extends A>(ma: Either<E1, B>) => Left<E1> | Right<B> | Left<E2>
+```
+
+Returns `Either` if it is a `Left` or the result of predicate is true,
+otherwise returns the result of applying onFalse function to value inside `Either` and wrapped in a `Left`.
+
+```ts
+const f = filterOrElse(
+  (n: number) => n > 0,
+  () => 'err'
+)
+pipe(right(1), f)  ➔ right(1)
+pipe(right(-1), f) ➔ left('err')
+pipe(left(1), f)   ➔ left(1)
 ```
 
 ### fromPredicate
