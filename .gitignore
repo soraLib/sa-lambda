@@ -12,3 +12,4 @@ tsout/
 coverage/
 /publish
 /pack
+dist
