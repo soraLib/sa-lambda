@@ -28,6 +28,10 @@ const Modules = [
     text: 'Pipe',
     link: '/modules/Pipe',
   },
+  {
+    text: 'Math',
+    link: '/modules/Math',
+  }
 ]
 
 const slidebars = [
