@@ -18,11 +18,12 @@ Typescript library for functional programming.
 
 - [x] Either
 - [x] Maybe
-- [ ] Iterator
+- [x] Iterator
 - [x] Pipe & Flow
+- [x] Equal
+- [x] Math
 - [ ] Task (Promise-Like)
 - [ ] Docs
-- [ ] some math utils
 - [ ] Functors
 
 ## Installation
