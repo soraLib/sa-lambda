@@ -31,6 +31,10 @@ const Modules = [
   {
     text: 'Math',
     link: '/modules/Math',
+  },
+  {
+    text: 'Equal',
+    link: '/modules/Equal'
   }
 ]
 
