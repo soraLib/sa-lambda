@@ -91,6 +91,22 @@ isNone(some(1)) ➔ false
 isNone(none)    ➔ true
 ```
 
+### equals
+
+```ts
+<A>(a: Maybe<A>, b: Maybe<A>) => boolean
+```
+
+Compares one `Maybe` to another `Maybe`. Returns false if maybes or the wrapped values are different.
+
+```ts
+equals(some(1), some(1)) ➔ true
+equals(some(2), some(1)) ➔ false
+equals(some(1), none)    ➔ false
+equals(none, none)       ➔ true
+equals(none, right(1))   ➔ false
+```
+
 ### of
 
 ```ts
@@ -102,6 +118,22 @@ Takes a value and wraps it into a `Some`.
 ```ts
 of(1) ➔ some(1)
 ```
+
+### zero
+
+```ts
+() => None
+```
+
+Alias of `none`.
+
+### empty
+
+```ts
+() => None
+```
+
+Alias of `none`.
 
 ### map
 
@@ -143,6 +175,22 @@ pipe(none, ap(some(1)))                       ➔ none
 pipe(some((n: number) => n + 1), ap(none))    ➔ none
 ```
 
+### filter
+
+```ts
+<A>(predicate: Predicate<A>) => (ma: Maybe<A>) => Maybe<A>
+```
+
+Takes a predicate function and a `Maybe`, returns the `Maybe` if it's `Some` and the predicate returns true, otherwise returns `None`.
+
+```ts
+const f = flow(filter((n: number) => n > 0))
+
+f(some(1)) ➔ some(1)
+f(some(0)) ➔ none
+f(none)    ➔ none
+```
+
 ### match
 
 ```ts
@@ -170,6 +218,18 @@ pipe(some(0), chain((n: number) => n > 0 ? some(n) : none)) ➔ none
 pipe(none, chain((n: number) => n > 0 ? some(n) : none))    ➔ none
 ```
 
+### extend
+
+```ts
+<A, B>(f: (a: Maybe<A>) => B) => (ma: Maybe<A>) => Maybe<B>
+```
+Returns none if the `Maybe` is a `None`, otherwise returns the result of the applying function and wrapped in a `Some`.
+
+```ts
+pipe(some(1), extend(getOrElse(zero))) ➔ some(1)
+pipe(none, extend(getOrElse(zero))) ➔ none
+```
+
 ### filter
 
 ```ts
@@ -182,6 +242,38 @@ Takes a predicate function and a `Maybe`, returns the `Maybe` if it's `Some` and
 pipe(some(1), filter((n: number) => n > 0)) ➔ some(1)
 pipe(some(0), filter((n: number) => n > 0)) ➔ none
 pipe(none, filter((n: number) => n > 0))    ➔ none
+```
+### reduce
+
+```ts
+<A, B>(f: (acc: B, a: A) => B, b: B) => (ma: Maybe<A>) => B
+```
+
+Takes a function and an initial value and returns the initial value if `Maybe` is `none`,
+otherwise returns the result of applying the function to the initial value and the value inside `Maybe`.
+
+
+```ts
+pipe(some(1), reduce((acc, a) => acc + a, 1)) ➔ 2
+pipe(none, reduce((acc, a) => acc + a, 1))    ➔ 1
+```
+
+### traverse
+
+```ts
+PipeableTraverse1<MaybeKind>
+```
+
+Maps each element of a `HKT` structure to an action, and collects the results wrapped in `Some`.
+
+Returns a `HKT` contains a none if the `Maybe` is a `None`.
+
+
+```ts
+const f = traverse(Maybe.Monad)((n: number) => n > 0 ? some(n): none)
+pipe(some(1), f)  ➔ some(some(1))
+pipe(none, f)     ➔ some(none)
+pipe(some(-1), f) ➔ none
 ```
 
 ### getOrElse
