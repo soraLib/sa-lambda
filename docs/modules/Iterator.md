@@ -217,9 +217,9 @@ pipe(['a', 'b'], map(f), ap([1, 2]), collect) ➔ ['a1', 'a2', 'b1', 'b2']
 ### reduce
 
 ```ts
-<A>(f: (b: A, a: A, i: number, as: Iterable<A>) => A): (as: Iterable<A>) => A;
-<A>(f: (b: A, a: A, i: number, as: Iterable<A>) => A, b: A): (as: Iterable<A>) => A;
-<A, B>(f: (b: B, a: A, i: number, as: Iterable<A>) => B, b: B): (as: Iterable<A>) => B;
+<A>(f: (b: A, a: A, i: number, as: Iterable<A>) => A): (as: Iterable<A>) => A
+<A>(f: (b: A, a: A, i: number, as: Iterable<A>) => A, b: A): (as: Iterable<A>) => A
+<A, B>(f: (b: B, a: A, i: number, as: Iterable<A>) => B, b: B): (as: Iterable<A>) => B
 ```
 
 Calls the specified callback function for all the elements in an iterator.
@@ -232,7 +232,7 @@ pipe([2, 3, 4], reduce((acc: number, cur: number) => acc + cur, 1)) ➔ 10
 ### head
 
 ```ts
-<A>(ma: Iterable<A>) => None | Some<A>;
+<A>(ma: Iterable<A>) => None | Some<A>
 ```
 
 Returns `Some` the first element of an iterable if it exists, otherwise returns `None`.
