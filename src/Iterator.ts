@@ -173,10 +173,10 @@ export const replicate = <A>(ma: A, n: number): Iterable<A> => makeBy(n, () => m
  * @example
  *
  * ```ts
- * assert.deepStrictEqual([1, 2, 3], [1, 2, 3]))
- * assert.deepStrictEqual(function* () {
+ * assert.deepStrictEqual(collect([1, 2, 3]), [1, 2, 3]))
+ * assert.deepStrictEqual(collect(function* () {
  *  for(let i = 1; i <=3; i++) yield i
- * }, [1, 2, 3]))
+ * }), [1, 2, 3]))
  * ```
  */
 export const collect = <A>(ma: Iterable<A>): A[] => [...ma]
@@ -199,11 +199,11 @@ export const join = (seperator?: string) => <A>(ma: Iterable<A>): string => coll
  *
  * ```ts
  * assert.deepStrictEqual(count([1, 2, 3]), 3)
- * assert.deepStrictEqual(function* () {
- *  yield 1
- *  yield 2
- *  yield 3
- * }, 3)
+ * assert.deepStrictEqual(count(function* () {
+ *   yield 1
+ *   yield 2
+ *   yield 3
+ * }), 3)
  * ```
  */
 export const count = <A>(ma: Iterable<A>): number => {

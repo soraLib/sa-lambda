@@ -71,7 +71,7 @@ f(2);
 
 ## Functors
 
-![dependencies](dependencies.png)
+![dependencies](./docs/dependencies.png)
 
 ## Inspired by
 
