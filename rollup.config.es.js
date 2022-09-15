@@ -1,10 +1,10 @@
-import resolve from 'rollup-plugin-node-resolve'
-import typescript from '@rollup/plugin-typescript'
+import typescript from '@rollup/plugin-typescript';
+import resolve from 'rollup-plugin-node-resolve';
 
 export default {
   input: './src/index.ts',
   output: {
-    file: './sa-lambda.mjs',
+    file: './dist/sa-lambda.mjs',
     format: 'es',
     name: 'sa-lambda'
   },

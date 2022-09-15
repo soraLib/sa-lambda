@@ -3,7 +3,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "target": "ES2021",
-    "outDir": "./es",
+    "outDir": "./dist/es",
     "strict": true,
     "declaration": true,
     "declarationDir": "./type",

@@ -3,10 +3,13 @@ import { promisify } from "util";
 const ncp = promisify(ncpRaw);
 
 const cwd = process.cwd();
+
 await Promise.all([
-  ncp(`${cwd}/type`, `${cwd}/cjs`),
-  ncp(`${cwd}/type`, `${cwd}/esm`),
-  ncp(`${cwd}/type`, `${cwd}/umd`),
-  ncp(`${cwd}/type`, `${cwd}/es`),
+  ncp(`${cwd}/package.json`, `${cwd}/dist/package.json`),
+  ncp(`${cwd}/type`, `${cwd}/dist/cjs`),
+  ncp(`${cwd}/type`, `${cwd}/dist/cjs`),
+  ncp(`${cwd}/type`, `${cwd}/dist/esm`),
+  ncp(`${cwd}/type`, `${cwd}/dist/umd`),
+  ncp(`${cwd}/type`, `${cwd}/dist/es`),
 ])
 

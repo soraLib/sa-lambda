@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES2020",
-    "outDir": "./cjs",
+    "outDir": "./dist/cjs",
     "strict": true,
     "importHelpers": true,
     "moduleResolution": "node",

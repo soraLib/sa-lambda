@@ -17,6 +17,10 @@
       "import": "./esm/*.mjs",
       "require": "./cjs/*.js"
     },
+    "./lib/*": {
+      "import": "./lib/*.js",
+      "require": "./lib/*.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
