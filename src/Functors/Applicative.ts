@@ -8,8 +8,8 @@
  * of :: Applicative f => a -> f a
  */
 
-import { HKT, URIS, KindOf } from './HKT'
 import { Apply, Apply1, Apply2 } from './Apply'
+import { HKT, KindOf, URIS } from './HKT'
 
 export interface Applicative<F> extends Apply<F> {
   readonly of: <A>(ma: A) => HKT<F, A>

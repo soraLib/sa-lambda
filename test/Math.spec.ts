@@ -1,4 +1,4 @@
-import { max, min, abs, cmp, sum } from '../src/Math'
+import { abs, cmp, max, min, sum } from '../src/Math'
 
 it('max', () => {
   expect(max(1, 2, 3)).toBe(3)

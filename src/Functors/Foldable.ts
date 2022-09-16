@@ -6,7 +6,7 @@
  * reduce :: Foldable f => f a ~> (b, (b, a) -> b) -> b
  */
 
-import { HKT, URIS, KindOf } from './HKT'
+import { HKT, KindOf, URIS } from './HKT'
 
 export interface Foldable<F> {
   readonly URI: F

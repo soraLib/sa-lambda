@@ -8,8 +8,8 @@
  * filter :: Filterable f => f a ~> (a -> Boolean) -> f a
  */
 
-import { HKT, URIS, KindOf } from './HKT'
 import { Predicate } from '../Predicate'
+import { HKT, KindOf, URIS } from './HKT'
 
 export interface Filterable<F> {
   readonly URI: F

@@ -1,7 +1,9 @@
-import { isSome, some, isNone, none, fromPredicate, getOrElse, of, map, chain, match, alt, ap, tryCatch, equals,
-  orElse, toEither, toNullable, toUndefined, empty, filter, extend, zero, traverse, Monad as MM, reduce } from '../src/Maybe'
-import { pipe, flow } from '../src/Pipe'
 import { left, right } from '../src/Either'
+import {
+  alt, ap, chain, empty, equals, extend, filter, fromPredicate, getOrElse,
+  isNone, isSome, map, match, Monad as MM, none, of, orElse, reduce, some, toEither, toNullable, toUndefined, traverse, tryCatch, zero
+} from '../src/Maybe'
+import { flow, pipe } from '../src/Pipe'
 
 test('isSome', () => {
   expect(isSome(some(1))).toBeTruthy()

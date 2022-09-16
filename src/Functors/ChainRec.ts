@@ -8,9 +8,9 @@
  * chainRec :: ChainRec m => ((a -> c, b -> c, a) -> m c, a) -> m b
  */
 
-import { HKT, URIS, KindOf } from './HKT'
-import { Chain, Chain1, Chain2 } from './Chain'
 import { Either } from '../Either'
+import { Chain, Chain1, Chain2 } from './Chain'
+import { HKT, KindOf, URIS } from './HKT'
 
 export interface ChainRec<F> extends Chain<F> {
   readonly chainRec: <A, B>(fa: A, f: (a: A) => HKT<F, Either<A, B>>) => HKT<F, B>

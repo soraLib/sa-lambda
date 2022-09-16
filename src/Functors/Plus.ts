@@ -8,8 +8,8 @@
  * zero :: Plus f => () -> f a
  */
 
-import { HKT, URIS, KindOf } from './HKT'
-import { Alt, Alt2, Alt1 } from './Alt'
+import { Alt, Alt1, Alt2 } from './Alt'
+import { HKT, KindOf, URIS } from './HKT'
 
 export interface Plus<F> extends Alt<F> {
   readonly zero: <A>() => HKT<F, A>

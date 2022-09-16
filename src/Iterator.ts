@@ -1,11 +1,11 @@
+import { Either, isLeft } from './Either'
+import { Lazy } from './function'
+import { Alternative1 } from './Functors/Alternative'
+import { ChainRec1 } from './Functors/ChainRec'
+import { Monad1 } from './Functors/Monad'
+import { getOrElse, none, some } from './Maybe'
 import { flow, pipe } from './Pipe'
 import { Predicate } from './Predicate'
-import { some, none, getOrElse } from './Maybe'
-import { Alternative1 } from './Functors/Alternative'
-import { Lazy } from './function'
-import { Monad1 } from './Functors/Monad'
-import { ChainRec1 } from './Functors/ChainRec'
-import { Either, isLeft } from './Either'
 
 
 export const IterKind = Symbol('Iterator')

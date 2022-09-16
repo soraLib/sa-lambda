@@ -1,8 +1,9 @@
 import {
-  isLeft, left, right, isRight, map, of, fromPredicate, match, getOrElse, chain, orElse, exists, alt, getLeft, getRight,
-  fromMaybe, tryCatch, swap, equals, ap, chainRec, extend, extract, reduce, traverse, filterOrElse } from '../src/Either'
+  alt, ap, chain, chainRec, equals, exists, extend, extract, filterOrElse,
+  fromMaybe, fromPredicate, getLeft, getOrElse, getRight, isLeft, isRight, left, map, match, of, orElse, reduce, right, swap, traverse, tryCatch
+} from '../src/Either'
+import { Monad as MM, none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
-import { none, some, Monad as MM } from '../src/Maybe'
 
 
 test('isLeft', () => {

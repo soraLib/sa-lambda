@@ -7,8 +7,8 @@
  * promap :: Profunctor p => p b c ~> (a -> b, c -> d) -> p a d
  */
 
-import { URIS, KindOf } from './HKT'
 import { Functor2 } from './Functor'
+import { KindOf, URIS } from './HKT'
 
 export interface Profunctor2<F extends URIS> extends Functor2<F> {
   readonly promap: <E, A, D, B>(fea: KindOf<F, [E, A]>, f: (d: D) => E, g: (a: A) => B) => KindOf<F, [D, B]>

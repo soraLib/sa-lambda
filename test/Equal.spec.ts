@@ -1,4 +1,4 @@
-import { isEqual, isStrictEqual, eqOr, strictEqOr, eqAnd, strictEqAnd } from '../src/Equal'
+import { eqAnd, eqOr, isEqual, isStrictEqual, strictEqAnd, strictEqOr } from '../src/Equal'
 
 it('loose equal', () => {
   expect(isEqual(1, 2)).toBeFalsy()

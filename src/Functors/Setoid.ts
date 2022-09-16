@@ -8,7 +8,7 @@
  * equals :: Setoid a => a ~> a -> Boolean
  */
 
-import { HKT, URIS, KindOf } from './HKT'
+import { HKT, KindOf, URIS } from './HKT'
 
 export interface Setoid<F> {
   readonly URI: F

@@ -6,7 +6,7 @@
  * compose :: Semigroupoid c => c i j ~> c j k -> c i k
  */
 
-import { HKT, URIS, KindOf } from './HKT'
+import { HKT, KindOf, URIS } from './HKT'
 
 export interface Semigroupoid<F> {
   readonly URI: F

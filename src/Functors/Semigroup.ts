@@ -6,7 +6,7 @@
  * concat :: Semigroup a => a ~> a -> a
  */
 
-import { HKT, URIS, KindOf } from './HKT'
+import { HKT, KindOf, URIS } from './HKT'
 
 export interface Semigroup<F> {
   readonly URI: F

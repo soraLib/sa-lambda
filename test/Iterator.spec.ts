@@ -1,5 +1,5 @@
-import { right, left } from '../src/Either'
-import { isEmpty, iter, Iter, collect, to, map, replicate, chain, join, filter, reduce, zero, concat, of, alt, ap, chainRec } from '../src/Iterator'
+import { left, right } from '../src/Either'
+import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero } from '../src/Iterator'
 import { none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
 

@@ -5,9 +5,9 @@
  * 2. x.ap(A.zero()) is equivalent to A.zero() (annihilation)
  */
 
+import { Applicative, Applicative1, Applicative2 } from './Applicative'
 import { URIS } from './HKT'
 import { Plus, Plus1, Plus2 } from './Plus'
-import { Applicative, Applicative1, Applicative2 } from './Applicative'
 
 export interface Alternative<F> extends Plus<F>, Applicative<F> {}
 
