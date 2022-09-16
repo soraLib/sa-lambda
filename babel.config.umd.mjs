@@ -1,11 +1,11 @@
-import { fileURLToPath } from 'url'
-import { basename, dirname, join, normalize, extname } from 'path'
 import fs from 'fs'
+import { basename, dirname, extname, join, normalize } from 'path'
+import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const dir = join(__dirname, './es')
+const dir = join(__dirname, './dist/es')
 
 /** @type {Map<string, string[]>} */
 const moduleIds = new Map

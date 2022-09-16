@@ -72,7 +72,7 @@ f(2);
 
 ## Functors
 
-![dependencies](./docs/dependencies.png)
+![dependencies](https://raw.githubusercontent.com/soraLib/sa-lambda/main/docs/dependencies.png)
 
 ## Inspired by
 

@@ -1,11 +1,11 @@
-import "./prebuild.mjs";
-import os from "os";
-import fs from "fs/promises";
 import ChildProcess from "child_process";
-import ncpRaw from "ncp";
-import { promisify } from "util";
-import path from "path";
+import fs from "fs/promises";
 import { createRequire } from "module";
+import ncpRaw from "ncp";
+import os from "os";
+import path from "path";
+import { promisify } from "util";
+import "./prebuild.mjs";
 const require = createRequire(import.meta.url);
 const packageJson = require("../package");
 
@@ -43,7 +43,7 @@ try {
     );
   } else {
     console.log("\nnpm publish", '\n');
-    ChildProcess.execSync(`npm publish`, { encoding: 'utf-8', cwd: publishDir });
+    ChildProcess.execSync(`npm publish`, { encoding: 'utf-8', cwd: `${publishDir}/dist` });
   }
 } finally {
   await fs.rm(publishDir, { recursive: true });
