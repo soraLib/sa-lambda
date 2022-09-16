@@ -60,6 +60,6 @@ await Promise.all([
   ncp(path.join(cwd, 'type'), path.join(OUTPUT_PATH, 'es')),
   copyPackageJson(),
   copyFiles(),
+  makeModules(),
 ])
 
-makeModules()
