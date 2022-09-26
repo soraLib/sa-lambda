@@ -21,7 +21,7 @@
     "@vueuse/core": "8.9.4",
     "esbuild-register": "3.3.3",
     "eslint": "8.24.0",
-    "esno": "0.14.1",
+    "esno": "0.16.3",
     "fast-glob": "3.2.12",
     "fs-extra": "10.1.0",
     "https-localhost": "4.7.1",
