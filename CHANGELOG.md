@@ -67,5 +67,3 @@
 
 * build ([bee2bfd](https://github.com/soraLib/sa-lambda/commit/bee2bfd0be3d54b3c0a68fb7d84b346459a27be4))
 * from-predicate type infer ([392ecc8](https://github.com/soraLib/sa-lambda/commit/392ecc82e6046047f139aae4125ed762ed6e22b6))
-
-## Changelog
