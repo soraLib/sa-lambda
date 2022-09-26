@@ -11,6 +11,7 @@ import { PipeableTraverse2, Traversable2 } from './Functors/Traversable'
 import { isNone, Maybe, none, some } from './Maybe'
 import { pipe } from './Pipe'
 import { Predicate } from './Predicate'
+import { Refinement } from './Refinement'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -104,6 +105,7 @@ export const ap = <E2, A>(ma: Either<E2, A>) => <E1, B>(fab: Either<E1, (a: A) =
  * assert.deepStrictEqual(getEither(-1), left('error'))
  * ```
  */
+export function fromPredicate<A, B extends A, E>(refinement: Refinement<A, B>, onFalse: Lazy<E>): <B extends A>(a: A) => Either<E, B>
 export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): <B extends A>(b: B) => Either<E, B>
 export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): (a: A) => Either<E, A>
 export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): (a: A) => Either<E, A> {

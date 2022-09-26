@@ -9,6 +9,7 @@ import { Monad1 } from './Functors/Monad'
 import { PipeableTraverse1, Traversable1 } from './Functors/Traversable'
 import { pipe } from './Pipe'
 import { Predicate } from './Predicate'
+import { Refinement } from './Refinement'
 
 export interface None {
   readonly _tag: 'None'
@@ -75,6 +76,7 @@ export const some = <A>(value: A): Maybe<A> => ({ _tag: 'Some', value })
  * assert.deepStrictEqual(getMaybe(1), some(1))
  * ```
  */
+export function fromPredicate<A, B extends A>(Refinement: Refinement<A, B>): (a: A) => Maybe<B>
 export function fromPredicate<A>(predicate: Predicate<A>): <B extends A>(b: B) => Maybe<B>
 export function fromPredicate<A>(predicate: Predicate<A>): (a: A) => Maybe<A>
 export function fromPredicate<A>(predicate: Predicate<A>): (a: A) => Maybe<A> {
