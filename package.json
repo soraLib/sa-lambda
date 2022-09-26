@@ -2,6 +2,7 @@
   "name": "sa-lambda",
   "version": "1.0.0",
   "description": "Typescript library for functional programming.",
+  "packageManager": "pnpm@7.12.2",
   "main": "./cjs/index.js",
   "module": "./esm/index.mjs",
   "browser": "./lib/sa-lambda.min.js",
