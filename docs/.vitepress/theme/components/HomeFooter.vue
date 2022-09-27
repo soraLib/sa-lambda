@@ -1,8 +1,6 @@
 <template>
   <footer v-if="$frontmatter.footer" class="footer">
-    <p class="text">
-      {{ $frontmatter.footer }}
-    </p>
+    <p class="text" v-html="$frontmatter.footer" />
   </footer>
 </template>
 
