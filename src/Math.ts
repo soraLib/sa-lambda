@@ -10,9 +10,7 @@ import { NonEmptyArray } from './TupleT'
  * ```
  */
 
-export function max(...as: NonEmptyArray<number>): number
-export function max(...as: NonEmptyArray<bigint>): bigint
-export function max(...as: NonEmptyArray<any>): any {
+export const max = (...as: NonEmptyArray<number>): number => {
   let [max, ...bs] = as
   for (const b of bs) {
     if(b > max) max = b
@@ -30,9 +28,7 @@ export function max(...as: NonEmptyArray<any>): any {
  * assert.deepStrictEqual(min(1, 2, 3), 1)
  * ```
  */
-export function min(...as: NonEmptyArray<number>): number
-export function min(...as: NonEmptyArray<bigint>): bigint
-export function min(...as: NonEmptyArray<any>): any {
+export const min = (...as: NonEmptyArray<number>): number => {
   let [min, ...bs] = as
   for (const b of bs) {
     if(b < min) min = b
@@ -67,13 +63,9 @@ export const abs = (num: number): number => max(num, -num)
  * assert.deepStrictEqual(cmp(0, 1), -1)
  * ```
  */
-export function cmp(a: number, b: number): -1 | 0 | 1
-export function cmp(a: bigint, b: bigint): -1n | 0n | 1n
-export function cmp(a: any, b: any): any {
-  if(typeof a === 'bigint') return a > b ? 1n : a < b ? -1n : 0n
+export const cmp = (a: number, b: number): -1 | 0 | 1 =>
+  a > b ? 1 : a < b ? -1 : 0
 
-  return a > b ? 1 : a < b ? -1 : 0
-}
 
 /**
  * Computes the sum of the values.

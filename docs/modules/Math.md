@@ -6,7 +6,6 @@
 
 ```ts
 (...as: NonEmptyArray<number>): number
-(...as: NonEmptyArray<bigint>): bigint
 ```
 
 Returns the largest number of a set of number.
@@ -19,7 +18,6 @@ max(1, 2, 3) ➔ 3
 
 ```ts
 (...as: NonEmptyArray<number>): number;
-(...as: NonEmptyArray<bigint>): bigint;
 ```
 
 Returns the smallest number of a set of number.
@@ -45,7 +43,6 @@ abs(-1) ➔ 1
 
 ``` ts
 (a: number, b: number): -1 | 0 | 1;
-(a: bigint, b: bigint): -1n | 0n | 1n;
 ```
 
 Compares two numbers.
