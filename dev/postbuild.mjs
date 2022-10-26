@@ -42,7 +42,7 @@ const getModules = paths =>
 
 const makePkgJson = module => ({
     main: `../cjs/${module}.js`,
-    module: `../esm/${module}.js`,
+    module: `../esm/${module}.mjs`,
     types: `../type/${module}.d.ts`,
     sideEffects: false
   })
