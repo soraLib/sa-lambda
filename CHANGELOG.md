@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1](https://github.com/soraLib/sa-lambda/compare/v1.0.0...v1.0.1) (2022-10-26)
+
+
+### Bug Fixes
+
+* **build:** esm file ext ([eeb3d97](https://github.com/soraLib/sa-lambda/commit/eeb3d97b2e86b61465e98fffb4962bfc6c7ecdef))
+* **Math:** remove big integer ([c0c149e](https://github.com/soraLib/sa-lambda/commit/c0c149e87b7af305fce2c35cfc1a4a34afa3af0d))
+* **scripts:** pnpm build hook ([395af7e](https://github.com/soraLib/sa-lambda/commit/395af7e2dbd3098175e5f4b78cd194bf9b73a1e5))
+
 ## 1.0.0 (2022-09-26)
 
 
