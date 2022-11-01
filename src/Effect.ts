@@ -45,3 +45,22 @@ export const also = <A>(a: A, f: (a: A) => void): A => (f(a), a)
  */
 export const match = <A, B>(onTrue: () => A, onFalse: () => B) => (condition: boolean): A | B => condition ? onTrue() : onFalse()
 
+/**
+ * Gets a value from source by the given key.
+ *
+ * Sets a value with the initial function if source doesn't [has](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn) the key.
+ *
+ * @example
+ *
+ * ```ts
+ * const source: Record<string, number> = { a: 0 }
+ * assert.deepStrictEqual(getOrSet(source, 'a', () => 1), 0)
+ * assert.deepStrictEqual(getOrSet(source, 'b', () => 1), 1)
+ * assert.deepStrictEqual(source['b']), 1)
+ * ```
+ */
+export const getOrSet = <T extends Record<string, unknown>, K extends keyof T>(
+  source: T,
+  key: K,
+  initialValue: () => T[K]
+): T[K] => Object.hasOwn(source, key) ? source[key] : (source[key] = initialValue())

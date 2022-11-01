@@ -1,5 +1,5 @@
 import { pipe } from '../src/Pipe'
-import { also, map, match, use } from '../src/Effect'
+import { also, map, match, use, getOrSet } from '../src/Effect'
 
 
 test('map', () => {
@@ -27,4 +27,14 @@ test('match', () => {
 
   expect(m(true)).toBe(1)
   expect(m(false)).toBe(0)
+})
+
+test('ge or set', () => {
+  const source: Record<string, number> = {
+    a: 0
+  }
+
+  expect(getOrSet(source, 'a', () => 1)).toBe(0)
+  expect(getOrSet(source, 'b', () => 1)).toBe(1)
+  expect(source['b']).toBe(1)
 })
