@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node",
-    "target": "ES2021",
+    "target": "esnext",
     "outDir": "./dist/es",
     "strict": true,
     "declaration": true,
