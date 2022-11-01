@@ -1,3 +1,5 @@
+import { strictEqOr } from './Equal'
+
 /**
  * A lazy `thunk`
  */
@@ -37,3 +39,15 @@ export const constUndefined: Lazy<undefined> = constant(void 0)
   * A thunk returns always `void`.
   */
 export const constVoid = constUndefined
+
+/**
+ * Returns whether the value is null or undefined.
+ */
+export const isNullable = (a: unknown): a is undefined | null =>
+  strictEqOr(a, null, undefined)
+
+/**
+ * Returns whether the value is `NonNullable`.
+ */
+export const isNonNullable = <A>(a: A): a is NonNullable<A> =>
+  !isNullable(a)
