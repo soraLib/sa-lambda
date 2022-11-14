@@ -320,6 +320,18 @@ export const head = <A>(ma: Iterable<A>) => {
 }
 
 /**
+ * Try to return the first element of an iterator.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(tryHead([1, 2, 3]), 1)
+ * assert.deepStrictEqual(tryHead([]), undefined)
+ * ```
+ */
+export const tryHead = <A>(ma: Iterable<A>) => pipe(ma, head, toUndefined)
+
+/**
  * Returns `Some` the last element of an iterator if it exists, otherwise returns `None`.
  *
  * @example
@@ -534,6 +546,7 @@ export class Iter<A> implements Iterable<A> {
   static replicate = flow(replicate, iter)
 
   head = () => head(this._iter())
+  tryHead = () => tryHead(this._iter())
   tail = () => tail(this._iter())
   tryTail = () => tryTail(this._iter())
   map = <B>(f: (a: A) => B) => pipe(this._iter(), map(f), iter)
