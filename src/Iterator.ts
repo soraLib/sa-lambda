@@ -3,7 +3,7 @@ import { Lazy } from './function'
 import { Alternative1 } from './Functors/Alternative'
 import { ChainRec1 } from './Functors/ChainRec'
 import { Monad1 } from './Functors/Monad'
-import { getOrElse, none, some } from './Maybe'
+import { getOrElse, Maybe, none, some, toUndefined } from './Maybe'
 import { flow, pipe } from './Pipe'
 import { Predicate } from './Predicate'
 
@@ -304,7 +304,7 @@ export function reduce<A, B>(f:(b: B, a: A, i: number, as: Iterable<A>) => B, b?
 }
 
 /**
- * Returns `Some` the first element of an iterable if it exists, otherwise returns `None`.
+ * Returns `Some` the first element of an iterator if it exists, otherwise returns `None`.
  *
  * @example
  *
@@ -320,14 +320,14 @@ export const head = <A>(ma: Iterable<A>) => {
 }
 
 /**
- * Returns `Some` the last element of an iterable if it exists, otherwise returns `None`.
+ * Returns `Some` the last element of an iterator if it exists, otherwise returns `None`.
  *
  * @example
  *
  * assert.deepStrictEqual(tail([1, 2, 3]), some(3))
  * assert.deepStrictEqual(tail([]), none)
  */
-export const tail = <A>(ma: Iterable<A>) => {
+export const tail = <A>(ma: Iterable<A>): Maybe<A> => {
   let i = 1
   const len = count(ma)
   for(const a of ma) {
@@ -337,6 +337,16 @@ export const tail = <A>(ma: Iterable<A>) => {
 
   return none
 }
+
+/**
+ * Try to return the last element of an iterator.
+ *
+ * @example
+ *
+ * assert.deepStrictEqual(tryTail([1, 2, 3]), 3)
+ * assert.deepStrictEqual(tryTail([]), undefined)
+ */
+export const tryTail = <A>(ma: Iterable<A>) => pipe(ma, tail, toUndefined)
 
 /**
  * Combines two or more iterators.
@@ -525,6 +535,7 @@ export class Iter<A> implements Iterable<A> {
 
   head = () => head(this._iter())
   tail = () => tail(this._iter())
+  tryTail = () => tryTail(this._iter())
   map = <B>(f: (a: A) => B) => pipe(this._iter(), map(f), iter)
   toArray = (): A[] => toArray(this._iter())
   isEmpty= (): boolean => isEmpty(this._iter())

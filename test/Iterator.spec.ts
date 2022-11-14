@@ -1,5 +1,5 @@
 import { left, right } from '../src/Either'
-import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero } from '../src/Iterator'
+import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero, tryTail } from '../src/Iterator'
 import { none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
 
@@ -176,6 +176,11 @@ it('head', () => {
 it('tail', () => {
   expect(iter([1, 2, 3]).tail()).toEqual(some(3))
   expect(iter([]).tail()).toEqual(none)
+})
+
+it('tryTail', () => {
+  expect(tryTail([1, 2, 3])).toEqual(3)
+  expect(tryTail(<number[]>[])).toEqual(undefined)
 })
 
 it('zero', () => {
