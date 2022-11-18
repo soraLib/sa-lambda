@@ -1,5 +1,5 @@
 import { left, right } from '../src/Either'
-import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero, tryTail, tryHead } from '../src/Iterator'
+import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero, tryTail, tryHead, group } from '../src/Iterator'
 import { none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
 
@@ -123,6 +123,24 @@ it('makeBy', () => {
 it('replicate', () => {
   expect(flow(replicate, collect)('a', 2)).toEqual(['a', 'a'])
   expect(Iter.replicate('a', 2).collect()).toEqual(['a', 'a'])
+})
+
+it('splite into groups', () => {
+  expect(group([1, 2, 3, 4, 5, 6], 2)).toEqual([
+    [1, 2],
+    [3, 4],
+    [5, 6]
+  ])
+  expect(group([1, 2, 3, 4, 5, 6, 7], 3)).toEqual([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7]
+  ])
+  expect(group(new Set([1, 2, 3, 4]), 3)).toEqual([
+    [1, 2, 3],
+    [4]
+  ])
+  expect(group([], 3)).toEqual([])
 })
 
 it('chain', () => {

@@ -463,6 +463,28 @@ export function* flatten<A>(as: Iterable<Iterable<A>>): Iterable<A> {
 }
 
 /**
+ * Splits an iterator into a group of iterators by the size of per group.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(group([1, 2, 3, 4, 5, 6, 7], 3), [
+ *  [1, 2, 3],
+ *  [4, 5, 6],
+ *  [7],
+ * ])
+ * ```
+ */
+export const group = <T>(ma: Iterable<T>, size: number): Iterable<Iterable<T>> => {
+  const list = collect(ma)
+
+  return Array.from({ length: Math.ceil(count(ma) / size) }).map((_, i) =>
+    list.slice(i * size, (i + 1) * size)
+  )
+}
+
+
+/**
  * Returns an iterator that concatenates the function result into a single interator (like [`flatten`](#flatten)).
  *
  * @example
@@ -566,6 +588,7 @@ export class Iter<A> implements Iterable<A> {
     (A extends [any, infer Y] | readonly [any, infer Y] | (infer Y)[] ? Y : unknown)[],
   ]> => flow(unzip, iter)(this._iter() as any) as any
   flatten = (): A extends Iterable<infer R> ? Iter<R> : never => pipe(this._iter() as any, flatten, iter) as any
+  group = (size: number) => flow(group, iter)(this._iter(), size)
   chain = <B>(f: (a: A, i: number) => Iterable<B>) => pipe(this._iter(), chain(f), iter)
   concat = <B>(...items: Iterable<B>[]) => pipe(this._iter(), concat(items), iter)
   ap = <B>(ma: A extends (a: B) => any ? Iterable<B> : never): Iter<A extends (a: B) => any ? ReturnType<A> : never> => pipe(this._iter() as any, ap(ma), iter) as any
