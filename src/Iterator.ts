@@ -76,6 +76,35 @@ export function* of<A>(...as: A[]): Iterable<A> {
 }
 
 /**
+ * Returns whether the index is out of bounds.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(pipe([1, 2, 3], isOutOfBounds(1)), false)
+ * assert.deepStrictEqual(pipe([1, 2, 3], isOutOfBounds(-1)), true)
+ * assert.deepStrictEqual(pipe([1, 2, 3], isOutOfBounds(3)), true)
+ * ```
+ */
+export const isOutOfBounds = (index: number) => <A>(as: Iterable<A>): boolean =>
+  index < 0 || index >= count(as)
+
+
+/**
+ * Returns the value at the index of a iterator and wrapped in a Some if the index is not out of bounds. Otherwise returns a none.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(pipe([1, 2, 3], nth(1)), some(2))
+ * assert.deepStrictEqual(pipe([1, 2, 3], nth(-1)), none)
+ * assert.deepStrictEqual(pipe([1, 2, 3], nth(3)), none)
+ * ```
+ */
+export const nth = (index: number) => <A>(as: Iterable<A>): Maybe<A> =>
+  pipe(as, isOutOfBounds(index)) ? none : some(collect(as)[index])
+
+/**
  * Returns an empty list.
  * @returns
  */
@@ -544,7 +573,8 @@ export const chainRec = <A, B>(f: (a: A) => Iterable<Either<A, B>>) => function*
  * assert.deepStrictEqual(iter([1]), new Iter(() => [1]))
  * ```
  */
-export const iter = <A>(ma: Iterable<A>): Iter<A> => new Iter(() => ma)
+export const iter = <A>(ma: Iterable<A> | (() => Iterable<A>)): Iter<A> =>
+  new Iter(typeof ma === 'function' ? ma : () => ma)
 
 /**
  * Iter

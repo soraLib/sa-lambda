@@ -1,5 +1,5 @@
 import { left, right } from '../src/Either'
-import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero, tryTail, tryHead, group } from '../src/Iterator'
+import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero, tryTail, tryHead, group, nth } from '../src/Iterator'
 import { none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
 
@@ -47,7 +47,7 @@ it('range', () => {
 
 it('collect', () => {
   expect(iter([1, 2, 3]).collect()).toEqual([1, 2, 3])
-  expect(new Iter(function* () {
+  expect(iter(function* () {
     for(let i = 1; i <= 3; i++) yield i
   }).collect()).toEqual([1, 2, 3])
 })
@@ -56,7 +56,7 @@ it('join', () => {
   expect(flow(join('-'))(['a', 'b', 'c'])).toBe('a-b-c')
   expect(iter(['a', 'b', 'c']).join('-')).toBe('a-b-c')
   expect(iter(['a', 'b', 'c']).join()).toBe('a,b,c')
-  expect(new Iter(function* () {
+  expect(iter(function* () {
     yield 'a'
     yield 'b'
     yield 'c'
@@ -65,12 +65,23 @@ it('join', () => {
 
 it('count', () => {
   expect(iter([1, 2, 3]).count()).toBe(3)
-  expect(new Iter(function* () {
+  expect(iter(function* () {
     yield 1
     yield 2
     yield 3
   }).count()).toBe(3)
   expect(iter(new Set([1, 2, 3])).count()).toBe(3)
+})
+
+it('nth', () => {
+  expect(pipe([1, 2, 3], nth(0))).toEqual(some(1))
+  expect(pipe([1, 2, 3], nth(3))).toEqual(none)
+  expect(pipe(new Set([1, 2, 3]), nth(0))).toEqual(some(1))
+  expect(pipe(iter(function* () {
+    yield 1
+    yield 2
+    yield 3
+  }), nth(0))).toEqual(some(1))
 })
 
 it('filter', () => {
@@ -87,7 +98,7 @@ it('filter', () => {
 it('zipWith', () => {
   expect(iter([1, 2, 3]).zipWith([0, 1], (a, b) => a + b).collect()).toEqual([1, 3])
   expect(iter([1, 2]).zipWith([0, 1, 2], (a, b) => a + b).collect()).toEqual([1, 3])
-  expect(new Iter(function* () {
+  expect(iter(function* () {
     yield 1
     yield 2
     yield 3
@@ -97,7 +108,7 @@ it('zipWith', () => {
 it('zip', () => {
   expect(iter([1, 2, 3]).zip([0, 1]).collect()).toEqual([[1, 0], [2, 1]])
   expect(iter([1, 2]).zip([0, 1, 2]).collect()).toEqual([[1, 0], [2, 1]])
-  expect(new Iter(function* () {
+  expect(iter(function* () {
     yield 1
     yield 2
     yield 3
