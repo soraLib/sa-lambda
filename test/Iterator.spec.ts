@@ -76,6 +76,9 @@ it('count', () => {
 it('nth', () => {
   expect(pipe([1, 2, 3], nth(0))).toEqual(some(1))
   expect(pipe([1, 2, 3], nth(3))).toEqual(none)
+  expect(pipe([1, 2, 3], nth(-1))).toEqual(some(3))
+  expect(pipe([1, 2, 3], nth(-3))).toEqual(some(1))
+  expect(pipe([1, 2, 3], nth(-4))).toEqual(none)
   expect(pipe(new Set([1, 2, 3]), nth(0))).toEqual(some(1))
   expect(pipe(iter(function* () {
     yield 1

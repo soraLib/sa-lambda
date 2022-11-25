@@ -6,6 +6,7 @@ import { Monad1 } from './Functors/Monad'
 import { getOrElse, Maybe, none, some, toUndefined } from './Maybe'
 import { flow, pipe } from './Pipe'
 import { Predicate } from './Predicate'
+import { abs } from './Math'
 
 
 export const IterKind = Symbol('Iterator')
@@ -87,8 +88,7 @@ export function* of<A>(...as: A[]): Iterable<A> {
  * ```
  */
 export const isOutOfBounds = (index: number) => <A>(as: Iterable<A>): boolean =>
-  index < 0 || index >= count(as)
-
+  count(as) <= (index >= 0 ? index : abs(index) - 1)
 
 /**
  * Returns the value at the index of a iterator and wrapped in a Some if the index is not out of bounds. Otherwise returns a none.
@@ -97,12 +97,12 @@ export const isOutOfBounds = (index: number) => <A>(as: Iterable<A>): boolean =>
  *
  * ```ts
  * assert.deepStrictEqual(pipe([1, 2, 3], nth(1)), some(2))
- * assert.deepStrictEqual(pipe([1, 2, 3], nth(-1)), none)
+ * assert.deepStrictEqual(pipe([1, 2, 3], nth(-1)), some(3))
  * assert.deepStrictEqual(pipe([1, 2, 3], nth(3)), none)
  * ```
  */
 export const nth = (index: number) => <A>(as: Iterable<A>): Maybe<A> =>
-  pipe(as, isOutOfBounds(index)) ? none : some(collect(as)[index])
+  pipe(as, isOutOfBounds(index)) ? none : some(collect(as).at(index)!)
 
 /**
  * Returns an empty list.
