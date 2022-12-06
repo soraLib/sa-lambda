@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.0](https://github.com/soraLib/sa-lambda/compare/v1.0.1...v1.1.0) (2022-11-25)
+
+
+### Features
+
+* **effect:** basic ([cac870f](https://github.com/soraLib/sa-lambda/commit/cac870f330f31dec3bd71d5ff2a959fb72e344c1))
+* **effect:** get or set ([3858be2](https://github.com/soraLib/sa-lambda/commit/3858be2e5ae7cc7de7ab8ba5c55c6955142cd663))
+* **Equal:** not equals ([1da80d4](https://github.com/soraLib/sa-lambda/commit/1da80d4f1dc6ae58ee397ab9b70741b52f931888))
+* **iterator:** group ([98b3664](https://github.com/soraLib/sa-lambda/commit/98b3664edcf82c644e8e61ad6bdd97a3c6aa9f68))
+* **iterator:** nth ([d5c3f35](https://github.com/soraLib/sa-lambda/commit/d5c3f3597b5b0ad7e39e49e8bf11ac54fa6b0089))
+* **iterator:** nth negative index ([3e40258](https://github.com/soraLib/sa-lambda/commit/3e402588ef46f5f01c92c2935b5322f2b24870fc))
+* **iterator:** try head ([97b8fcc](https://github.com/soraLib/sa-lambda/commit/97b8fcc31e0856ee91712556860b5cfce4f44ffd))
+* **iterator:** try tail ([e995a7c](https://github.com/soraLib/sa-lambda/commit/e995a7cd5bca75226dfe4f8d66412b5bf6a594e9))
+* **math:** between ([4d63d5b](https://github.com/soraLib/sa-lambda/commit/4d63d5b140c44a176cd5abd3a7d95bfe56bf232f))
+* **utils:** is nullable ([aeb1534](https://github.com/soraLib/sa-lambda/commit/aeb1534a046ddc29f3a4b7538af0b5a4ebe00c0d))
+
 ## [1.0.1](https://github.com/soraLib/sa-lambda/compare/v1.0.0...v1.0.1) (2022-10-26)
 
 
