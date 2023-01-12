@@ -9,7 +9,6 @@ import { NonEmptyArray } from './TupleT'
  * assert.deepStrictEqual(max(1, 2, 3), 3)
  * ```
  */
-
 export const max = (...as: NonEmptyArray<number>): number => {
   let [max, ...bs] = as
   for (const b of bs) {
@@ -115,3 +114,9 @@ export const between = (
 
   return exclude.to ? value < to : value <= to
 }
+
+/**
+ * Returns a random integer from min to max (includes min and max).
+ */
+export const randrange = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min) + min)

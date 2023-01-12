@@ -1,4 +1,4 @@
-import { abs, between, cmp, max, min, sum } from '../src/Math'
+import { abs, between, cmp, max, min, sum, randrange } from '../src/Math'
 
 it('max', () => {
   expect(max(1, 2, 3)).toBe(3)
@@ -36,4 +36,10 @@ it('between', () => {
   expect(between(2, 1, 2, { to: true })).toBe(false)
   expect(between(1, 1, 2, { from: true, to: true })).toBe(false)
   expect(between(2, 1, 2, { from: true, to: true })).toBe(false)
+})
+
+it('randrange', () => {
+  const rand = randrange(0, 100)
+  expect(rand).toBeGreaterThanOrEqual(0)
+  expect(rand).toBeLessThanOrEqual(100)
 })
