@@ -1,5 +1,7 @@
 # Math
 
+Some helpful mathematical functions.
+
 ## API
 
 ### max
@@ -66,4 +68,33 @@ Computes the sum of the values.
 
 ```ts
 sum(1, 2, 3) ➔ 6
+```
+
+### between
+
+```ts
+(value: number, from: number, to: number, exclude?: BetweenExclude) => boolean
+```
+
+Returns whether a value is between a range.
+
+```ts
+between(1, 1, 2)                           ➔ true
+between(1, 2, 3)                           ➔ false
+between(1, 1, 2, { from: true })           ➔ false
+between(2, 1, 2, { to: true })             ➔ false
+between(1, 1, 2, { from: true, to: true }) ➔ false
+between(2, 1, 2, { from: true, to: true }) ➔ false
+```
+
+### randrange
+
+```
+(min: number, max: number) => number
+```
+
+Returns a random integer from min to max (includes min and max).
+
+```ts
+randrange(0, 100) ➔ 50 // a random number between 0 and 100
 ```

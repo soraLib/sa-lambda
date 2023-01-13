@@ -16,7 +16,7 @@ export const map = <A, B>(f: (a: A) => B) => (a: A) => f(a)
  * @example
  *
  * ```ts
- * assert.deepStrictEqual(used(1, n => n + 1), 2)
+ * assert.deepStrictEqual(use(1, n => n + 1), 2)
  * ```
  */
 export const use = <A, B>(a: A, f: (a: A) => B): B => f(a)

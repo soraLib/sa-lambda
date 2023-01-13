@@ -1,5 +1,5 @@
 /**
- * Returns a promise waiting with *setTimeout*.
+ * Returns a promise waiting with [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout).
  *
  * @example
  *
@@ -10,7 +10,7 @@ export const delay = (ms?: number): Promise<void> =>
 
 
 /**
- * Returns a promise waiting with *microtask*.
+ * Returns a promise waiting with [microtask](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide).
  *
  * @example
  *

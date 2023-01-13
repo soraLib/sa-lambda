@@ -1,5 +1,23 @@
 # Iterator
 
+Provides some methods for iterable object.
+
+## Example
+
+Without **Iterator**
+
+```ts
+[{ name: 'foo' }][2].name // error: Cannot read properties of undefined
+```
+
+With **Iterator**
+
+```ts
+import { nth } from 'sa-lambda/Iterator'
+
+pipe([{ name: 'foo' }], nth(2), Maybe.map(v => v.name))
+```
+
 ## API
 
 ### isEmpty
@@ -67,6 +85,34 @@ Returns an empty list.
 
 ```ts
 <A>() => Iterable<A>
+```
+
+### isOutOfBounds
+
+```ts
+(index: number) => <A>(as: Iterable<A>) => boolean
+```
+
+Returns whether the index is out of bounds.
+
+```ts
+pipe([1, 2, 3], isOutOfBounds(1))  ➔ false
+pipe([1, 2, 3], isOutOfBounds(-1)) ➔ true
+pipe([1, 2, 3], isOutOfBounds(3))  ➔ true
+```
+
+### nth
+
+```
+(index: number) => <A>(as: Iterable<A>) => Maybe<A>
+```
+
+Returns the value at the index of a iterator and wrapped in a Some if the index is not out of bounds. Otherwise returns a none.
+
+```ts
+pipe([1, 2, 3], nth(1))  ➔ some(2)
+pipe([1, 2, 3], nth(-1)) ➔ some(3)
+pipe([1, 2, 3], nth(3))  ➔ none
 ```
 
 Alias of `empty`.
@@ -242,6 +288,18 @@ head([1, 2, 3]) ➔ some(1)
 head([])        ➔ none
 ```
 
+### tryHead
+
+```ts
+<A>(ma: Iterable<A>) => A | undefined
+```
+Try to return the first element of an iterator.
+
+```ts
+tryHead([1, 2, 3]) ➔ 1
+tryHead([])        ➔ undefined
+```
+
 ### tail
 
 ```ts
@@ -255,6 +313,19 @@ tail([1, 2, 3]) ➔ some(3)
 tail([])        ➔ none
 ```
 
+### tryTail
+
+```ts
+<A>(ma: Iterable<A>) => A | undefined
+```
+
+Try to return the last element of an iterator.
+
+```
+tryTail([1, 2, 3]) ➔ 3
+tryTail([])        ➔ undefined
+```
+
 ### concat
 
 ```ts
@@ -265,6 +336,19 @@ Combines two or more iterators.
 
 ```ts
 pipe([1], concat([2, 3], [4, 5]), collect) ➔ [1, 2, 3, 4, 5]
+```
+
+### group
+
+``` ts
+<T>(ma: Iterable<T>, size: number) => Iterable<Iterable<T>>
+```
+
+Splits an iterator into a group of iterators by the size of per group.
+
+```ts
+group([1, 2, 3, 4, 5, 6, 7], 2) ➔ [[1, 2], [3, 4], [5, 6], [7]]
+group([1, 2, 3, 4, 5, 6, 7], 3) ➔ [[1, 2, 3], [4, 5, 6], [7]]
 ```
 
 ### zipWith
@@ -357,34 +441,37 @@ Creates an `Iter` from an iterator.
 ```ts
 class Iter<A> implements Iterable<A> {
   private readonly _iter;
-  constructor(_iter: () => Iterable<A>);
-  [Symbol.iterator](): Iterator<A>;
-  get arr(): A[];
-  static zero: <A_1>() => Iter<A_1>;
-  static of: <A_1>(...args: A_1[]) => Iter<A_1>;
-  static to: (end: number, step?: number | undefined) => Iter<number>;
-  static range: (from: number, end: number, step?: number | undefined) => Iter<number>;
-  static makeBy: <A_1>(n: number, f: (i: number) => A_1) => Iter<A_1>;
-  static replicate: <A_1>(ma: A_1, n: number) => Iter<A_1>;
-  head: () => import("./Maybe").None | import("./Maybe").Some<A>;
-  tail: () => import("./Maybe").None | import("./Maybe").Some<A>;
-  map: <B>(f: (a: A) => B) => Iter<B>;
-  toArray: () => A[];
-  isEmpty: () => boolean;
-  push: (...as: A[]) => Iter<A>;
-  unshift: (...as: A[]) => Iter<A>;
-  filter: (predicate: Predicate<A>) => Iter<A>;
-  reduce: <B>(f: (b: B, a: A) => B, b: B) => B;
-  collect: () => A[];
-  join: (seperator?: string | undefined) => string;
-  count: () => number;
-  zipWith: <B, C>(b: Iterable<B>, f: (a: A, b: B) => C) => Iter<C>;
-  zip: <B>(b: Iterable<B>) => Iter<[A, B]>;
-  unzip: () => Iter<[(A extends [infer X, any] | readonly [infer X, any] | (infer X)[] ? X : unknown)[], (A extends [any, infer Y] | readonly [any, infer Y] | (infer Y)[] ? Y : unknown)[]]>;
-  flatten: () => A extends Iterable<infer R> ? Iter<R> : never;
-  chain: <B>(f: (a: A, i: number) => Iterable<B>) => Iter<B>;
-  concat: <B>(...items: Iterable<B>[]) => Iter<A | Iterable<B>>;
-  ap: <B>(ma: A extends (a: B) => any ? Iterable<B> : never) => Iter<A extends (a: B) => any ? ReturnType<A> : never>;
-  alt: <B>(that: Lazy<Iterable<B>>) => Iter<A | B>;
+  constructor(_iter: () => Iterable<A>)
+  [Symbol.iterator](): Iterator<A>
+  get arr(): A[]
+  static zero: <A_1>() => Iter<A_1>
+  static of: <A_1>(...args: A_1[]) => Iter<A_1>
+  static to: (end: number, step?: number | undefined) => Iter<number>
+  static range: (from: number, end: number, step?: number | undefined) => Iter<number>
+  static makeBy: <A_1>(n: number, f: (i: number) => A_1) => Iter<A_1>
+  static replicate: <A_1>(ma: A_1, n: number) => Iter<A_1>
+  head: () => import("./Maybe").None | import("./Maybe").Some<A>
+  tryHead: () => A | undefined
+  tail: () => Maybe<A>
+  tryTail: () => A | undefined
+  map: <B>(f: (a: A) => B) => Iter<B>
+  toArray: () => A[]
+  isEmpty: () => boolean
+  push: (...as: A[]) => Iter<A>
+  unshift: (...as: A[]) => Iter<A>
+  filter: (predicate: Predicate<A>) => Iter<A>
+  reduce: <B>(f: (b: B, a: A) => B, b: B) => B
+  collect: () => A[]
+  join: (seperator?: string) => string
+  count: () => number
+  zipWith: <B, C>(b: Iterable<B>, f: (a: A, b: B) => C) => Iter<C>
+  zip: <B>(b: Iterable<B>) => Iter<[A, B]>
+  unzip: () => Iter<[(A extends [infer X, any] | readonly [infer X, any] | (infer X)[] ? X : unknown)[], (A extends [any, infer Y] | readonly [any, infer Y] | (infer Y)[] ? Y : unknown)[]]>
+  flatten: () => A extends Iterable<infer R> ? Iter<R> : never
+  group: (size: number) => Iter<Iterable<A>>
+  chain: <B>(f: (a: A, i: number) => Iterable<B>) => Iter<B>
+  concat: <B>(...items: Iterable<B>[]) => Iter<A | Iterable<B>>
+  ap: <B>(ma: A extends (a: B) => any ? Iterable<B> : never) => Iter<A extends (a: B) => any ? ReturnType<A> : never>
+  alt: <B>(that: Lazy<Iterable<B>>) => Iter<A | B>
 }
 ```

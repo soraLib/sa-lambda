@@ -138,7 +138,7 @@ export function eqAnd<A>(self: A, ...others: unknown[]): A | boolean {
  * @example
  *
  * ```ts
-  assert.deepStrictEqual(notEqAnd(1), true)
+  assert.deepStrictEqual(notEqAnd(1), 1)
   assert.deepStrictEqual(notEqAnd(1, 2, 3), true)
   assert.deepStrictEqual(notEqAnd(1, '1', 3), false)
  * ```

@@ -1,5 +1,7 @@
 # Equal
 
+Makes a equivalent comparison among some values.
+
 ## Example
 
 Without **Equal**
@@ -64,6 +66,23 @@ eqOr(1, 2, 3)   ➔ false
 eqOr(1, '1', 3) ➔ true
 ```
 
+### notEqOr
+
+```ts
+<A>(self: A): A
+(self: unknown, ...others: unknown[]): boolean
+```
+
+Checks if value is *loose not equal* to any other value.
+
+Returns self directly if others is empty.
+
+```ts
+notEqOr(1)         ➔ 1
+notEqOr(1, '1', 1) ➔ false
+notEqOr(1, 1, 2)   ➔ true
+```
+
 ### strictEqOr
 
 ```ts
@@ -79,6 +98,24 @@ Returns self directly if others is empty.
 strictEqOr(1, 2, 3)   ➔ false
 strictEqOr(1, '1', 3) ➔ false
 strictEqOr(1, 1, 3)   ➔ true
+```
+
+### strictNotEqOr
+
+```ts
+<A>(self: A): A
+(self: unknown, ...others: unknown[]): boolean
+```
+
+Checks if value is *strict not equal* to any other value.
+
+Returns self directly if others is empty.
+
+```ts
+strictNotEqOr(1)         ➔ 1
+strictNotEqOr(1, 1, 1)   ➔ false
+strictNotEqOr(1, 2, 3)   ➔ true
+strictNotEqOr(1, '1', 1) ➔ true
 ```
 
 ### eqAnd
@@ -98,6 +135,23 @@ eqAnd(1, '1', 3)    ➔ false
 eqAnd(1, '1', true) ➔ true
 ```
 
+### notEqAnd
+
+```ts
+<A>(self: A): A
+(self: unknown, ...others: unknown[]): boolean
+```
+
+Checks if value is *loose not equal* to every other value.
+
+Returns self directly if others is empty.
+
+```ts
+notEqAnd(1)         ➔ 1
+notEqAnd(1, 2, 3)   ➔ true
+notEqAnd(1, '1', 3) ➔ false
+```
+
 ### strictEqAnd
 
 ```ts
@@ -113,4 +167,21 @@ Returns self directly if others is empty.
 strictEqAnd(1, 2, 3) ➔ false
 strictEqAnd(1, 1, 2) ➔ false
 strictEqAnd(1, 1, 1) ➔ true
+```
+
+### strictNotEqAnd
+
+```ts
+<A>(self: A): A
+(self: unknown, ...others: unknown[]): boolean
+```
+
+Checks if value is *strict not equal* to every other value.
+
+Returns self directly if others is empty.
+
+```ts
+strictNotEqAnd(1, 2, 3)   ➔ true
+strictNotEqAnd(1, '1', 2) ➔ true
+strictNotEqAnd(1, 1, 1)   ➔ false
 ```

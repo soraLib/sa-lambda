@@ -28,14 +28,28 @@ const Modules = [
     text: 'Pipe',
     link: '/modules/Pipe',
   },
+
+  // utils
   {
-    text: 'Math',
-    link: '/modules/Math',
+    text: 'Async',
+    link: '/modules/Async'
+  },
+  {
+    text: 'Delay',
+    link: '/modules/Delay'
   },
   {
     text: 'Equal',
     link: '/modules/Equal'
-  }
+  },
+  {
+    text: 'Effect',
+    link: '/modules/Effect'
+  },
+  {
+    text: 'Math',
+    link: '/modules/Math',
+  },
 ]
 
 const slidebars = [
