@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/soraLib/sa-lambda/compare/v1.1.0...v1.2.0) (2023-01-13)
+
+
+### Features
+
+* **async:** async queue ([23a960e](https://github.com/soraLib/sa-lambda/commit/23a960e15ae23102264acace2e94a3c526ee0300))
+* **math:** randrange ([9d2ff9f](https://github.com/soraLib/sa-lambda/commit/9d2ff9ff31eb82030d08551343d58a35a13a62a0))
+
 ## [1.1.0](https://github.com/soraLib/sa-lambda/compare/v1.0.1...v1.1.0) (2022-11-25)
 
 
