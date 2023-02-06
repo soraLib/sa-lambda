@@ -21,8 +21,9 @@ Typescript library for functional programming.
 - [x] Iterator
 - [x] Pipe & Flow
 - [x] Equal
+- [x] Effect
 - [x] Math
-- [ ] Task (Promise-Like)
+- [x] Async (Promise-Like)
 - [ ] Docs
 - [ ] Functors
 

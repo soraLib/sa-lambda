@@ -1,5 +1,5 @@
 import { delay, microtask } from '../src/Delay'
-import { AsyncQueue } from '../src/Async'
+import { AsyncQueue, retry } from '../src/Async'
 
 test('delay', () => {
   let num = 0
@@ -58,3 +58,10 @@ test('async queue without limit', async () => {
   expect(res).toEqual([200, 100, 150])
 })
 
+test('retry', async () => {
+  retry(() => 1).then(r => expect(r).toBe(1))
+  retry(() => 2, 3).then(r => expect(r).toBe(2))
+  retry(() => new Promise(r => r(3))).then(r => expect(r).toBe(3))
+  retry(() => new Promise(r => r(4)), { times: 3, interval: 200 }).then(r => expect(r).toBe(4))
+  retry(() => new Promise((_, r) => r(-1)), 3).catch(e => expect(e).toBe(-1))
+})

@@ -1,5 +1,7 @@
 import { isNullable } from './function'
 import { isEmpty } from './Iterator'
+import { Either } from './Either'
+import { Maybe } from './Maybe'
 
 /** Asynchronous tasks queued for execution */
 type AsyncTaskQueue = { f: () => Promise<any>, then: (v: any) => void, err: (e: any) => void }[]
@@ -74,4 +76,58 @@ export class AsyncQueue {
       return await new Promise<A>((then, err) => this.queue.push({ f, then, err }))
     }
   }
+}
+
+
+export type RetryOption = {
+  /**
+   * The time to wait between retries, in milliseconds. The default is 0.
+   */
+  interval?: number
+  /**
+   * The number of attempts to make before giving up. The default is 3.
+   */
+  times?: number
+}
+/**
+ * Attempts to get a successful response from task no more than times times before returning an error.
+ *
+ * @example
+ *
+ * ```ts
+ * const res = await retry(() => new Promise(r => r(1)), 3)
+ * assert.deepStrictEqual(res, 1)
+ *
+ * const res = await retry(() => 2), { times: 3, interval: 300 })
+ * assert.deepStrictEqual(res, 2)
+ * ```
+ */
+export async function retry<A>(fn: (() => PromiseLike<A>) | (() => A), times?: number): Promise<A>
+export async function retry<A>(fn: (() => Promise<A>) | (() => A), options: RetryOption): Promise<A>
+export async function retry<A>(fn: (() => Promise<A>) | (() => A), options: number | RetryOption = 1): Promise<A> {
+  let interval = 0
+  let times = 1
+
+  if(typeof options === 'number') {
+    times = options
+  } else {
+    times = options.times ?? 1
+    interval = options.interval ?? 0
+  }
+
+  return new Promise((resolve, reject) => {
+    const attempt = () => {
+      try {
+        resolve(fn())
+      } catch(error) {
+        if (times > 0) {
+          times--
+          interval ? setTimeout(attempt, interval) : attempt()
+        } else {
+          reject(error)
+        }
+      }
+    }
+    attempt()
+  })
 }
