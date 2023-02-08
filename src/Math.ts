@@ -116,7 +116,7 @@ export const between = (
 }
 
 /**
- * Returns a random integer from min to max (includes min and max).
+ * Returns a random integer from min to max (includes min and excludes max).
  */
 export const randrange = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min) + min)
