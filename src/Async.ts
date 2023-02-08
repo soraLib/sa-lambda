@@ -89,6 +89,7 @@ export type RetryOption = {
    */
   times?: number
 }
+type Fn<A> = ((times: number) => Promise<A>) | (() => A)
 /**
  * Attempts to get a successful response from task no more than times times before returning an error.
  *
@@ -102,11 +103,12 @@ export type RetryOption = {
  * assert.deepStrictEqual(res, 2)
  * ```
  */
-export async function retry<A>(fn: (() => PromiseLike<A>) | (() => A), times?: number): Promise<A>
-export async function retry<A>(fn: (() => Promise<A>) | (() => A), options: RetryOption): Promise<A>
-export async function retry<A>(fn: (() => Promise<A>) | (() => A), options: number | RetryOption = 1): Promise<A> {
-  let interval = 0
-  let times = 1
+export async function retry<A>(fn: Fn<A>, times?: number): Promise<A>
+export async function retry<A>(fn: Fn<A>, options: RetryOption): Promise<A>
+export async function retry<A>(fn: Fn<A>, options: number | RetryOption = 1): Promise<A> {
+  let interval: number
+  let times: number
+  let retry = 1
 
   if(typeof options === 'number') {
     times = options
@@ -116,12 +118,13 @@ export async function retry<A>(fn: (() => Promise<A>) | (() => A), options: numb
   }
 
   return new Promise((resolve, reject) => {
-    const attempt = () => {
+    const attempt = async () => {
       try {
-        resolve(fn())
+        const res = await fn(retry)
+        resolve(res)
       } catch(error) {
-        if (times > 0) {
-          times--
+        if (retry < times) {
+          retry++
           interval ? setTimeout(attempt, interval) : attempt()
         } else {
           reject(error)

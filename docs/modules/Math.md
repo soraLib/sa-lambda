@@ -93,7 +93,7 @@ between(2, 1, 2, { from: true, to: true }) ➔ false
 (min: number, max: number) => number
 ```
 
-Returns a random integer from min to max (includes min and max).
+Returns a random integer from min to max (includes min and excludes max).
 
 ```ts
 randrange(0, 100) ➔ 50 // a random number between 0 and 100

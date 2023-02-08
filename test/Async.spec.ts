@@ -62,6 +62,10 @@ test('retry', async () => {
   retry(() => 1).then(r => expect(r).toBe(1))
   retry(() => 2, 3).then(r => expect(r).toBe(2))
   retry(() => new Promise(r => r(3))).then(r => expect(r).toBe(3))
-  retry(() => new Promise(r => r(4)), { times: 3, interval: 200 }).then(r => expect(r).toBe(4))
-  retry(() => new Promise((_, r) => r(-1)), 3).catch(e => expect(e).toBe(-1))
+  retry(() => new Promise(r => r(4)), { interval: 200 }).then(r => expect(r).toBe(4))
+  retry((retry) => new Promise((_, e) => e(retry)), { times: 2 }).catch(e => expect(e).toBe(2))
+  retry((retry) => new Promise((then, error) => {
+    if (retry === 3) return then(retry)
+    error(-1)
+  }), { times: 3, interval: 200 }).catch(e => expect(e).toBe(3))
 })

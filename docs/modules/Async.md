@@ -61,3 +61,28 @@ const res = await Promise.all([
 seq ➔ [200, 100, 150]
 res ➔ [200, 100, 150]
 ```
+
+### retry
+
+```ts
+RetryOption = {
+  /**
+   * The time to wait between retries, in milliseconds. The default is 0.
+   */
+  interval?: number;
+  /**
+   * The number of attempts to make before giving up. The default is 3.
+   */
+  times?: number;
+}
+
+<A>(fn: ((times: number) => Promise<A>) | (() => A), times?: number): Promise<A>;
+<A>(fn: ((times: number) => Promise<A>) | (() => A), options: RetryOption): Promise<A>;
+```
+
+Attempts to get a successful response from task no more than times times before returning an error.
+
+```ts
+await retry(() => new Promise(r => r(1)), 3)       ➔ 1
+await retry(() => 2), { times: 3, interval: 300 }) ➔ 2
+```
