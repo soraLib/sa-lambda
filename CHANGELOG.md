@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/soraLib/sa-lambda/compare/v1.2.0...v1.3.0) (2023-02-08)
+
+
+### Features
+
+* **async:** retry ([0d825c9](https://github.com/soraLib/sa-lambda/commit/0d825c9fe69527fd229a2d423354bcdae281cee7))
+* **async:** retry doc ([0b80cf4](https://github.com/soraLib/sa-lambda/commit/0b80cf4253c53aa75084df11b74407b49216b04a))
+
 ## [1.2.0](https://github.com/soraLib/sa-lambda/compare/v1.1.0...v1.2.0) (2023-01-13)
 
 
