@@ -6,7 +6,7 @@ specifiers:
   '@types/fs-extra': 9.0.13
   '@types/node': 17.0.45
   '@vueuse/core': 8.9.4
-  '@vueuse/shared': 8.9.4
+  '@vueuse/shared': 9.13.0
   esbuild-register: 3.3.3
   eslint: 8.24.0
   esno: 0.16.3
@@ -31,7 +31,7 @@ specifiers:
 
 dependencies:
   '@vueuse/core': 8.9.4_vue@3.2.39
-  '@vueuse/shared': 8.9.4_vue@3.2.39
+  '@vueuse/shared': 9.13.0_vue@3.2.39
   vue: 3.2.39
   vue-global-api: 0.4.1_vue@3.2.39
 
@@ -1758,7 +1758,16 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.39
-      vue-demi: 0.13.1_vue@3.2.39
+      vue-demi: 0.13.11_vue@3.2.39
+    dev: false
+
+  /@vueuse/shared/9.13.0_vue@3.2.39:
+    resolution: {integrity: sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==}
+    dependencies:
+      vue-demi: 0.13.11_vue@3.2.39
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
     dev: false
 
   /@windicss/config/1.8.8:
