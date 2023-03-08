@@ -19,6 +19,15 @@ test('microtask', () => {
   expect(num).toBe(0)
 })
 
+test('async queue size', async () => {
+  const aqueue = new AsyncQueue(1)
+
+  aqueue.run(delay)
+  expect(aqueue.size).toEqual(1)
+  aqueue.run(delay)
+  expect(aqueue.size).toEqual(2)
+})
+
 test('async queue with limit 1', async () => {
   const aqueue = new AsyncQueue(1)
 
@@ -28,6 +37,7 @@ test('async queue with limit 1', async () => {
     aqueue.run(() => new Promise(then => delay(100).then(() => { then(100); seq.push(100) }))),
     aqueue.run(() => new Promise(then => delay(150).then(() => { then(150); seq.push(150) })))
   ])
+  expect(aqueue.size).toEqual(0)
   expect(seq).toEqual([200, 100, 150])
   expect(res).toEqual([200, 100, 150])
 })

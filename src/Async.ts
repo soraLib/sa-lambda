@@ -1,7 +1,5 @@
 import { isNullable } from './function'
 import { isEmpty } from './Iterator'
-import { Either } from './Either'
-import { Maybe } from './Maybe'
 
 /** Asynchronous tasks queued for execution */
 type AsyncTaskQueue = { f: () => Promise<any>, then: (v: any) => void, err: (e: any) => void }[]
@@ -32,8 +30,21 @@ export type AsyncQueueOption = {
  */
 export class AsyncQueue {
   private limit: number | undefined
-  private size = 0
+  private count = 0
   private queue: AsyncTaskQueue = []
+
+  /**
+   * Returns the total number of tasks currently being executed and in the waiting queue.
+   */
+  get size() {
+    return this.queue.length + this.count
+  }
+  /**
+   * Alias of `size`.
+   */
+  get length() {
+    return this.size
+  }
 
   /**
    * @param limit Maximum concurrency limit
@@ -49,18 +60,18 @@ export class AsyncQueue {
 
   private async process<A>(a: () => PromiseLike<A>) {
     try {
-      this.size += 1
+      this.count += 1
 
       return await a()
     } finally {
-      this.size -= 1
+      this.count -= 1
       this.afterProcess()
     }
   }
 
   private async afterProcess() {
     if(isEmpty(this.queue)) return
-    if(isNullable(this.limit) || (this.limit && this.size < this.limit) ) {
+    if(isNullable(this.limit) || (this.limit && this.count < this.limit) ) {
       const { f, then, err } = this.queue.shift()!
       this.process(f).then(then, err)
     }
@@ -70,7 +81,7 @@ export class AsyncQueue {
    * Runs a asynchronous task in the async queue.
    */
   async run<A>(f: () => Promise<A>): Promise<A> {
-    if(isNullable(this.limit) || (this.limit && this.size < this.limit) ) {
+    if(isNullable(this.limit) || (this.limit && this.count < this.limit) ) {
       return await this.process(f)
     } else {
       return await new Promise<A>((then, err) => this.queue.push({ f, then, err }))
