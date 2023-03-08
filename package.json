@@ -1,6 +1,6 @@
 {
   "name": "sa-lambda",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Typescript library for functional programming.",
   "packageManager": "pnpm@7.12.2",
   "main": "./cjs/index.js",

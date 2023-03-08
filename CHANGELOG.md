@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/soraLib/sa-lambda/compare/v1.3.0...v1.4.0) (2023-03-08)
+
+
+### Features
+
+* **async:** queue size ([2c7c3a5](https://github.com/soraLib/sa-lambda/commit/2c7c3a5923d4363db1a9037dd879aa5744c15245))
+
 ## [1.3.0](https://github.com/soraLib/sa-lambda/compare/v1.2.0...v1.3.0) (2023-02-08)
 
 
