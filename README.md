@@ -4,6 +4,7 @@
 ![MIT](https://img.shields.io/github/license/soraLib/sa-lambda)
 [![Github](https://img.shields.io/badge/Github-232323?logo=github)](https://github.com/soraLib/sa-lambda)
 [![codecov](https://codecov.io/gh/soraLib/sa-lambda/branch/main/graph/badge.svg?token=RaeLDeLgm1)](https://codecov.io/gh/soraLib/sa-lambda)
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 ![JS](https://img.shields.io/badge/JS-232323?logo=javascript)
 ![JS](https://img.shields.io/badge/TS-fcfcfc?logo=typescript)
