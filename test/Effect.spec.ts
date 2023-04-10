@@ -1,5 +1,5 @@
 import { pipe } from '../src/Pipe'
-import { also, map, match, use, getOrSet } from '../src/Effect'
+import { also, map, match, use, getOrSet, tryWithCallback } from '../src/Effect'
 
 
 test('map', () => {
@@ -37,4 +37,10 @@ test('ge or set', () => {
   expect(getOrSet(source, 'a', () => 1)).toBe(0)
   expect(getOrSet(source, 'b', () => 1)).toBe(1)
   expect(source['b']).toBe(1)
+})
+
+
+test('try with callback', () => {
+  expect(tryWithCallback(() => 1, () => 2)).toBe(1)
+  expect(tryWithCallback((): number => { throw 'error' }, () => 2)).toBe(2)
 })

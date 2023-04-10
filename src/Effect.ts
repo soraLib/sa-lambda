@@ -64,3 +64,21 @@ export const getOrSet = <T extends Record<string, unknown>, K extends keyof T>(
   key: K,
   initialValue: () => T[K]
 ): T[K] => Object.hasOwn(source, key) ? source[key] : (source[key] = initialValue())
+
+/**
+ * Makes a try with a error callback.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(tryWithCallback(() => 1, () => 2), 1))
+ * assert.deepStrictEqual(tryWithCallback((): number => { throw 'error' }, () => 2), 2))
+ * ```
+ */
+export const tryWithCallback = <A extends () => any>(a: A, callback: (err: unknown) => ReturnType<A>): ReturnType<A> => {
+  try {
+    return a()
+  } catch(err) {
+    return callback(err)
+  }
+}
