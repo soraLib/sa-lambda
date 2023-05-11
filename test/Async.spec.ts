@@ -1,5 +1,6 @@
 import { delay, microtask } from '../src/Delay'
-import { AsyncQueue, retry } from '../src/Async'
+import { AsyncQueue, retry, deferred } from '../src/Async'
+import { max } from '../src/Math'
 
 test('delay', () => {
   let num = 0
@@ -78,4 +79,16 @@ test('retry', async () => {
     if (retry === 3) return then(retry)
     error(-1)
   }), { times: 3, interval: 200 }).catch(e => expect(e).toBe(3))
+})
+
+test('deferred', async () => {
+  deferred(() => 1).execute().then(r => expect(r).toBe(1))
+  deferred(max).execute(1, 2, 3).then(r => expect(r).toBe(3))
+  deferred(() => 1, {
+    delay: 100,
+    onSuccess: r => expect(r).toBe(1)
+  }).execute().then(r => expect(r).toBe(1))
+  deferred(() => { throw 0 }, {
+    onError: err => expect(err).toBe(0)
+  }).execute().catch(err => expect(err).toBe(0))
 })

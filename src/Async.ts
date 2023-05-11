@@ -1,5 +1,6 @@
-import { isNullable } from './function'
+import { isNullable, noop } from './function'
 import { isEmpty } from './Iterator'
+import { delay as delayFn } from './Delay'
 
 /** Asynchronous tasks queued for execution */
 type AsyncTaskQueue = { f: () => Promise<any>, then: (v: any) => void, err: (e: any) => void }[]
@@ -70,8 +71,8 @@ export class AsyncQueue {
   }
 
   private async afterProcess() {
-    if(isEmpty(this.queue)) return
-    if(isNullable(this.limit) || (this.limit && this.count < this.limit) ) {
+    if (isEmpty(this.queue)) return
+    if (isNullable(this.limit) || (this.limit && this.count < this.limit)) {
       const { f, then, err } = this.queue.shift()!
       this.process(f).then(then, err)
     }
@@ -81,7 +82,7 @@ export class AsyncQueue {
    * Runs a asynchronous task in the async queue.
    */
   async run<A>(f: () => Promise<A>): Promise<A> {
-    if(isNullable(this.limit) || (this.limit && this.count < this.limit) ) {
+    if (isNullable(this.limit) || (this.limit && this.count < this.limit)) {
       return await this.process(f)
     } else {
       return await new Promise<A>((then, err) => this.queue.push({ f, then, err }))
@@ -121,7 +122,7 @@ export async function retry<A>(fn: Fn<A>, options: number | RetryOption = 1): Pr
   let times: number
   let retry = 1
 
-  if(typeof options === 'number') {
+  if (typeof options === 'number') {
     times = options
   } else {
     times = options.times ?? 1
@@ -133,7 +134,7 @@ export async function retry<A>(fn: Fn<A>, options: number | RetryOption = 1): Pr
       try {
         const res = await fn(retry)
         resolve(res)
-      } catch(error) {
+      } catch (error) {
         if (retry < times) {
           retry++
           interval ? setTimeout(attempt, interval) : attempt()
@@ -144,4 +145,66 @@ export async function retry<A>(fn: Fn<A>, options: number | RetryOption = 1): Pr
     }
     attempt()
   })
+}
+
+export type Thenable<Params extends any[], Data> =
+  ((...args: Params) => Promise<Data>) | ((...args: Params) => Data);
+export interface DeferredOptions<D = any> {
+  /**
+   * Optional delay in milliseconds before executing the function.
+   *
+   * @default 0
+   */
+  delay?: number
+  onError?: (e: unknown) => void
+  onSuccess?: (data: D) => void
+}
+export interface DeferredReturn<Data, Params extends any[]> {
+  execute: (delay?: number, ...args: Params) => Promise<Data>
+}
+/**
+ * Creates a deferred function that wraps a promise or a thenable function, allowing delayed execution and handling of success and error cases.
+ *
+ * @param promise The promise or thenable function to be executed.
+ * @param options Optional configuration for the deferred function.
+ * @returns An object with the execute method that can be called to execute the deferred function.
+ *
+ * @example
+ *
+ * ```ts
+ * deferred(() => 1).execute().then(r => expect(r).toBe(1))
+ * deferred(() => { throw 0 }).execute().catch(err => expect(err).toBe(0))
+ * ```
+ */
+export const deferred = <Data, Params extends any[] = []>(promise: Promise<Data> | Thenable<Params, Data>,
+  options?: DeferredOptions<Data>,
+): DeferredReturn<Data, Params> => {
+  const {
+    delay = 0,
+    onError = noop,
+    onSuccess = noop
+  } = options ?? {}
+
+  const execute = async (...args: any[]) => {
+    await delayFn(delay)
+
+    const _promise = typeof promise === 'function'
+      ? promise(...args as Params)
+      : promise
+
+    try {
+      const data = await _promise
+      onSuccess(data)
+
+      return data
+    } catch (e) {
+      onError(e)
+
+      throw e
+    }
+  }
+
+  return {
+    execute
+  }
 }

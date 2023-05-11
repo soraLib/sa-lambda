@@ -11,6 +11,11 @@ export type Lazy<A> = () => A
 export const lazy: <A>(a: A) => Lazy<A> = <A>(a: A) => () => a
 
 /**
+ * A no-operation funciton.
+ */
+export const noop = () => {}
+
+/**
   * Identity
   */
 export const identity = <A>(a: A): A => a
