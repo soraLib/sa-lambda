@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/soraLib/sa-lambda/compare/v1.4.0...v1.5.0) (2023-05-11)
+
+
+### Features
+
+* **async:** deferred ([f365c78](https://github.com/soraLib/sa-lambda/commit/f365c78d96a9be9162dfc6eb92e86bb7a5e21d87))
+* **effect:** try with callback ([de7a35f](https://github.com/soraLib/sa-lambda/commit/de7a35f55b0a4d8c14cf5be05ad47fd952282482))
+
 ## [1.4.0](https://github.com/soraLib/sa-lambda/compare/v1.3.0...v1.4.0) (2023-03-08)
 
 
