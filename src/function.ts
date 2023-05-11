@@ -43,7 +43,7 @@ export const constUndefined: Lazy<undefined> = constant(void 0)
 /**
   * A thunk returns always `void`.
   */
-export const constVoid = constUndefined
+export const constVoid: () => void = constUndefined
 
 /**
  * Returns whether the value is null or undefined.

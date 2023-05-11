@@ -29,6 +29,7 @@
     "max-len": ["error", { "code": 200 }],
     "prefer-rest-params": "off",
     "prefer-const": "off",
-    "@typescript-eslint/no-empty-interface": "off"
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-empty-function": "off"
   }
 }

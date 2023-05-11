@@ -86,3 +86,38 @@ Attempts to get a successful response from task no more than times times before 
 await retry(() => new Promise(r => r(1)), 3)       ➔ 1
 await retry(() => 2), { times: 3, interval: 300 }) ➔ 2
 ```
+
+### deferred
+
+```ts
+type Thenable<Params extends any[], Data> = (
+  (...args: Params) => Promise<Data>)  | ((...args: Params) => Data);
+interface DeferredOptions<D = any> {
+  /**
+   * Optional delay in milliseconds before executing the function.
+   *
+   * @default 0
+   */
+  delay?: number;
+  onError?: (e: unknown) => void;
+  onSuccess?: (data: D) => void;
+}
+interface DeferredReturn<Data, Params extends any[]> {
+  execute: (delay?: number, ...args: Params) => Promise<Data>;
+}
+/**
+ * @param promise The promise or thenable function to be executed.
+ * @param options Optional configuration for the deferred function.
+ * @returns An object with the execute method that can be called to execute the deferred function.
+ */
+<Data, Params extends any[] = []>(
+  promise: Promise<Data> | Thenable<Params, Data>,
+  options?: DeferredOptions<Data> | undefined) => DeferredReturn<Data, Params>;
+```
+
+Creates a deferred function that wraps a promise or a thenable function, allowing delayed execution and handling of success and error cases.
+
+```ts
+deferred(() => 1).execute().then(r => expect(r).toBe(1))
+deferred(() => { throw 0 }).execute().catch(err => expect(err).toBe(0))
+```

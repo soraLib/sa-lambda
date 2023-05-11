@@ -31,6 +31,10 @@ const Modules = [
 
   // utils
   {
+    text: 'Function',
+    link: '/modules/Function'
+  },
+  {
     text: 'Async',
     link: '/modules/Async'
   },
