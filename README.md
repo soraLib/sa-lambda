@@ -25,7 +25,8 @@ Typescript library for functional programming.
 - [x] Effect
 - [x] Math
 - [x] Async (Promise-Like)
-- [ ] Docs
+- [ ] Tree
+- [x] Docs
 - [ ] Functors
 
 ## Installation
