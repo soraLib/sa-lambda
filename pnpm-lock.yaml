@@ -23,7 +23,7 @@ specifiers:
   darl: 2.2.0
   eslint: 8.24.0
   glob: 8.0.3
-  husky: 8.0.1
+  husky: 8.0.3
   jest: 26.6.3
   ncp: 2.0.0
   rollup: 2.79.1
@@ -60,7 +60,7 @@ devDependencies:
   darl: 2.2.0
   eslint: 8.24.0
   glob: 8.0.3
-  husky: 8.0.1
+  husky: 8.0.3
   jest: 26.6.3_ts-node@10.9.1
   ncp: 2.0.0
   rollup: 2.79.1
@@ -3716,8 +3716,8 @@ packages:
     engines: {node: '>=10.17.0'}
     dev: true
 
-  /husky/8.0.1:
-    resolution: {integrity: sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==}
+  /husky/8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
