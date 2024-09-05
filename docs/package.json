@@ -10,7 +10,7 @@
   "dependencies": {
     "@vueuse/core": "8.9.4",
     "@vueuse/shared": "8.9.4",
-    "vue": "3.2.39",
+    "vue": "3.5.2",
     "vue-global-api": "0.4.1"
   },
   "devDependencies": {
