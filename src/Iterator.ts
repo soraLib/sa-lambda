@@ -7,6 +7,7 @@ import { getOrElse, Maybe, none, some, toUndefined } from './Maybe'
 import { flow, pipe } from './Pipe'
 import { Predicate } from './Predicate'
 import { abs } from './Math'
+import * as E from './Effect';
 
 
 export const IterKind = Symbol('Iterator')
@@ -60,10 +61,46 @@ export function* push<A>(a: Iterable<A>, ...as: A[]): Iterable<A> {
 }
 
 /**
+ * Returns an iterator with the elements inserted.
+ * 
+ * @example
+ * 
+ * ```ts
+ * assert.deepStrictEqual(pipe(of(1, 2, 3), insert(1, 4), collect), [1, 4, 2, 3])
+ * ```
+ */
+export const insert = <A>(index: number, ...as: A[]): (a: Iterable<A>) => Iterable<A> => a => {
+  const collects = collect(a)
+  collects.splice(index, 0, ...as)
+
+  return collects
+}
+
+/**
+ * Returns an iterator with an element moved to the target position.
+ * 
+ * @example
+ * 
+ * ```ts
+ * assert.deepStrictEqual(pipe(of(1, 2, 3), move(1, 2), collect), [1, 3, 2])
+ * ```
+ */
+export const move = <A>(from: number, to: number): (a: Iterable<A>) => Iterable<A> => a => {
+  const as = collect(a)
+
+  if (!(from < 0 || from >= as.length || to < 0 || to >= as.length)) {
+    const [moved] = as.splice(from, 1)
+    as.splice(to, 0, moved)
+  }
+
+  return as
+}
+
+/**
  * Returns an iterator with the elements at start.
  */
-export function* unshift<T>(a: Iterable<T>, ...items: T[]): Iterable<T> {
-  yield* items
+export function* unshift<T>(a: Iterable<T>, ...as: T[]): Iterable<T> {
+  yield* as
   yield* a
 }
 
@@ -563,6 +600,28 @@ export const chainRec = <A, B>(f: (a: A) => Iterable<Either<A, B>>) => function*
 
   return yield* out
 }
+
+/**
+ * Returns a sorted iterator of objects based on the specified order.
+ * 
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(orderBy([{ id: 1 }, { id: 2 }, { id: 3 }], 'id', [3, 2, 1]), [{ id: 3 }, { id: 2 }, { id: 1 }])
+ * ```
+ */
+export const orderBy = <
+ A extends Record<string, any>,
+ K extends keyof A,
+>(
+ key: K,
+ to: A[K][]
+) => (as: Iterable<A>): Iterable<A> =>
+  pipe(
+    as, 
+    collect, 
+    E.ap(as => as.sort((a, b) => to.indexOf(a[key]) - to.indexOf(b[key])))
+  )
 
 /**
  * Creates an `Iter` from an iterator.

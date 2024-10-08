@@ -1,5 +1,5 @@
 import { left, right } from '../src/Either'
-import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero, tryTail, tryHead, group, nth } from '../src/Iterator'
+import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero, tryTail, tryHead, group, nth, orderBy, move, insert } from '../src/Iterator';
 import { none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
 
@@ -18,6 +18,14 @@ it('isEmpty', () => {
 
 it('push', () => {
   expect(iter([1]).push(2, 3).collect()).toEqual([1, 2, 3])
+})
+
+it('insert', () => {
+  expect(pipe(of(1, 2, 3), insert(1, 4), collect)).toEqual([1, 4, 2, 3])
+})
+
+it('move', () => {
+  expect(pipe(of(1, 2, 3), move(1, 2), collect)).toEqual([1, 3, 2])
 })
 
 it('toArray', () => {
@@ -239,6 +247,10 @@ it('concat', () => {
   expect(pipe(of(1), concat([2, 3], [4, 5]), collect)).toEqual([1, 2, 3, 4, 5])
   expect(pipe(of(1), concat(['2', 3], [4, 5]), collect)).toEqual([1, '2', 3, 4, 5])
   expect(Iter.of(1).concat(['2', 3], [4, 5]))
+})
+
+it('orderBy', () => {
+  expect(pipe(of({ id: 1 }, { id: 2 }, { id: 3 }), orderBy('id', [3, 2, 1]), collect)).toEqual([{ id: 3 }, { id: 2 }, { id: 1 }])
 })
 
 it('compose1', () => {
