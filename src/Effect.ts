@@ -21,6 +21,21 @@ export const map = <A, B>(f: (a: A) => B) => (a: A) => f(a)
  */
 export const use = <A, B>(a: A, f: (a: A) => B): B => f(a)
 
+
+/**
+ * Apply a function to an argument.
+ * 
+ * Functional programming style of `Effect.use`.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(use(1, n => n + 1), 2)
+ * ```
+ */
+export const ap = <A, B>(f: (a: A) => B) => (a: A): B => f(a)
+
+
 /**
  * Uses a value to do something extra.
  *

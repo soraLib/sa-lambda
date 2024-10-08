@@ -1,5 +1,5 @@
 import { pipe } from '../src/Pipe'
-import { also, map, match, use, getOrSet, tryWithCallback } from '../src/Effect'
+import { also, ap, map, match, use, getOrSet, tryWithCallback } from '../src/Effect'
 
 
 test('map', () => {
@@ -8,6 +8,10 @@ test('map', () => {
 
 test('use', () => {
   expect(use(1, n => n + 1)).toBe(2)
+})
+
+test('ap', () => {
+  expect(pipe(1, ap( n => n + 1))).toBe(2)
 })
 
 test('also', () => {
