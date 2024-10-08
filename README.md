@@ -11,7 +11,7 @@
 
 Typescript library for functional programming.
 
-[Document](https://www.sa-lambda.soralib.com)
+[Document](https://sa-lambda.hfutsora.com)
 
 ## Modules
 
