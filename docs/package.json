@@ -29,7 +29,7 @@
     "prism-theme-vars": "0.2.4",
     "typescript": "4.8.4",
     "unplugin-icons": "0.14.10",
-    "unplugin-vue-components": "0.19.9",
+    "unplugin-vue-components": "0.28.0",
     "vite": "2.9.15",
     "vite-plugin-pwa": "0.12.8",
     "vite-plugin-windicss": "1.8.8",
