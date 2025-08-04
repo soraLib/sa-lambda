@@ -14,7 +14,7 @@
     "vue-global-api": "0.4.1"
   },
   "devDependencies": {
-    "@iconify/json": "2.1.113",
+    "@iconify/json": "2.2.366",
     "@rollup/plugin-replace": "4.0.0",
     "@types/fs-extra": "9.0.13",
     "@types/node": "17.0.45",
