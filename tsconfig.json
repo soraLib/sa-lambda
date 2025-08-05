@@ -3,19 +3,13 @@
     "module": "esnext",
     "moduleResolution": "node",
     "target": "esnext",
-    "outDir": "./dist/dev",
+    "outDir": "dist/type",
     "strict": true,
     "declaration": true,
-    "declarationDir": "./type",
     "importHelpers": true,
     "esModuleInterop": true,
-    "paths": {
-      "tslib": [
-        "./node_modules/tslib/tslib.d.ts"
-      ]
-    }
   },
   "include": [
-    "./src/**/*.ts"
+    "src"
   ]
 }
