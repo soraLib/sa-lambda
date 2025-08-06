@@ -13,7 +13,7 @@ specifiers:
   fast-glob: 3.2.12
   fs-extra: 10.1.0
   https-localhost: 4.7.1
-  nodemon: 2.0.20
+  nodemon: 2.0.22
   prism-theme-vars: 0.2.4
   typescript: 4.8.4
   unplugin-icons: 0.14.10
@@ -46,7 +46,7 @@ devDependencies:
   fast-glob: 3.2.12
   fs-extra: 10.1.0
   https-localhost: 4.7.1
-  nodemon: 2.0.20
+  nodemon: 2.0.22
   prism-theme-vars: 0.2.4
   typescript: 4.8.4
   unplugin-icons: 0.14.10
@@ -3751,8 +3751,8 @@ packages:
     resolution: {integrity: sha512-U9h1NLROZTq9uE1SNffn6WuPDg8icmi3ns4rEl/oTfIle4iLjTliCzgTsbaIFMq/Xn078/lfY/BL0GWZ+psK4Q==}
     dev: true
 
-  /nodemon/2.0.20:
-    resolution: {integrity: sha512-Km2mWHKKY5GzRg6i1j5OxOHQtuvVsgskLfigG25yTtbyfRGn/GNvIbRyOf1PSCKJ2aT/58TiuUsuOU5UToVViw==}
+  /nodemon/2.0.22:
+    resolution: {integrity: sha512-B8YqaKMmyuCO7BowF1Z1/mkPqLk6cs/l63Ojtd6otKjMx47Dq1utxfRxcavH1I7VSaL8n5BUaoutadnsX3AAVQ==}
     engines: {node: '>=8.10.0'}
     hasBin: true
     dependencies:
