@@ -8,6 +8,7 @@
     "declaration": true,
     "importHelpers": true,
     "esModuleInterop": true,
+    "types": ["vitest/globals"]
   },
   "include": [
     "src"
