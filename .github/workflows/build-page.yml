@@ -32,3 +32,4 @@ jobs:
         with:
           publish_dir: ./docs/.vitepress/dist
           force_orphan: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
