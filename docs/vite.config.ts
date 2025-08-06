@@ -8,6 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { version } from '../package.json'
 
 export default defineConfig({
+  base: '/sa-lambda/',
   build: {
     ssrManifest: false,
     manifest: false
