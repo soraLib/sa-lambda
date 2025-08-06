@@ -1,4 +1,5 @@
-import { isNullable, isNonNullable } from '../src/function'
+import { expect, it } from 'vitest'
+import { isNonNullable, isNullable } from '../src/function'
 
 it('is nullable', () => {
   expect(isNullable(0)).toBe(false)
@@ -13,4 +14,3 @@ it('is nonnullable', () => {
   expect(isNonNullable(null)).toBe(false)
   expect(isNonNullable(undefined)).toBe(false)
 })
-

@@ -5,9 +5,9 @@
  * 2. m.chain(M.of) is equivalent to m (right identity)
  */
 
-import { Applicative, Applicative1, Applicative2 } from './Applicative'
-import { Chain, Chain1, Chain2 } from './Chain'
-import { URIS } from './HKT'
+import type { Applicative, Applicative1, Applicative2 } from './Applicative'
+import type { Chain, Chain1, Chain2 } from './Chain'
+import type { URIS } from './HKT'
 
 export interface Monad<F> extends Applicative<F>, Chain<F> {}
 

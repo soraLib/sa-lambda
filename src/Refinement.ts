@@ -1,4 +1,3 @@
-
 /**
  * Narrows type A to the type B.
  */

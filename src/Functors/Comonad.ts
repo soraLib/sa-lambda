@@ -7,8 +7,8 @@
  * extract :: Comonad w => w a ~> () -> a
  */
 
-import { Extend, Extend1, Extend2 } from './Extend'
-import { HKT, KindOf, URIS } from './HKT'
+import type { Extend, Extend1, Extend2 } from './Extend'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Comonad<F> extends Extend<F> {
   readonly extract: <A>(ma: HKT<F, A>) => A

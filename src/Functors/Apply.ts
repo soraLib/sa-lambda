@@ -6,8 +6,8 @@
  * ap :: Apply f => f a ~> f (a -> b) -> f b
  */
 
-import { Functor, Functor1, Functor2 } from './Functor'
-import { HKT, KindOf, URIS } from './HKT'
+import type { Functor, Functor1, Functor2 } from './Functor'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Apply<F> extends Functor<F> {
   readonly ap: <A, B>(fab: HKT<F, (a: A) => B>, fa: HKT<F, A>) => HKT<F, B>

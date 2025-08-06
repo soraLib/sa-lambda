@@ -1,4 +1,5 @@
-import { abs, between, cmp, max, min, sum, randrange } from '../src/Math'
+import { expect, it } from 'vitest'
+import { abs, between, cmp, max, min, randrange, sum } from '../src/Math'
 
 it('max', () => {
   expect(max(1, 2, 3)).toBe(3)

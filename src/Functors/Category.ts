@@ -7,7 +7,7 @@
  * compose :: Category c => c i j ~> c j k -> c i k
  */
 
-import { HKT, KindOf, URIS } from './HKT'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Category<F> {
   readonly id: <A>() => HKT<F, A>

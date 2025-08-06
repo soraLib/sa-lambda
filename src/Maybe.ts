@@ -1,15 +1,17 @@
-import { Either, left, right } from './Either'
-import { constNull, constUndefined, identity, Lazy } from './function'
-import { Alternative1 } from './Functors/Alternative'
-import { Applicative } from './Functors/Applicative'
-import { Chain1 } from './Functors/Chain'
-import { Extend1 } from './Functors/Extend'
-import { HKT } from './Functors/HKT'
-import { Monad1 } from './Functors/Monad'
-import { PipeableTraverse1, Traversable1 } from './Functors/Traversable'
+import type { Either } from './Either'
+import type { Lazy } from './function'
+import type { Alternative1 } from './Functors/Alternative'
+import type { Applicative } from './Functors/Applicative'
+import type { Chain1 } from './Functors/Chain'
+import type { Extend1 } from './Functors/Extend'
+import type { HKT } from './Functors/HKT'
+import type { Monad1 } from './Functors/Monad'
+import type { PipeableTraverse1, Traversable1 } from './Functors/Traversable'
+import type { Predicate } from './Predicate'
+import type { Refinement } from './Refinement'
+import { left, right } from './Either'
+import { constNull, constUndefined, identity } from './function'
 import { pipe } from './Pipe'
-import { Predicate } from './Predicate'
-import { Refinement } from './Refinement'
 
 export interface None {
   readonly _tag: 'None'
@@ -80,7 +82,7 @@ export function fromPredicate<A, B extends A>(Refinement: Refinement<A, B>): (a:
 export function fromPredicate<A>(predicate: Predicate<A>): <B extends A>(b: B) => Maybe<B>
 export function fromPredicate<A>(predicate: Predicate<A>): (a: A) => Maybe<A>
 export function fromPredicate<A>(predicate: Predicate<A>): (a: A) => Maybe<A> {
-  return (a) => (predicate(a) ? some(a) : none)
+  return a => (predicate(a) ? some(a) : none)
 }
 
 /**
@@ -97,7 +99,7 @@ export const of = some
 /**
  * Returns the `Maybe` if it is `Some`, otherwise returns the function result.
  */
-export const alt = <B>(that: Lazy<Maybe<B>>) => <A>(ma: Maybe< A>): Maybe<A | B> =>
+export const alt = <B>(that: Lazy<Maybe<B>>) => <A>(ma: Maybe<A>): Maybe<A | B> =>
   isNone(ma) ? that() : ma
 
 /**
@@ -246,7 +248,6 @@ export const toUndefined: <A>(ma: Maybe<A>) => A | undefined = match(constUndefi
  */
 export const getOrElse = <A>(onNone: Lazy<A>) => <B>(ma: Maybe<B>): A | B => isNone(ma) ? onNone() : ma.value
 
-
 /**
  * Returns `Maybe` if it's a `Some`, otherwise returns onNone result.
  *
@@ -281,7 +282,8 @@ export const orElse = <B>(onNone: Lazy<Maybe<B>>) => <A>(ma: Maybe<A>): Maybe<A 
 export const tryCatch = <A>(f: Lazy<A>): Maybe<A> => {
   try {
     return some(f())
-  } catch (_) {
+  }
+  catch (_) {
     return none
   }
 }
@@ -300,10 +302,9 @@ export const tryCatch = <A>(f: Lazy<A>): Maybe<A> => {
  * assert.deepStrictEqual(pipe(some(-1), f), none)
  * ```
  */
-export const traverse: PipeableTraverse1<MaybeKind> = /* TODO: expect a better case, use iter */
-  <F>(F: Applicative<F>): <A, B>(f: (a: A) => HKT<F, B>) => (ma: Maybe<A>) => HKT<F, Maybe<B>> =>
+export const traverse: PipeableTraverse1<MaybeKind> /* TODO: expect a better case, use iter */
+  = <F>(F: Applicative<F>): <A, B>(f: (a: A) => HKT<F, B>) => (ma: Maybe<A>) => HKT<F, Maybe<B>> =>
     f => ma => isNone(ma) ? F.of(none) : F.map(f(ma.value), some)
-
 
 /**
  * Takes a function and an initial value and returns the initial value if `Maybe` is `none`,
@@ -353,7 +354,7 @@ export const Alternative: Alternative1<MaybeKind> = {
   ap: _ap,
   of,
   alt: _alt,
-  zero
+  zero,
 }
 
 /**
@@ -364,7 +365,7 @@ export const Monad: Monad1<MaybeKind> = {
   of,
   map: _map,
   ap: _ap,
-  chain: _chain
+  chain: _chain,
 }
 
 /**
@@ -374,7 +375,7 @@ export const Chain: Chain1<MaybeKind> = {
   URI: MaybeKind,
   map: _map,
   ap: _ap,
-  chain: _chain
+  chain: _chain,
 }
 
 /**
@@ -383,7 +384,7 @@ export const Chain: Chain1<MaybeKind> = {
 export const Extend: Extend1<MaybeKind> = {
   URI: MaybeKind,
   map: _map,
-  extend: _extend
+  extend: _extend,
 }
 
 /**
@@ -393,5 +394,5 @@ export const Traversable: Traversable1<MaybeKind> = {
   URI: MaybeKind,
   map: _map,
   reduce: _reduce,
-  traverse: _traverse
+  traverse: _traverse,
 }

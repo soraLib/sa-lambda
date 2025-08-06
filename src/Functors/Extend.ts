@@ -6,8 +6,8 @@
  * extend :: Extend w => w a ~> (w a -> b) -> w b
  */
 
-import { Functor, Functor1, Functor2 } from './Functor'
-import { HKT, KindOf, URIS } from './HKT'
+import type { Functor, Functor1, Functor2 } from './Functor'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Extend<W> extends Functor<W> {
   readonly extend: <A, B>(wa: HKT<W, A>, f: (wa: HKT<W, A>) => B) => HKT<W, B>

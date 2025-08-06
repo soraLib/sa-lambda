@@ -1,11 +1,11 @@
+import { delay as delayFn } from './Delay'
 import { isNullable, noop } from './function'
 import { isEmpty } from './Iterator'
-import { delay as delayFn } from './Delay'
 
 /** Asynchronous tasks queued for execution */
 type AsyncTaskQueue = { f: () => Promise<any>, then: (v: any) => void, err: (e: any) => void }[]
 
-export type AsyncQueueOption = {
+export interface AsyncQueueOption {
   /**
    * Maximum concurrency limit
    */
@@ -40,6 +40,7 @@ export class AsyncQueue {
   get size() {
     return this.queue.length + this.count
   }
+
   /**
    * Alias of `size`.
    */
@@ -64,14 +65,16 @@ export class AsyncQueue {
       this.count += 1
 
       return await a()
-    } finally {
+    }
+    finally {
       this.count -= 1
       this.afterProcess()
     }
   }
 
   private async afterProcess() {
-    if (isEmpty(this.queue)) return
+    if (isEmpty(this.queue))
+      return
     if (isNullable(this.limit) || (this.limit && this.count < this.limit)) {
       const { f, then, err } = this.queue.shift()!
       this.process(f).then(then, err)
@@ -84,14 +87,14 @@ export class AsyncQueue {
   async run<A>(f: () => Promise<A>): Promise<A> {
     if (isNullable(this.limit) || (this.limit && this.count < this.limit)) {
       return await this.process(f)
-    } else {
+    }
+    else {
       return await new Promise<A>((then, err) => this.queue.push({ f, then, err }))
     }
   }
 }
 
-
-export type RetryOption = {
+export interface RetryOption {
   /**
    * The time to wait between retries, in milliseconds. The default is 0.
    */
@@ -124,7 +127,8 @@ export async function retry<A>(fn: Fn<A>, options: number | RetryOption = 1): Pr
 
   if (typeof options === 'number') {
     times = options
-  } else {
+  }
+  else {
     times = options.times ?? 1
     interval = options.interval ?? 0
   }
@@ -134,11 +138,13 @@ export async function retry<A>(fn: Fn<A>, options: number | RetryOption = 1): Pr
       try {
         const res = await fn(retry)
         resolve(res)
-      } catch (error) {
+      }
+      catch (error) {
         if (retry < times) {
           retry++
           interval ? setTimeout(attempt, interval) : attempt()
-        } else {
+        }
+        else {
           reject(error)
         }
       }
@@ -147,8 +153,8 @@ export async function retry<A>(fn: Fn<A>, options: number | RetryOption = 1): Pr
   })
 }
 
-export type Thenable<Params extends any[], Data> =
-  ((...args: Params) => Promise<Data>) | ((...args: Params) => Data);
+export type Thenable<Params extends any[], Data>
+  = ((...args: Params) => Promise<Data>) | ((...args: Params) => Data)
 export interface DeferredOptions<D = any> {
   /**
    * Optional delay in milliseconds before executing the function.
@@ -176,13 +182,11 @@ export interface DeferredReturn<Data, Params extends any[]> {
  * deferred(() => { throw 0 }).execute().catch(err => expect(err).toBe(0))
  * ```
  */
-export const deferred = <Data, Params extends any[] = []>(promise: Promise<Data> | Thenable<Params, Data>,
-  options?: DeferredOptions<Data>,
-): DeferredReturn<Data, Params> => {
+export const deferred = <Data, Params extends any[] = []>(promise: Promise<Data> | Thenable<Params, Data>, options?: DeferredOptions<Data>): DeferredReturn<Data, Params> => {
   const {
     delay = 0,
     onError = noop,
-    onSuccess = noop
+    onSuccess = noop,
   } = options ?? {}
 
   const execute = async (...args: any[]) => {
@@ -197,7 +201,8 @@ export const deferred = <Data, Params extends any[] = []>(promise: Promise<Data>
       onSuccess(data)
 
       return data
-    } catch (e) {
+    }
+    catch (e) {
       onError(e)
 
       throw e
@@ -205,6 +210,6 @@ export const deferred = <Data, Params extends any[] = []>(promise: Promise<Data>
   }
 
   return {
-    execute
+    execute,
   }
 }

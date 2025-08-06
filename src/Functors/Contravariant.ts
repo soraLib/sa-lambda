@@ -7,7 +7,7 @@
  * contramap :: Contravariant f => f a ~> (b -> a) -> f b
  */
 
-import { HKT, KindOf, URIS } from './HKT'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Contravariant<F> {
   readonly URI: F

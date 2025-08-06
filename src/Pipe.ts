@@ -1,4 +1,4 @@
-import { TupleLast } from './TupleT'
+import type { TupleLast } from './TupleT'
 
 type PipeFn<A, B> = (a: A) => B
 

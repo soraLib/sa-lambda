@@ -7,7 +7,7 @@
  * map :: Functor f => f a ~> (a -> b) -> f b
  */
 
-import { HKT, KindOf, URIS } from './HKT'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Functor<F> {
   readonly URI: F

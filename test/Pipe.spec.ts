@@ -1,18 +1,19 @@
+import { expect, it } from 'vitest'
 import { identity } from '../src/function'
 import { flow, pipe } from '../src/Pipe'
 
-test('identity', () => {
+it('identity', () => {
   expect(identity(1)).toBe(1)
 })
 
-test('flow1', () => {
+it('flow1', () => {
   const f = flow(
     (a: number) => a + 1,
   )
   expect(f(1)).toBe(1 + 1)
 })
 
-test('flow2', () => {
+it('flow2', () => {
   const f = flow(
     (a: number) => a + 1,
     (a: number) => a + 2,
@@ -20,7 +21,7 @@ test('flow2', () => {
   expect(f(1)).toBe(4)
 })
 
-test('flow3', () => {
+it('flow3', () => {
   const f = flow(
     (a: number) => a + 1,
     (a: number) => a + 2,
@@ -32,7 +33,7 @@ test('flow3', () => {
   expect(f(1)).toBe(1 + 1 + 2 + 3 + 4 + 5 + 6)
 })
 
-test('flow4', () => {
+it('flow4', () => {
   const f = flow(
     (a: number, b: number) => a + b,
     (a: number) => a + 2,
@@ -40,16 +41,17 @@ test('flow4', () => {
   expect(f(1, 2)).toBe(1 + 2 + 2)
 })
 
-test('pipe1', () => {
+it('pipe1', () => {
   expect(
     pipe(
       1,
       (a: number) => a + 1,
       (a: number) => a + 2,
-    )).toBe(1 + 1 + 2)
+    ),
+  ).toBe(1 + 1 + 2)
 })
 
-test('pipe2', () => {
+it('pipe2', () => {
   expect(
     pipe(
       1,
@@ -59,5 +61,6 @@ test('pipe2', () => {
       (a: number) => a + 4,
       (a: number) => a + 5,
       (a: number) => a + 6,
-    )).toBe(1 + 1 + 2 + 3 + 4 + 5 + 6)
+    ),
+  ).toBe(1 + 1 + 2 + 3 + 4 + 5 + 6)
 })

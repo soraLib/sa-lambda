@@ -7,8 +7,8 @@
  * invert :: Group g => g ~> () -> g
  */
 
-import { HKT, KindOf, URIS } from './HKT'
-import { Monoid, Monoid1, Monoid2 } from './Monoid'
+import type { HKT, KindOf, URIS } from './HKT'
+import type { Monoid, Monoid1, Monoid2 } from './Monoid'
 
 export interface Group<F> extends Monoid<F> {
   readonly invert: <A>() => HKT<F, A>

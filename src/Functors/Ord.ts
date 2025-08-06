@@ -8,8 +8,8 @@
  * lte :: Ord a => a ~> a -> Boolean
  */
 
-import { HKT, KindOf, URIS } from './HKT'
-import { Setoid, Setoid1, Setoid2 } from './Setoid'
+import type { HKT, KindOf, URIS } from './HKT'
+import type { Setoid, Setoid1, Setoid2 } from './Setoid'
 
 export interface Ord<F> extends Setoid<F> {
   readonly lte: <A>(a: HKT<F, A>, b: HKT<F, A>) => boolean

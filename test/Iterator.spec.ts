@@ -1,5 +1,6 @@
+import { expect, it } from 'vitest'
 import { left, right } from '../src/Either'
-import { alt, ap, chain, chainRec, collect, concat, filter, isEmpty, iter, Iter, join, map, of, reduce, replicate, to, zero, tryTail, tryHead, group, nth, orderBy, move, insert } from '../src/Iterator';
+import { alt, ap, chain, chainRec, collect, concat, filter, group, insert, isEmpty, iter, Iter, join, map, move, nth, of, orderBy, reduce, replicate, to, tryHead, tryTail, zero } from '../src/Iterator'
 import { none, some } from '../src/Maybe'
 import { flow, pipe } from '../src/Pipe'
 
@@ -56,7 +57,7 @@ it('range', () => {
 it('collect', () => {
   expect(iter([1, 2, 3]).collect()).toEqual([1, 2, 3])
   expect(iter(function* () {
-    for(let i = 1; i <= 3; i++) yield i
+    for (let i = 1; i <= 3; i++) yield i
   }).collect()).toEqual([1, 2, 3])
 })
 
@@ -98,13 +99,12 @@ it('nth', () => {
 it('filter', () => {
   const f = flow(
     filter((a: number) => a % 2 === 0),
-    collect
+    collect,
   )
 
   expect(f([1, 2, 3, 4])).toEqual([2, 4])
   expect(iter([1, 2, 3, 4].filter((a: number) => a % 2 === 0)).collect()).toEqual([2, 4])
 })
-
 
 it('zipWith', () => {
   expect(iter([1, 2, 3]).zipWith([0, 1], (a, b) => a + b).collect()).toEqual([1, 3])
@@ -139,7 +139,7 @@ it('flatten', () => {
 })
 
 it('makeBy', () => {
-  expect(Iter.makeBy(3, (n) => `${n}`).collect()).toEqual(['0', '1', '2'])
+  expect(Iter.makeBy(3, n => `${n}`).collect()).toEqual(['0', '1', '2'])
 })
 
 it('replicate', () => {
@@ -151,16 +151,16 @@ it('splite into groups', () => {
   expect(group([1, 2, 3, 4, 5, 6], 2)).toEqual([
     [1, 2],
     [3, 4],
-    [5, 6]
+    [5, 6],
   ])
   expect(group([1, 2, 3, 4, 5, 6, 7], 3)).toEqual([
     [1, 2, 3],
     [4, 5, 6],
-    [7]
+    [7],
   ])
   expect(group(new Set([1, 2, 3, 4]), 3)).toEqual([
     [1, 2, 3],
-    [4]
+    [4],
   ])
   expect(group([], 3)).toEqual([])
 })
@@ -185,21 +185,21 @@ it('isEmpty', () => {
   expect(isEmpty([])).toBeTruthy()
   expect(isEmpty(new Map())).toBeTruthy()
   expect(isEmpty(new Set())).toBeTruthy()
-  expect(isEmpty({ [Symbol.iterator]: function*() { /*  */} })).toBeTruthy()
-  expect(isEmpty({ [Symbol.iterator]: function*() { yield 1 } })).toBeFalsy()
+  expect(isEmpty({ * [Symbol.iterator]() { /*  */ } })).toBeTruthy()
+  expect(isEmpty({ * [Symbol.iterator]() { yield 1 } })).toBeFalsy()
   expect(iter([1]).isEmpty()).toBeFalsy()
 })
 
 it('reduce', () => {
   const f = flow(
-    reduce((prev: number, cur: number) => prev + cur, 1)
+    reduce((prev: number, cur: number) => prev + cur, 1),
   )
 
   expect(f([2, 3, 4])).toBe(10)
   expect(iter([2, 3, 4]).reduce((prev: number, cur: number) => prev + cur, 1)).toBe(10)
 
   const f2 = flow(
-    reduce((prev: number, cur: number) => prev + cur)
+    reduce((prev: number, cur: number) => prev + cur),
   )
 
   expect(f2([2])).toBe(2)
@@ -262,8 +262,8 @@ it('compose1', () => {
       x => pipe(
         size,
         to,
-        map(y => [x, y])
-      )
+        map(y => [x, y]),
+      ),
     ),
     collect,
   )

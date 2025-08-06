@@ -18,8 +18,8 @@ export default defineConfig({
         'src/Maybe.ts',
         'src/Pipe.ts',
         'src/Tree.ts',
-        'src/function.ts'
-      ]
-    }
-  }
+        'src/function.ts',
+      ],
+    },
+  },
 })

@@ -6,8 +6,8 @@
  * chain :: Chain m => m a ~> (a -> m b) -> m b
  */
 
-import { Apply, Apply1, Apply2 } from './Apply'
-import { HKT, KindOf, URIS } from './HKT'
+import type { Apply, Apply1, Apply2 } from './Apply'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Chain<F> extends Apply<F> {
   readonly chain: <A, B>(fa: HKT<F, A>, f: (a: A) => HKT<F, B>) => HKT<F, B>

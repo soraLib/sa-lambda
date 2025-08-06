@@ -1,4 +1,4 @@
-import { Predicate } from './Predicate'
+import type { Predicate } from './Predicate'
 
 export type TreeNode<A> = A & {
   children?: TreeNode<A>[]
@@ -42,8 +42,9 @@ export const collectTreeNodes = <T extends TreeNode<Record<string, any>>>(root: 
   const nodes: T[] = []
 
   const traverse = (node: T) => {
-    if (p(node)) nodes.push(node)
-    if(node.children) {
+    if (p(node))
+      nodes.push(node)
+    if (node.children) {
       for (const child of node.children) {
         traverse(child as T)
       }
@@ -81,16 +82,19 @@ export const collectTreeNodes = <T extends TreeNode<Record<string, any>>>(root: 
  *   })
  */
 export const filterTreeNodes = <T extends TreeNode<Record<string, any>>>(root: T, p: Predicate<T>): T | null => {
-  if(!p(root)) return null
+  if (!p(root))
+    return null
 
-  if(root.children?.length)
+  if (root.children?.length) {
     root.children = (root.children as T[]).reduce<T[]>((prev, cur) => {
       const result = filterTreeNodes(cur, p)
 
-      if(result) return [...prev, result]
+      if (result)
+        return [...prev, result]
 
       return prev
     }, [])
+  }
 
   return root
 }

@@ -2,9 +2,9 @@ name: upload_codecov
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -13,16 +13,16 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-    
-    steps:
-    - uses: actions/checkout@main
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i
-    - run: npm run test
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i
+      - run: npm run test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5

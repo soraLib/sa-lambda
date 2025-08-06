@@ -9,7 +9,6 @@
  */
 export const map = <A, B>(f: (a: A) => B) => (a: A) => f(a)
 
-
 /**
  * Uses a value to make a mapping.
  *
@@ -21,10 +20,9 @@ export const map = <A, B>(f: (a: A) => B) => (a: A) => f(a)
  */
 export const use = <A, B>(a: A, f: (a: A) => B): B => f(a)
 
-
 /**
  * Apply a function to an argument.
- * 
+ *
  * Functional programming style of `Effect.use`.
  *
  * @example
@@ -34,7 +32,6 @@ export const use = <A, B>(a: A, f: (a: A) => B): B => f(a)
  * ```
  */
 export const ap = <A, B>(f: (a: A) => B) => (a: A): B => f(a)
-
 
 /**
  * Uses a value to do something extra.
@@ -46,7 +43,6 @@ export const ap = <A, B>(f: (a: A) => B) => (a: A): B => f(a)
  * ```
  */
 export const also = <A>(a: A, f: (a: A) => void): A => (f(a), a)
-
 
 /**
  * Returns onTrue result if the condition is Truthy, otherwise returns the onFalse result.
@@ -77,7 +73,7 @@ export const match = <A, B>(onTrue: () => A, onFalse: () => B) => (condition: bo
 export const getOrSet = <T extends Record<string, unknown>, K extends keyof T>(
   source: T,
   key: K,
-  initialValue: () => T[K]
+  initialValue: () => T[K],
 ): T[K] => Object.hasOwn(source, key) ? source[key] : (source[key] = initialValue())
 
 /**
@@ -93,7 +89,8 @@ export const getOrSet = <T extends Record<string, unknown>, K extends keyof T>(
 export const tryWithCallback = <A extends () => any>(a: A, callback: (err: unknown) => ReturnType<A>): ReturnType<A> => {
   try {
     return a()
-  } catch(err) {
+  }
+  catch (err) {
     return callback(err)
   }
 }

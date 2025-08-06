@@ -7,9 +7,9 @@
  * alt :: Alt f => f a ~> f a -> f a
  */
 
-import { Lazy } from '../function'
-import { Functor, Functor1, Functor2 } from './Functor'
-import { HKT, KindOf, URIS } from './HKT'
+import type { Lazy } from '../function'
+import type { Functor, Functor1, Functor2 } from './Functor'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Alt<F> extends Functor<F> {
   readonly alt: <A, B>(fa: HKT<F, A>, that: Lazy<HKT<F, B>>) => HKT<F, A | B>

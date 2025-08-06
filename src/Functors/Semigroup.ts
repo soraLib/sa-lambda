@@ -6,7 +6,7 @@
  * concat :: Semigroup a => a ~> a -> a
  */
 
-import { HKT, KindOf, URIS } from './HKT'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Semigroup<F> {
   readonly URI: F
@@ -22,4 +22,3 @@ export interface Semigroup2<F extends URIS> {
   readonly URI: F
   readonly concat: <E, A>(a: KindOf<F, [E, A]>, b: KindOf<F, [E, A]>) => KindOf<F, [E, A]>
 }
-

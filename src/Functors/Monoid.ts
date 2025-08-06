@@ -7,8 +7,8 @@
  * empty :: Monoid m => () -> m
  */
 
-import { HKT, KindOf, URIS } from './HKT'
-import { Semigroup, Semigroup1, Semigroup2 } from './Semigroup'
+import type { HKT, KindOf, URIS } from './HKT'
+import type { Semigroup, Semigroup1, Semigroup2 } from './Semigroup'
 
 export interface Monoid<F> extends Semigroup<F> {
   readonly empty: <A>() => HKT<F, A>

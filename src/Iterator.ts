@@ -1,14 +1,15 @@
-import { Either, isLeft } from './Either'
-import { Lazy } from './function'
-import { Alternative1 } from './Functors/Alternative'
-import { ChainRec1 } from './Functors/ChainRec'
-import { Monad1 } from './Functors/Monad'
-import { getOrElse, Maybe, none, some, toUndefined } from './Maybe'
-import { flow, pipe } from './Pipe'
-import { Predicate } from './Predicate'
+import type { Either } from './Either'
+import type { Lazy } from './function'
+import type { Alternative1 } from './Functors/Alternative'
+import type { ChainRec1 } from './Functors/ChainRec'
+import type { Monad1 } from './Functors/Monad'
+import type { Maybe } from './Maybe'
+import type { Predicate } from './Predicate'
+import * as E from './Effect'
+import { isLeft } from './Either'
 import { abs } from './Math'
-import * as E from './Effect';
-
+import { getOrElse, none, some, toUndefined } from './Maybe'
+import { flow, pipe } from './Pipe'
 
 export const IterKind = Symbol('Iterator')
 export type IterKind = typeof IterKind
@@ -32,9 +33,10 @@ declare module './Functors/HKT' {
  * ```
  */
 export const isEmpty = <A>(ma: Iterable<A>): boolean => {
-  if ('length' in ma) return (ma as any).length == 0
-  if ('size' in ma) return (ma as any).size == 0
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  if ('length' in ma)
+    return (ma as any).length === 0
+  if ('size' in ma)
+    return (ma as any).size === 0
   for (const _ of ma) return false
 
   return true
@@ -50,7 +52,7 @@ export const isEmpty = <A>(ma: Iterable<A>): boolean => {
  * assert.deepStrictEqual(toArray(new Set([1, 2, 3])), [1, 2, 3])
  * ```
  */
-export const toArray = <A>(ma: Iterable<A>): A[] => ma instanceof Array ? ma : Array.from(ma)
+export const toArray = <A>(ma: Iterable<A>): A[] => Array.isArray(ma) ? ma : Array.from(ma)
 
 /**
  * Returns an iterator with the elements at last.
@@ -62,14 +64,14 @@ export function* push<A>(a: Iterable<A>, ...as: A[]): Iterable<A> {
 
 /**
  * Returns an iterator with the elements inserted.
- * 
+ *
  * @example
- * 
+ *
  * ```ts
  * assert.deepStrictEqual(pipe(of(1, 2, 3), insert(1, 4), collect), [1, 4, 2, 3])
  * ```
  */
-export const insert = <A>(index: number, ...as: A[]): (a: Iterable<A>) => Iterable<A> => a => {
+export const insert = <A>(index: number, ...as: A[]): (a: Iterable<A>) => Iterable<A> => (a) => {
   const collects = collect(a)
   collects.splice(index, 0, ...as)
 
@@ -78,14 +80,14 @@ export const insert = <A>(index: number, ...as: A[]): (a: Iterable<A>) => Iterab
 
 /**
  * Returns an iterator with an element moved to the target position.
- * 
+ *
  * @example
- * 
+ *
  * ```ts
  * assert.deepStrictEqual(pipe(of(1, 2, 3), move(1, 2), collect), [1, 3, 2])
  * ```
  */
-export const move = <A>(from: number, to: number): (a: Iterable<A>) => Iterable<A> => a => {
+export const move = <A>(from: number, to: number): (a: Iterable<A>) => Iterable<A> => (a) => {
   const as = collect(a)
 
   if (!(from < 0 || from >= as.length || to < 0 || to >= as.length)) {
@@ -108,7 +110,7 @@ export function* unshift<T>(a: Iterable<T>, ...as: T[]): Iterable<T> {
  * Creates an iterator with an array.
  */
 export function* of<A>(...as: A[]): Iterable<A> {
-  for(const a of as) {
+  for (const a of as) {
     yield a
   }
 }
@@ -143,7 +145,6 @@ export const nth = (index: number) => <A>(as: Iterable<A>): Maybe<A> =>
 
 /**
  * Returns an empty list.
- * @returns
  */
 export const empty = <A>(): Iterable<A> => []
 /**
@@ -183,11 +184,12 @@ const _getStep = (step: number): number => {
 export function* range(from: number, end: number, step = 1): Iterable<number> {
   step = _getStep(step)
 
-  if(from > end) {
+  if (from > end) {
     for (let i = from; i > end; i -= step) {
       yield i
     }
-  } else {
+  }
+  else {
     for (let i = from; i < end; i += step) {
       yield i
     }
@@ -206,7 +208,6 @@ export function* range(from: number, end: number, step = 1): Iterable<number> {
  */
 export const to = (end: number, step = 1): Iterable<number> => range(0, end, step)
 
-
 /**
  * Creates an iterator of length `n` initialized with `f(i)`.
  *
@@ -217,7 +218,7 @@ export const to = (end: number, step = 1): Iterable<number> => range(0, end, ste
  * ```
  */
 export function* makeBy<A>(n: number, f: (i: number) => A): Iterable<A> {
-  for(let i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     yield f(i)
   }
 }
@@ -273,8 +274,10 @@ export const join = (seperator?: string) => <A>(ma: Iterable<A>): string => coll
  * ```
  */
 export const count = <A>(ma: Iterable<A>): number => {
-  if ('length' in ma) return (ma as A[]).length
-  if ('size' in ma) return (ma as any).size
+  if ('length' in ma)
+    return (ma as A[]).length
+  if ('size' in ma)
+    return (ma as any).size
 
   return collect(ma).length
 }
@@ -295,8 +298,8 @@ export const count = <A>(ma: Iterable<A>): number => {
  * ```
  */
 export const filter = <A>(predicate: Predicate<A>) => function* (ma: Iterable<A>): Iterable<A> {
-  for(const a of ma) {
-    if(predicate(a)) {
+  for (const a of ma) {
+    if (predicate(a)) {
       yield a
     }
   }
@@ -337,29 +340,30 @@ export const ap: <A>(ma: Iterable<A>) => <B>(f: Iterable<(a: A) => B>) => Iterab
  * )
  * ```
  */
-export function reduce<A>(f:(b: A, a: A, i: number, as: Iterable<A>) => A): (as: Iterable<A>) => A
-export function reduce<A>(f:(b: A, a: A, i: number, as: Iterable<A>) => A, b: A): (as: Iterable<A>) => A
-export function reduce<A, B>(f:(b: B, a: A, i: number, as: Iterable<A>) => B, b: B): (as: Iterable<A>) => B
-export function reduce<A, B>(f:(b: B, a: A, i: number, as: Iterable<A>) => B, b?: B): (as: Iterable<A>) => B {
+export function reduce<A>(f: (b: A, a: A, i: number, as: Iterable<A>) => A): (as: Iterable<A>) => A
+export function reduce<A>(f: (b: A, a: A, i: number, as: Iterable<A>) => A, b: A): (as: Iterable<A>) => A
+export function reduce<A, B>(f: (b: B, a: A, i: number, as: Iterable<A>) => B, b: B): (as: Iterable<A>) => B
+export function reduce<A, B>(f: (b: B, a: A, i: number, as: Iterable<A>) => B, b?: B): (as: Iterable<A>) => B {
   return (as: Iterable<A>) => {
     let cur = 0
     let ret: B
 
-    if(arguments.length === 1) {
+    if (arguments.length === 1) {
       ret = pipe(as, head, getOrElse(() => { throw '[ERR]: Reduce of empty iterator with no initial value ' })) as unknown as B
       cur = 1
       let i = 0
 
-      for(const a of as) {
-        if(i === cur) {
+      for (const a of as) {
+        if (i === cur) {
           ret = f(ret, a, i, as)
           cur++
         }
         i++
       }
-    } else {
+    }
+    else {
       ret = b!
-      for(const a of as) {
+      for (const a of as) {
         ret = f(ret, a, cur, as)
         cur++
       }
@@ -378,7 +382,7 @@ export function reduce<A, B>(f:(b: B, a: A, i: number, as: Iterable<A>) => B, b?
  * assert.deepStrictEqual(head([]), none)
  */
 export const head = <A>(ma: Iterable<A>) => {
-  for(const a of ma) {
+  for (const a of ma) {
     return some(a)
   }
 
@@ -408,8 +412,9 @@ export const tryHead = <A>(ma: Iterable<A>) => pipe(ma, head, toUndefined)
 export const tail = <A>(ma: Iterable<A>): Maybe<A> => {
   let i = 1
   const len = count(ma)
-  for(const a of ma) {
-    if(i === len) return some(a)
+  for (const a of ma) {
+    if (i === len)
+      return some(a)
     i++
   }
 
@@ -433,17 +438,16 @@ export const tryTail = <A>(ma: Iterable<A>) => pipe(ma, tail, toUndefined)
  *
  * assert.deepStrictEqual(pipe([1], concat([2, 3], [4, 5]), collect), [1, 2, 3, 4, 5])
  */
-export const concat = <A>(...items: Iterable<A>[]) => function*<B>(ma: Iterable<B>): Iterable<A | B> {
-  for(const a of ma) {
+export const concat = <A>(...items: Iterable<A>[]) => function* <B>(ma: Iterable<B>): Iterable<A | B> {
+  for (const a of ma) {
     yield a
   }
-  for(const item of items) {
-    for(const b of item) {
+  for (const item of items) {
+    for (const b of item) {
       yield b
     }
   }
 }
-
 
 /**
  * Takes two iterator and returns an iterator of the function results. If one iterator is short, excess items of the longer iterator are discarded.
@@ -459,11 +463,13 @@ export function* zipWith<A, B, C>(a: Iterable<A>, b: Iterable<B>, f: (a: A, b: B
   const ai = a[Symbol.iterator]()
   const bi = b[Symbol.iterator]()
 
-  for(;;) {
+  for (;;) {
     const a = ai.next()
-    if(a.done) return
+    if (a.done)
+      return
     const b = bi.next()
-    if(b.done) return
+    if (b.done)
+      return
 
     yield f(a.value, b.value)
   }
@@ -483,11 +489,13 @@ export function* zip<A, B>(a: Iterable<A>, b: Iterable<B>): Iterable<[A, B]> {
   const ai = a[Symbol.iterator]()
   const bi = b[Symbol.iterator]()
 
-  for(;;) {
+  for (;;) {
     const a = ai.next()
-    if(a.done) return
+    if (a.done)
+      return
     const b = bi.next()
-    if(b.done) return
+    if (b.done)
+      return
 
     yield [a.value, b.value]
   }
@@ -545,10 +553,9 @@ export const group = <T>(ma: Iterable<T>, size: number): Iterable<Iterable<T>> =
   const list = collect(ma)
 
   return Array.from({ length: Math.ceil(count(ma) / size) }).map((_, i) =>
-    list.slice(i * size, (i + 1) * size)
+    list.slice(i * size, (i + 1) * size),
   )
 }
-
 
 /**
  * Returns an iterator that concatenates the function result into a single interator (like [`flatten`](#flatten)).
@@ -593,7 +600,8 @@ export const chainRec = <A, B>(f: (a: A) => Iterable<Either<A, B>>) => function*
     const e = next.shift()!
     if (isLeft(e)) {
       next.unshift(...f(e.left))
-    } else {
+    }
+    else {
       out.push(e.right)
     }
   }
@@ -603,24 +611,18 @@ export const chainRec = <A, B>(f: (a: A) => Iterable<Either<A, B>>) => function*
 
 /**
  * Returns a sorted iterator of objects based on the specified order.
- * 
+ *
  * @example
  *
  * ```ts
  * assert.deepStrictEqual(orderBy([{ id: 1 }, { id: 2 }, { id: 3 }], 'id', [3, 2, 1]), [{ id: 3 }, { id: 2 }, { id: 1 }])
  * ```
  */
-export const orderBy = <
- A extends Record<string, any>,
- K extends keyof A,
->(
- key: K,
- to: A[K][]
-) => (as: Iterable<A>): Iterable<A> =>
+export const orderBy = <A extends Record<string, any>, K extends keyof A>(key: K, to: A[K][]) => (as: Iterable<A>): Iterable<A> =>
   pipe(
-    as, 
-    collect, 
-    E.ap(as => as.sort((a, b) => to.indexOf(a[key]) - to.indexOf(b[key])))
+    as,
+    collect,
+    E.ap(as => as.sort((a, b) => to.indexOf(a[key]) - to.indexOf(b[key]))),
   )
 
 /**
@@ -662,11 +664,11 @@ export class Iter<A> implements Iterable<A> {
   tryTail = () => tryTail(this._iter())
   map = <B>(f: (a: A) => B) => pipe(this._iter(), map(f), iter)
   toArray = (): A[] => toArray(this._iter())
-  isEmpty= (): boolean => isEmpty(this._iter())
+  isEmpty = (): boolean => isEmpty(this._iter())
   push = (...as: A[]): Iter<A> => flow(push, iter)(this._iter(), ...as)
   unshift = (...as: A[]) => flow(unshift, iter)(this._iter(), ...as)
   filter = (predicate: Predicate<A>) => pipe(this._iter(), filter(predicate), iter)
-  reduce = <B>(f:(b: B, a: A) => B, b: B) => pipe(this._iter(), reduce(f, b))
+  reduce = <B>(f: (b: B, a: A) => B, b: B) => pipe(this._iter(), reduce(f, b))
   collect = (): A[] => collect(this._iter())
   join = (seperator?: string) => pipe(this._iter(), join(seperator))
   count = () => count(this._iter())
@@ -676,6 +678,7 @@ export class Iter<A> implements Iterable<A> {
     (A extends [infer X, any] | readonly [infer X, any] | (infer X)[] ? X : unknown)[],
     (A extends [any, infer Y] | readonly [any, infer Y] | (infer Y)[] ? Y : unknown)[],
   ]> => flow(unzip, iter)(this._iter() as any) as any
+
   flatten = (): A extends Iterable<infer R> ? Iter<R> : never => pipe(this._iter() as any, flatten, iter) as any
   group = (size: number) => flow(group, iter)(this._iter(), size)
   chain = <B>(f: (a: A, i: number) => Iterable<B>) => pipe(this._iter(), chain(f), iter)
@@ -700,7 +703,7 @@ export const Alternative: Alternative1<IterKind> = {
   zero,
   map: _map,
   alt: _alt,
-  ap: _ap
+  ap: _ap,
 }
 
 /**
@@ -711,7 +714,7 @@ export const Monad: Monad1<IterKind> = {
   of,
   ap: _ap,
   map: _map,
-  chain: _chain
+  chain: _chain,
 }
 
 /**
@@ -722,5 +725,5 @@ export const ChainRec: ChainRec1<IterKind> = {
   ap: _ap,
   map: _map,
   chain: _chain,
-  chainRec: _chainRec
+  chainRec: _chainRec,
 }

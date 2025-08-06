@@ -1,14 +1,21 @@
 {
   "name": "sa-lambda",
   "version": "1.5.0",
-  "description": "Typescript library for functional programming.",
   "packageManager": "pnpm@10.14.0",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.mjs",
-  "browser": "dist/lib/sa-lambda.min.js",
-  "umd:main": "dist/lib/sa-lambda.js",
-  "types": "dist/type/index.d.ts",
-  "typings": "dist/type/index.d.ts",
+  "description": "Typescript library for functional programming.",
+  "author": "hfutsora",
+  "license": "MIT",
+  "homepage": "https://github.com/soraLib/sa-lambda#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soraLib/sa-lambda.git"
+  },
+  "keywords": [
+    "typescript",
+    "js",
+    "library",
+    "functional-programming"
+  ],
   "exports": {
     ".": {
       "import": "./dist/esm/index.mjs",
@@ -20,20 +27,29 @@
     },
     "./package.json": "./package.json"
   },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.mjs",
+  "browser": "dist/lib/sa-lambda.min.js",
+  "umd:main": "dist/lib/sa-lambda.js",
+  "types": "dist/type/index.d.ts",
+  "typings": "dist/type/index.d.ts",
   "files": [
-    "dist",
+    "LICENSE",
     "README.md",
-    "LICENSE"
+    "dist"
   ],
   "scripts": {
+    "cz": "czg",
     "docs": "pnpm -C docs run dev",
     "docs:build": "pnpm -C docs run build",
     "prebuild": "node ./dev/prebuild.mjs",
     "build": "rolldown -c rolldown.config.ts && tsc --emitDeclarationOnly",
+    "lint": "eslint --fix --ext .ts,.tsx .",
+    "lint:fix": "eslint --fix . --ext .js,.ts,.md,.json",
     "test": "vitest run --coverage",
-    "prepare": "husky install",
     "do:pack": "node ./dev/publish.mjs pack",
-    "do:publish": "node ./dev/publish.mjs"
+    "do:publish": "node ./dev/publish.mjs",
+    "prepare": "husky"
   },
   "tags": [
     "typescript",
@@ -41,34 +57,29 @@
     "library",
     "functional-programming"
   ],
-  "keywords": [
-    "typescript",
-    "js",
-    "library",
-    "functional-programming"
-  ],
-  "author": "hfutsora",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/soraLib/sa-lambda.git"
-  },
-  "homepage": "https://github.com/soraLib/sa-lambda#readme",
   "devDependencies": {
-    "@commitlint/config-conventional": "17.1.0",
+    "@antfu/eslint-config": "^4.14.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/types": "^19.8.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/node": "18.7.21",
     "@typescript-eslint/eslint-plugin": "5.38.1",
     "@typescript-eslint/parser": "5.38.1",
     "@vitest/coverage-v8": "3.2.4",
-    "codecov": "3.8.3",
-    "commitlint": "17.1.2",
-    "eslint": "8.24.0",
-    "husky": "8.0.1",
+    "cz-git": "^1.11.1",
+    "czg": "^1.11.1",
+    "eslint": "^9.28.0",
+    "fast-glob": "^3.3.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
     "rolldown": "1.0.0-beta.31",
-    "ts-node": "10.9.1",
     "tslib": "^2.8.1",
     "typescript": "4.8.4",
+    "vite": "^7.0.6",
     "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{js,ts,md,json}": "eslint --fix"
   }
 }

@@ -1,17 +1,19 @@
-import { Lazy } from './function'
-import { Alt2 } from './Functors/Alt'
-import { Alternative2 } from './Functors/Alternative'
-import { Applicative } from './Functors/Applicative'
-import { ChainRec2, tailRec } from './Functors/ChainRec'
-import { Comonad2 } from './Functors/Comonad'
-import { Extend2 } from './Functors/Extend'
-import { HKT } from './Functors/HKT'
-import { Monad2 } from './Functors/Monad'
-import { PipeableTraverse2, Traversable2 } from './Functors/Traversable'
-import { isNone, Maybe, none, some } from './Maybe'
+import type { Lazy } from './function'
+import type { Alt2 } from './Functors/Alt'
+import type { Alternative2 } from './Functors/Alternative'
+import type { Applicative } from './Functors/Applicative'
+import type { ChainRec2 } from './Functors/ChainRec'
+import type { Comonad2 } from './Functors/Comonad'
+import type { Extend2 } from './Functors/Extend'
+import type { HKT } from './Functors/HKT'
+import type { Monad2 } from './Functors/Monad'
+import type { PipeableTraverse2, Traversable2 } from './Functors/Traversable'
+import type { Maybe } from './Maybe'
+import type { Predicate } from './Predicate'
+import type { Refinement } from './Refinement'
+import { tailRec } from './Functors/ChainRec'
+import { isNone, none, some } from './Maybe'
 import { pipe } from './Pipe'
-import { Predicate } from './Predicate'
-import { Refinement } from './Refinement'
 
 export interface Left<E> {
   readonly _tag: 'Left'
@@ -67,8 +69,8 @@ export const isRight = <A>(ma: Either<unknown, A>): ma is Right<A> => ma._tag ==
  */
 export const zero = left
 /**
-  * Alias of `left`.
-  */
+ * Alias of `left`.
+ */
 export const empty = left
 
 /**
@@ -109,7 +111,7 @@ export function fromPredicate<A, B extends A, E>(refinement: Refinement<A, B>, o
 export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): <B extends A>(b: B) => Either<E, B>
 export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): (a: A) => Either<E, A>
 export function fromPredicate<A, E>(predicate: Predicate<A>, onFalse: Lazy<E>): (a: A) => Either<E, A> {
-  return (a) => predicate(a) ? right(a) : left(onFalse())
+  return a => predicate(a) ? right(a) : left(onFalse())
 }
 
 /**
@@ -238,11 +240,11 @@ export const chain = <E2, A, B>(f: (a: A) => Either<E2, B>) => <E1>(ma: Either<E
  * , right('5'))
  * ```
  */
-export const chainRec: <E, A, B>(f: (a: A) => Either<E, Either<A, B>>) => (ma: A) => Either<E, B> = (f) =>
+export const chainRec: <E, A, B>(f: (a: A) => Either<E, Either<A, B>>) => (ma: A) => Either<E, B> = f =>
   ma => tailRec(
     f(ma),
-    (e) =>
-      isLeft(e) ? right(left(e.left)) : isLeft(e.right) ? left(f(e.right.left)) : right(right(e.right.right))
+    e =>
+      isLeft(e) ? right(left(e.left)) : isLeft(e.right) ? left(f(e.right.left)) : right(right(e.right.right)),
   )
 
 /**
@@ -273,8 +275,8 @@ export const reduce = <E, A, B>(f: (acc: B, a: A) => B, b: B) => (ma: Either<E, 
  * assert.deepStrictEqual(pipe(right(-1), f), none)
  * ```
  */
-export const traverse: PipeableTraverse2<EitherKind> =
-  <F>(F: Applicative<F>): <A, B>(f: (a: A) => HKT<F, B>) => <E>(e: Either<E, A>) => HKT<F, Either<E, B>> =>
+export const traverse: PipeableTraverse2<EitherKind>
+  = <F>(F: Applicative<F>): <A, B>(f: (a: A) => HKT<F, B>) => <E>(e: Either<E, A>) => HKT<F, Either<E, B>> =>
     f => e => isLeft(e) ? F.of(left(e.left)) : F.map(f(e.right), right)
 
 /**
@@ -320,7 +322,8 @@ export const exists = <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>): boo
 export const tryCatch = <E, A>(f: Lazy<A>, onThrow: (e: unknown) => E): Either<E, A> => {
   try {
     return right(f())
-  } catch (e) {
+  }
+  catch (e) {
     return left(onThrow(e))
   }
 }
@@ -353,7 +356,6 @@ export const swap = <E, A>(ma: Either<E, A>): Either<A, E> =>
  */
 export const equals = <E, A>(a: Either<E, A>, b: Either<E, A>): boolean =>
   a === b || (isLeft(a) ? isLeft(b) && a.left === b.left : isRight(b) && a.right === b.right)
-
 
 /**
  * Returns `Either` if it is a `Left` or the result of predicate is true,
@@ -390,7 +392,7 @@ const _traverse: Traversable2<EitherKind>['traverse'] = <F>(F: Applicative<F>) =
 export const Alt: Alt2<EitherKind> = {
   URI: EitherKind,
   map: _map,
-  alt: _alt
+  alt: _alt,
 }
 
 /**
@@ -401,7 +403,7 @@ export const Monad: Monad2<EitherKind> = {
   of,
   map: _map,
   ap: _ap,
-  chain: _chain
+  chain: _chain,
 }
 
 /**
@@ -412,7 +414,7 @@ export const ChainRec: ChainRec2<EitherKind> = {
   map: _map,
   ap: _ap,
   chain: _chain,
-  chainRec: _chainRec
+  chainRec: _chainRec,
 }
 
 /**
@@ -422,7 +424,7 @@ export const Comonad: Comonad2<EitherKind> = {
   URI: EitherKind,
   map: _map,
   extend: _extend,
-  extract
+  extract,
 }
 
 /**
@@ -432,5 +434,5 @@ export const Traversable: Traversable2<EitherKind> = {
   URI: EitherKind,
   map: _map,
   reduce: _reduce,
-  traverse: _traverse
+  traverse: _traverse,
 }

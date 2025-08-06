@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
+    "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "target": "esnext",
-    "outDir": "dist/type",
+    "typeRoots": ["./types", "./node_modules/@types", "./node_modules"],
+    "types": ["vitest/globals"],
     "strict": true,
     "declaration": true,
     "importHelpers": true,
-    "esModuleInterop": true,
-    "types": ["vitest/globals"]
+    "outDir": "dist/type",
+    "esModuleInterop": true
   },
   "include": [
-    "src"
+    "src/**/*.ts"
   ]
 }

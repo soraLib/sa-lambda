@@ -11,6 +11,7 @@ import { isEmpty } from './Iterator'
  * assert.deepStrictEqual(isEqual(1, '1'), true)
  * ```
  */
+// eslint-disable-next-line eqeqeq
 export const isEqual = (self: unknown, other: unknown): boolean => self == other
 
 /**
@@ -42,7 +43,8 @@ export const isStrictEqual = (self: unknown, other: unknown): boolean => self ==
 export function eqOr<A>(self: A): A
 export function eqOr(self: unknown, ...others: unknown[]): boolean
 export function eqOr<A>(self: A, ...others: unknown[]): A | boolean {
-  if(isEmpty(others)) return self
+  if (isEmpty(others))
+    return self
 
   return others.some(other => isEqual(self, other))
 }
@@ -62,7 +64,8 @@ export function eqOr<A>(self: A, ...others: unknown[]): A | boolean {
 export function notEqOr<A>(self: A): A
 export function notEqOr(self: unknown, ...others: unknown[]): boolean
 export function notEqOr<A>(self: A, ...others: unknown[]): A | boolean {
-  if(isEmpty(others)) return self
+  if (isEmpty(others))
+    return self
 
   return others.some(other => !isEqual(self, other))
 }
@@ -83,7 +86,8 @@ export function notEqOr<A>(self: A, ...others: unknown[]): A | boolean {
 export function strictEqOr<A>(self: A): A
 export function strictEqOr(self: unknown, ...others: unknown[]): boolean
 export function strictEqOr<A>(self: A, ...others: unknown[]): A | boolean {
-  if(isEmpty(others)) return self
+  if (isEmpty(others))
+    return self
 
   return others.some(other => isStrictEqual(self, other))
 }
@@ -104,7 +108,8 @@ export function strictEqOr<A>(self: A, ...others: unknown[]): A | boolean {
 export function strictNotEqOr<A>(self: A): A
 export function strictNotEqOr(self: unknown, ...others: unknown[]): boolean
 export function strictNotEqOr<A>(self: A, ...others: unknown[]): A | boolean {
-  if(isEmpty(others)) return self
+  if (isEmpty(others))
+    return self
 
   return others.some(other => !isStrictEqual(self, other))
 }
@@ -125,7 +130,8 @@ export function strictNotEqOr<A>(self: A, ...others: unknown[]): A | boolean {
 export function eqAnd<A>(self: A): A
 export function eqAnd(self: unknown, ...others: unknown[]): boolean
 export function eqAnd<A>(self: A, ...others: unknown[]): A | boolean {
-  if(isEmpty(others)) return self
+  if (isEmpty(others))
+    return self
 
   return others.every(other => isEqual(self, other))
 }
@@ -146,50 +152,52 @@ export function eqAnd<A>(self: A, ...others: unknown[]): A | boolean {
 export function notEqAnd<A>(self: A): A
 export function notEqAnd(self: unknown, ...others: unknown[]): boolean
 export function notEqAnd<A>(self: A, ...others: unknown[]): A | boolean {
-  if(isEmpty(others)) return self
+  if (isEmpty(others))
+    return self
 
   return others.every(other => !isEqual(self, other))
 }
 
-
 /**
-  * Checks if value is *strict equal* to every other value.
-  *
-  * Returns self directly if others is empty.
-  *
-  * @example
-  *
-  * ```ts
-  * assert.deepStrictEqual(strictEqAnd(1, 2, 3), false)
-  * assert.deepStrictEqual(strictEqAnd(1, 1, 2), false)
-  * assert.deepStrictEqual(strictEqAnd(1, 1, 1), true)
-  * ```
-  */
+ * Checks if value is *strict equal* to every other value.
+ *
+ * Returns self directly if others is empty.
+ *
+ * @example
+ *
+ * ```ts
+ * assert.deepStrictEqual(strictEqAnd(1, 2, 3), false)
+ * assert.deepStrictEqual(strictEqAnd(1, 1, 2), false)
+ * assert.deepStrictEqual(strictEqAnd(1, 1, 1), true)
+ * ```
+ */
 export function strictEqAnd<A>(self: A): A
 export function strictEqAnd(self: unknown, ...others: unknown[]): boolean
 export function strictEqAnd<A>(self: A, ...others: unknown[]): A | boolean {
-  if(isEmpty(others)) return self
+  if (isEmpty(others))
+    return self
 
   return others.every(other => isStrictEqual(self, other))
 }
 
 /**
-  * Checks if value is *strict not equal* to every other value.
-  *
-  * Returns self directly if others is empty.
-  *
-  * @example
-  *
-  * ```ts
+ * Checks if value is *strict not equal* to every other value.
+ *
+ * Returns self directly if others is empty.
+ *
+ * @example
+ *
+ * ```ts
   assert.deepStrictEqual(strictNotEqAnd(1, 2, 3), true)
   assert.deepStrictEqual(strictNotEqAnd(1, '1', 2), true)
   assert.deepStrictEqual(strictNotEqAnd(1, 1, 1), false)
-  * ```
-  */
+ * ```
+ */
 export function strictNotEqAnd<A>(self: A): A
 export function strictNotEqAnd(self: unknown, ...others: unknown[]): boolean
 export function strictNotEqAnd<A>(self: A, ...others: unknown[]): A | boolean {
-  if(isEmpty(others)) return self
+  if (isEmpty(others))
+    return self
 
   return others.every(other => !isStrictEqual(self, other))
 }

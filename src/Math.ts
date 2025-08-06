@@ -1,4 +1,4 @@
-import { NonEmptyArray } from './TupleT'
+import type { NonEmptyArray } from './TupleT'
 
 /**
  * Returns the largest number of a set of number.
@@ -12,7 +12,8 @@ import { NonEmptyArray } from './TupleT'
 export const max = (...as: NonEmptyArray<number>): number => {
   let [max, ...bs] = as
   for (const b of bs) {
-    if(b > max) max = b
+    if (b > max)
+      max = b
   }
 
   return max
@@ -30,7 +31,8 @@ export const max = (...as: NonEmptyArray<number>): number => {
 export const min = (...as: NonEmptyArray<number>): number => {
   let [min, ...bs] = as
   for (const b of bs) {
-    if(b < min) min = b
+    if (b < min)
+      min = b
   }
 
   return min
@@ -65,7 +67,6 @@ export const abs = (num: number): number => max(num, -num)
 export const cmp = (a: number, b: number): -1 | 0 | 1 =>
   a > b ? 1 : a < b ? -1 : 0
 
-
 /**
  * Computes the sum of the values.
  *
@@ -78,8 +79,7 @@ export const cmp = (a: number, b: number): -1 | 0 | 1 =>
 export const sum = (...as: NonEmptyArray<number>): number =>
   as.reduce((a, b) => a + b, 0)
 
-
-export type BetweenExclude = {
+export interface BetweenExclude {
   from?: boolean
   to?: boolean
 }
@@ -102,15 +102,17 @@ export const between = (
   value: number,
   from: number,
   to: number,
-  exclude: BetweenExclude = { from: false, to: false }
+  exclude: BetweenExclude = { from: false, to: false },
 ) => {
   if (exclude.from) {
-    if (value <= from) return false
+    if (value <= from)
+      return false
 
     return exclude.to ? value < to : value <= to
   }
 
-  if (value < from) return false
+  if (value < from)
+    return false
 
   return exclude.to ? value < to : value <= to
 }

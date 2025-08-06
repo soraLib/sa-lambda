@@ -52,25 +52,25 @@ pnpm add sa-lambda
 ## Use
 
 ```ts
-import { pipe } from "sa-lambda";
+import { pipe } from 'sa-lambda'
 
 pipe(
   1,
   (num: number) => num + 1,
   (num: number) => num + 2
-);
+)
 ```
 
 ```ts
-import { flow } from "sa-lambda/pipe";
+import { flow } from 'sa-lambda/pipe'
 
 const f = flow(
   (num: number) => num + 1,
   (num: number) => num + 2
-);
+)
 
-f(1);
-f(2);
+f(1)
+f(2)
 ```
 
 ## Functors

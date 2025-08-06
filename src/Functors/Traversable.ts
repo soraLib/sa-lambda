@@ -10,10 +10,10 @@
  * traverse :: Applicative f, Traversable t => t a ~> (TypeRep f, a -> f b) -> f (t b)
  */
 
-import { Applicative, Applicative1, Applicative2 } from './Applicative'
-import { Foldable, Foldable1, Foldable2 } from './Foldable'
-import { Functor, Functor1, Functor2 } from './Functor'
-import { HKT, KindOf, URIS } from './HKT'
+import type { Applicative, Applicative1, Applicative2 } from './Applicative'
+import type { Foldable, Foldable1, Foldable2 } from './Foldable'
+import type { Functor, Functor1, Functor2 } from './Functor'
+import type { HKT, KindOf, URIS } from './HKT'
 
 export interface Traversable<F> extends Functor<F>, Foldable<F> {
   readonly traverse: <T>(A: Applicative<T>) => <A, B>(ma: HKT<F, A>, f: (a: A) => HKT<T, B>) => HKT<F, B>
