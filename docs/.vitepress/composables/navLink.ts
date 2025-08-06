@@ -1,7 +1,7 @@
+import type { DefaultTheme } from 'vitepress'
 import type { Ref } from 'vue'
-import { computed } from 'vue'
 import { useRoute, withBase } from 'vitepress'
-import type { DefaultTheme } from '../config'
+import { computed } from 'vue'
 import { isExternal as isExternalCheck } from '../utils'
 
 export function useNavLink(item: Ref<DefaultTheme.NavItemWithLink>) {
@@ -32,14 +32,13 @@ export function useNavLink(item: Ref<DefaultTheme.NavItemWithLink>) {
     }
 
     return {
-      'class': {
+      class: {
         active,
         isExternal,
       },
-      'href': isExternal ? link : withBase(link),
-      'target': item.value.target || isExternal ? '_blank' : null,
-      'rel': item.value.rel || isExternal ? 'noopener noreferrer' : null,
-      'aria-label': item.value.ariaLabel,
+      href: isExternal ? link : withBase(link),
+      target: item.value.target || isExternal ? '_blank' : null,
+      rel: item.value.rel || isExternal ? 'noopener noreferrer' : null,
     }
   })
 
@@ -51,7 +50,7 @@ export function useNavLink(item: Ref<DefaultTheme.NavItemWithLink>) {
 
 function interpret(path = '') {
   return path
-    .replace(/{{pathname}}/, typeof window === 'undefined' ? '/' : location.pathname)
+    .replace(/\{\{pathname\}\}/, typeof window === 'undefined' ? '/' : location.pathname)
 }
 
 function normalizePath(path: string): string {

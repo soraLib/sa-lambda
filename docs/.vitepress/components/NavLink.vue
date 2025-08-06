@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { DefaultTheme } from '../config'
+import type { DefaultTheme } from 'vitepress'
+import { toRefs } from 'vue'
 import { useNavLink } from '../composables/navLink'
 
 const props = defineProps<{

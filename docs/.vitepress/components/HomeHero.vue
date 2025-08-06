@@ -1,9 +1,13 @@
+<script lang="ts" setup>
+import NavLink from './NavLink.vue'
+</script>
+
 <template>
   <header class="home-hero">
     <h1 class="tagline">
       The
       <span class="accent">Functional</span>
-      <br />Programming library
+      <br>Programming library
     </h1>
 
     <p class="text-lg description">
@@ -16,7 +20,7 @@
   </header>
 </template>
 
-<style scoped lang="postcss">
+<style scoped lang="css">
 .home-hero {
   margin: 0 0 1rem;
   padding: 96px 32px;

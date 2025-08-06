@@ -1,12 +1,7 @@
 ---
-home: true
+layout: home
 
-actionText: Get Started
-actionLink: /guide/
-
-# features:
-#   - title: 👌 Zero-Config
-#     details: Sensible built-in default configs for common use cases
-
-footer: MIT Licensed | Copyright © 2022-PRESENT Hfutsora
+hero:
+  name: "The Functional Programming library"
+  text: "A library for typed functional programming in TypeScript."
 ---

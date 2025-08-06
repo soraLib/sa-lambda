@@ -46,6 +46,7 @@ const Configuration: UserConfig = {
       [
         'build',
         'chore',
+        'docs',
         'feat',
         'fix',
         'perf',

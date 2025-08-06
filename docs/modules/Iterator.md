@@ -321,7 +321,7 @@ tail([])        ➔ none
 
 Try to return the last element of an iterator.
 
-```
+```ts
 tryTail([1, 2, 3]) ➔ 3
 tryTail([])        ➔ undefined
 ```

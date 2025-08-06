@@ -1,4 +1,4 @@
-import type { UserConfig } from 'vitepress'
+import { defineConfig } from 'vitepress'
 
 const Guide = [
   {
@@ -32,23 +32,23 @@ const Modules = [
   // utils
   {
     text: 'Function',
-    link: '/modules/Function'
+    link: '/modules/Function',
   },
   {
     text: 'Async',
-    link: '/modules/Async'
+    link: '/modules/Async',
   },
   {
     text: 'Delay',
-    link: '/modules/Delay'
+    link: '/modules/Delay',
   },
   {
     text: 'Equal',
-    link: '/modules/Equal'
+    link: '/modules/Equal',
   },
   {
     text: 'Effect',
-    link: '/modules/Effect'
+    link: '/modules/Effect',
   },
   {
     text: 'Math',
@@ -56,34 +56,13 @@ const Modules = [
   },
 ]
 
-const slidebars = [
-  {
-    text: 'Guide',
-    children: Guide.map((e) => {
-      (e as any).useLinkText = `${e.text} | Guide`
-      return e
-    }),
-  },
-  {
-    text: 'Modules',
-    children: Modules.map((e) => {
-      (e as any).useLinkText = `${e.text} | Modules`
-      return e
-    }),
-  },
-]
-
-const config: UserConfig = {
+export default defineConfig({
   title: 'Sa Lambda',
   description: 'Typescript library for Pipeal programming.',
   lang: 'en-US',
-  base: '/',
+  base: '/sa-lambda/',
   head: [
     ['meta', { name: 'theme-color', content: '#ffffff' }],
-    // ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
-    // ['link', { rel: 'alternate icon', href: '/favicon.ico', type: 'image/png', sizes: '16x16' }],
-    // ['link', { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#ffffff' }],
-    // ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }],
     ['meta', { name: 'author', content: 'Hfutsora' }],
     ['meta', { name: 'keywords', content: 'functional programming, typescript' }],
     ['meta', { property: 'og:title', content: 'Sa Lambda' }],
@@ -91,11 +70,13 @@ const config: UserConfig = {
   ],
   themeConfig: {
     logo: '/favicon.svg',
-    repo: 'soraLib/sa-lambda',
-    docsDir: 'docs',
-    editLinks: true,
-    editLinkText: 'Edit this page',
-    lastUpdated: 'Last Updated',
+    editLink: {
+      text: 'Edit this page',
+      pattern: 'https://github.com/sa-lambda/blob/main/docs/:path',
+    },
+    lastUpdated: {
+      text: 'Last Updated',
+    },
     // TODO:
     // algolia: {
     //   appId: '9RKCMNMXLH',
@@ -112,12 +93,16 @@ const config: UserConfig = {
         items: Modules,
       },
     ],
-    sidebar: {
-      'guide/': slidebars,
-      'modules/': slidebars,
-      '/': slidebars,
+    sidebar: [{
+      text: 'Guide',
+      items: Guide,
+    }, {
+      text: 'Modules',
+      items: Modules,
+    }],
+    footer: {
+      message: 'Released under the MIT License.',
+      copyright: 'Copyright © 2022-present Hfutsora',
     },
   },
-}
-
-export default config
+})

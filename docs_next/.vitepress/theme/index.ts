@@ -3,6 +3,8 @@ import { h } from 'vue'
 import HomeHeroInfo from '../components/HomeHero.vue'
 
 import './styles/vars.css'
+import './styles/code.css'
+import './styles/sidebar-links.css'
 
 export default {
   extends: DefaultTheme,

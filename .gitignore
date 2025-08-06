@@ -13,3 +13,4 @@ coverage/
 /publish
 /pack
 dist
+cache

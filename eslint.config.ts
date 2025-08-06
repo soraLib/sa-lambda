@@ -9,7 +9,7 @@ export default antfu({
   typescript: true,
   vue: true,
 
-  ignores: ['coverage', 'docs'],
+  ignores: ['coverage', 'docs/**/*.md'],
 
   rules: {
     'semi': ['error', 'never'],
