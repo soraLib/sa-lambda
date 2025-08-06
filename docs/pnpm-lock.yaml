@@ -40,8 +40,8 @@ importers:
         specifier: 8.57.1
         version: 8.57.1
       esno:
-        specifier: 0.16.3
-        version: 0.16.3
+        specifier: 0.17.0
+        version: 0.17.0
       fast-glob:
         specifier: 3.2.12
         version: 3.2.12
@@ -1541,8 +1541,8 @@ packages:
     deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
-  esno@0.16.3:
-    resolution: {integrity: sha512-6slSBEV1lMKcX13DBifvnDFpNno5WXhw4j/ff7RI0y51BZiDqEe5dNhhjhIQ3iCOQuzsm2MbVzmwqbN78BBhPg==}
+  esno@0.17.0:
+    resolution: {integrity: sha512-w78cQGlptQfsBYfootUCitsKS+MD74uR5L6kNsvwVkJsfzEepIafbvWsx2xK4rcFP4IUftt4F6J8EhagUxX+Bg==}
     hasBin: true
 
   espree@9.6.1:
@@ -4676,7 +4676,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  esno@0.16.3:
+  esno@0.17.0:
     dependencies:
       tsx: 3.14.0
 
