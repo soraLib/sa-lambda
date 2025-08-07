@@ -2,6 +2,7 @@
 
 [![NPM](https://img.shields.io/npm/v/sa-lambda)](https://www.npmjs.com/package/sa-lambda)
 ![MIT](https://img.shields.io/github/license/soraLib/sa-lambda)
+[![Deploy Docs](https://github.com/soraLib/sa-lambda/actions/workflows/build-page.yml/badge.svg)](https://github.com/soraLib/sa-lambda/actions/workflows/build-page.yml)
 [![Github](https://img.shields.io/badge/Github-232323?logo=github)](https://github.com/soraLib/sa-lambda)
 [![codecov](https://codecov.io/gh/soraLib/sa-lambda/branch/main/graph/badge.svg?token=RaeLDeLgm1)](https://codecov.io/gh/soraLib/sa-lambda)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
