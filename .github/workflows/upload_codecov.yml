@@ -25,7 +25,6 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: latest
           run_install: false
 
       - name: Install dependencies
@@ -36,5 +35,6 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
+
 
 
