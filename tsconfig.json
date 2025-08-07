@@ -2,14 +2,17 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "typeRoots": ["./types", "./node_modules/@types", "./node_modules"],
     "types": ["vitest/globals"],
     "strict": true,
     "declaration": true,
     "importHelpers": true,
     "outDir": "dist/type",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts"

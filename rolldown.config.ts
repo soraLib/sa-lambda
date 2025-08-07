@@ -1,16 +1,36 @@
 import terser from '@rollup/plugin-terser'
+import glob from 'fast-glob'
 import { defineConfig } from 'rolldown'
 
-const input = 'src/index.ts'
 const name = 'SaLambda'
+const inputFiles = glob.sync('src/**/*.ts', { absolute: false })
 
 export default defineConfig([
-  // CJS
-  { input, output: { file: 'dist/cjs/index.js', format: 'cjs' } },
-  // ESM
-  { input, output: { file: 'dist/esm/index.mjs', format: 'esm' } },
-  // UMD / IIFE main
-  { input, output: { file: 'dist/lib/sa-lambda.js', format: 'iife', name } },
-  // browser min
-  { input, output: { file: 'dist/lib/sa-lambda.min.js', format: 'iife', name }, plugins: [terser()] },
+  {
+    input: inputFiles,
+    output: {
+      dir: 'dist/esm',
+      format: 'esm',
+      preserveModules: true,
+      entryFileNames: '[name].mjs',
+    },
+  },
+  {
+    input: inputFiles,
+    output: {
+      dir: 'dist/cjs',
+      format: 'cjs',
+      preserveModules: true,
+      entryFileNames: '[name].js',
+    },
+  },
+  {
+    input: 'src/index.ts',
+    output: { file: 'dist/lib/sa-lambda.js', format: 'iife', name },
+  },
+  {
+    input: 'src/index.ts',
+    output: { file: 'dist/lib/sa-lambda.min.js', format: 'iife', name },
+    plugins: [terser()],
+  },
 ])

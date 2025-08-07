@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import os from 'node:os'
 import path from 'node:path'
+import process from 'node:process'
 import { promisify } from 'node:util'
 import ncpRaw from 'ncp'
 import './prebuild.mjs'
@@ -12,7 +13,7 @@ const packageJson = require('../package')
 
 console.log('argv', process.argv, '\n')
 
-const isPack = process.argv[2] == 'pack'
+const isPack = process.argv[2] === 'pack'
 
 const ncp = promisify(ncpRaw)
 const cwd = process.cwd()
