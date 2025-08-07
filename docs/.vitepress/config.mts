@@ -72,7 +72,7 @@ export default defineConfig({
     logo: '/favicon.svg',
     editLink: {
       text: 'Edit this page',
-      pattern: 'https://github.com/sa-lambda/blob/main/docs/:path',
+      pattern: 'https://github.com/soraLib/sa-lambda/blob/main/docs/:path',
     },
     lastUpdated: {
       text: 'Last Updated',
