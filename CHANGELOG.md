@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.6.0](https://github.com/soraLib/sa-lambda/compare/v1.5.0...v1.6.0) (2025-08-11)
+
+
+### Features
+
+* **docs:** defered api and function page ([c13e4ed](https://github.com/soraLib/sa-lambda/commit/c13e4ed9e601f143325807ce9ad50ca6c3315987))
+* **effect:** ap ([400c28f](https://github.com/soraLib/sa-lambda/commit/400c28fb82c40748855ed6a98652e63681670d36))
+* **iterator:** insert move orderby ([f49cbed](https://github.com/soraLib/sa-lambda/commit/f49cbed60cf7c133e61825827285107a225e5762))
+* **tree:** collect tree nodes ([bac1ed0](https://github.com/soraLib/sa-lambda/commit/bac1ed0aa9001358a003c08d52586468b3ee8399))
+* **tree:** filter tree ([b8ab5e7](https://github.com/soraLib/sa-lambda/commit/b8ab5e7f62a9c86d3483dc24f1a97200f7b892e4))
+
+
+### Bug Fixes
+
+* **deps:** update dependency vue to v3.5.2 ([eb18c5a](https://github.com/soraLib/sa-lambda/commit/eb18c5a476a091264160fcce6110742ec8ff67b5))
+
 ## [1.5.0](https://github.com/soraLib/sa-lambda/compare/v1.4.0...v1.5.0) (2023-05-11)
 
 
